@@ -1,0 +1,77 @@
+Translation
+Alexa
+Captioning
+Generation as an Area (Tic Tac Toe example)
+Deep learning: Predicting Output (image models)
+
+Summarization Accuracy
+
+However not as widespread as other uses like recognition and translation
+
+Multifaceted
+
+Fidelity - Do we say what's
+Fluency/ Coherence - Word by Word
+Robustness - Are we sure?
+
+Open Secret, many systems siri / alexa / etc uses templates
+
+Central Model in Neural NLP
+
+Research objective: build deep learning systems that learn to model the structure of language.
+
+Research Approach: Structure / Modeling / Inference
+
+
+Central Model: Conditional Auto-Regressive Prediction: (Diagram)
+- Character-Aware Models / bAbI /
+
+- Language Structure
+- Deep Learning
+- Probabilistic Inference
+- Neural Summarization
+- Neural Summarization 2
+- Character-Aware Language models
+- Beam Search Optimization
+- Knowledge Distillation
+- Neural Coreference
+- Neural Coreference 2
+- Grammar Correction
+- Structured Attention
+- Latent Attention
+- bAbI
+- OpenNMT
+
+
+Language Predicting structures
+
+Areas.
+
+
+Past Work:
+
+My Work: Sequence based models
+
+Area 1: Probabilistic models of Sequences
+- Beam Search Optimization
+- Knowledge Distillation
+
+My Work: Probabilistic Models
+Area 2: Learning Rule Based Systems
+- Neural Templates
+- Structured Attention
+
+
+Impact: OpenNMT / LSTMVis / AnnotatedTransformer Blog
+
+- OpenNMT and Workshop
+- Image-to-Latex
+- LSTMVis users
+- Annotated Transformer.
+
+
+Future Work:
+
+- Probabilistic Programming and NLP (Colab with Pyro)
+
+- Hardware for NLP Projects
