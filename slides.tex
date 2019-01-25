@@ -5,6 +5,10 @@
 \let\temptwo\enditemize
 \renewenvironment{itemize}{\tempone\addtolength{\itemsep}{0.5\baselineskip}}{\temptwo}
 
+\usepackage[absolute,overlay]{textpos}
+\usepackage[texcoord,grid,gridunit=mm,gridcolor=red!10,subgridcolor=green!10]
+{eso-pic}
+
 %%%%%%%%%%%%%%%%%%%%%%
 \usepackage{beamerthemeshadow}
 \usepackage[normalem]{ulem}
@@ -33,6 +37,11 @@
 \usepackage[absolute,overlay]{textpos}
 \usetikzlibrary{shapes,arrows,positioning,automata,positioning,spy,matrix,scopes,chains}
 \newcommand{\digs}[2]{\hphantom{999}\llap{#1}\,+\,\hphantom{999}\llap{#2}}
+
+\def\research#1{\begin{textblock*}{50mm}(80mm,7mm)\centerline{\textcolor{white}{ \footnotesize #1}}\end{textblock*}}
+
+
+
 \setbeamersize{text margin left=6mm}
 \setbeamersize{text margin right=6mm}
 \renewcommand{\insertnavigation}[1]{}
@@ -195,27 +204,110 @@
 \end{frame}
 
 
-\begin{frame}{My Research}
+\begin{frame}{My Research}{}
   % Picture
+  \research{\cite{Deng2016}}
+
+
   \begin{tikzpicture}
     \node{};
   \end{tikzpicture}
 \end{frame}
 
 
-\begin{frame}{My Research}
-  % Picture
+\begin{frame}{My Research}{}
+  % Pictured
+
+
+
+
+
+
+  \begin{center}
   \begin{tikzpicture}
-    \node{Applications};
-    \node{Methods};
-    \node{Deployment};
-    \node{Analysis};
-    \node{Implementation};
+
+    \node at (-35mm, 15mm) {
+      \scriptsize
+      \citet{Kim2016}
+      };
+
+    \node[draw] (ana) at (-15mm, 15mm) {Analysis};
+    \node[draw] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
+    \node at (0mm, 40mm) {
+      \scriptsize
+      \citet{Kim2016}
+      };
+
+
+    \node[draw] (app) at (25mm, 30mm) {Applications};
+    \node at (25mm, 40mm) {
+      \scriptsize
+      \citet{Kim2016}
+      };
+
+
+
+    \node[draw] (und) at (35mm, 15mm) {Understanding};
+
+
+    \node at (60mm, 15mm) {
+      \scriptsize
+      \citet{Kim2016}
+      };
+
+
+    \node[draw] (dep) at (25mm, 0mm){Deployment};
+
+    \node at (25mm, -10mm) {
+      \scriptsize
+      \citet{Kim2016}
+      };
+
+    \node[draw] (imp) at {Development};
+
+      \node at (0mm, -10mm) {
+      \scriptsize
+      \citet{Kim2016}
+      };
+
+
+
+    \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
+
   \end{tikzpicture}
+  \end{center}
 \end{frame}
 
 
-\section{Section 1:}
+\section{Section 1}
+
+
+\begin{frame}{Section 1: Analysis and Development}
+
+\end{frame}
+
+
+\begin{frame}{Autoregressive Neural Networks}
+
+(RNN Diagram)
+
+\end{frame}
+
+
+\begin{frame}{Autoregressive Neural Networks Math}
+
+\end{frame}
+
+\begin{frame}{LSTMVis}
+  \research{\citet{Strobelt2016} w/ IBM}
+
+  (LSTM Video)
+
+
+\end{frame}
+
+
+
 
 \section{Section 2:}
 \begin{frame}
