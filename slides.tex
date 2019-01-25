@@ -91,20 +91,33 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title[]{Deep Generative \\ Natural Language  Generation}
+\title[]{Text Generation }
 \author[]{Alexander Rush}
 \institute[Harvard SEAS]{
-  \begin{center}
-    \includegraphics[width=5cm]{harvardnlp}
-  \end{center}
+  % \begin{center}
+  %   \includegraphics[width=5cm]{harvardnlp}
+  % \end{center}
   \vspace{0.5cm}
   {\Large }\\
 
   { }
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+\long\def\beamer@@frametitle[#1]#2{%
+  \beamer@ifempty{#2}{}{%
+    \gdef\insertframetitle{\centering{#2\ifnum\beamer@autobreakcount>0\relax{}\space\usebeamertemplate*{frametitle continuation}\fi}}%
+  \gdef\beamer@frametitle{#2}%
+  \gdef\beamer@shortframetitle{#1}%
+}%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \date{}
 %\usetheme{Madrid}
-\usetheme[hideothersubsections]{Hannover}
+\usetheme[hideothersubsections]{Singapore}
 \definecolor{darkgreen}{rgb}{0.13, 0.55, 0.13}
 \definecolor{darkpurple}{rgb}{0.55, 0.0, 0.55}
 
@@ -133,18 +146,83 @@
 \begin{document}
 \maketitle
 
-
-
-
 \section{Introduction}
 
 
+\begin{frame}
 
-\section{Generating Text}
+  % Application pictures
+\end{frame}
+
+\begin{frame}{Text Generation}
+
+  \[ \argmax_{y_{1:T}} f(y_{1:T} ; x, \theta)\]
+
+\end{frame}
+
+\begin{frame}{Natural Language Processing, 2009}
+
+  % Picture
+  \begin{tikzpicture}
+    \node{};
+  \end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Natural Language Processing, 2019}
+
+  % Picture
+  \begin{tikzpicture}
+    \node{};
+  \end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Performance}
+
+\end{frame}
+
+
 \begin{frame}
 
 \end{frame}
 
+\begin{frame}{Central}
+  % Picture
+  \begin{tikzpicture}
+    \node{};
+  \end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}{My Research}
+  % Picture
+  \begin{tikzpicture}
+    \node{};
+  \end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}{My Research}
+  % Picture
+  \begin{tikzpicture}
+    \node{Applications};
+    \node{Methods};
+    \node{Deployment};
+    \node{Analysis};
+    \node{Implementation};
+  \end{tikzpicture}
+\end{frame}
+
+
+\section{Section 1:}
+
+\section{Section 2:}
+\begin{frame}
+
+\end{frame}
+
+\section{Section 3:}
 
 \section{Deep Latent Variable Modeling}
 
@@ -187,5 +265,7 @@
 
 \end{frame}
 
+\bibliography{me}
+\bibliographystyle{acl_natbib_nourl}
 
 \end{document}
