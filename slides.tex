@@ -17,11 +17,15 @@
 \usepackage{pgffor}
 \usepackage{booktabs}
 \usepackage{graphicx}
+\graphicspath{{figs/}}
 \usepackage{amssymb}
 \usepackage{bbm}
 \usepackage{tabularx}
 \usepackage{tikz,etoolbox}
 \usepackage{tikz,amsmath,siunitx}
+\usepackage{xmpmulti}
+
+
 \usetikzlibrary{arrows,snakes,backgrounds,patterns,matrix,shapes,fit,calc,shadows,plotmarks}
 \usepackage{subcaption}
 \usepackage{pgf}
@@ -288,9 +292,7 @@
 
 
 \begin{frame}{Autoregressive Neural Networks}
-
-(RNN Diagram)
-
+\multiinclude[format=png,start=1,graphics={width=\textwidth}]{figs/nmt-noattn}
 \end{frame}
 
 
@@ -307,9 +309,23 @@
 \end{frame}
 
 
+\begin{frame}{Seq2Seq Model}
+  \multiinclude[format=png,start=1,graphics={width=\textwidth}]{figs/nmt-attn}
+\end{frame}
+
+\begin{frame}{Seq2SeqVis}
+  \research{\citet{strobelt2019s} w/ IBM}
+
+  
+\end{frame}
 
 
-\section{Section 2:}
+\begin{frame}{OpenNMT}
+  \includegraphics[width=\textwidth]{opennmtpanaram.jpg}
+\end{frame}
+
+
+\section{Section 2: Applications}
 \begin{frame}
 
 \end{frame}
