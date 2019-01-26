@@ -1,13 +1,15 @@
-\documentclass[draft]{beamer}
+\documentclass[draft, aspectratio=169]{beamer}
+
+
 % \mode<presentation>
 \setbeamertemplate{navigation symbols}{}
 \let\tempone\itemize
 \let\temptwo\enditemize
 \renewenvironment{itemize}{\tempone\addtolength{\itemsep}{0.5\baselineskip}}{\temptwo}
-% \usepackage[texcoord,grid,gridunit=mm,gridcolor=red!10,subgridcolor=green!10]
-% {eso-pic}
+% \usepackage[texcoord,grid,gridunit=mm,gridcolor=red!10,subgridcolor=green!10]{eso-pic}
 
 \usepackage{multimedia}
+\usepackage{fancyvrb, verbatimbox}
 
 \usepackage[absolute,overlay]{textpos}
 
@@ -41,10 +43,10 @@
 \usepackage{tabularx}
 \usepackage{xcolor}
 \usepackage[absolute,overlay]{textpos}
-\usetikzlibrary{shapes,arrows,positioning,automata,positioning,spy,matrix,scopes,chains}
+\usetikzlibrary{tikzmark,shapes,arrows,positioning,automata,positioning,spy,matrix,scopes,chains}
 \newcommand{\digs}[2]{\hphantom{999}\llap{#1}\,+\,\hphantom{999}\llap{#2}}
 
-\def\research#1{\begin{textblock*}{50mm}(80mm,7mm)\centerline{\textcolor{white}{ \footnotesize #1}}\end{textblock*}}
+\def\research#1{\begin{textblock*}{60mm}(100mm,7mm)\centerline{\textcolor{white}{ \footnotesize #1}}\end{textblock*}}
 
 
 
@@ -106,8 +108,10 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title[]{Text Generation }
-\author[]{Alexander Rush}
+\title[]{Learning How to Say It: \\ 
+Language Generation post Deep Learning 
+}
+\author[]{Alexander M Rush}
 \institute[Harvard SEAS]{
   % \begin{center}
   %   \includegraphics[width=5cm]{harvardnlp}
@@ -162,10 +166,10 @@
 \maketitle
 
 \input{applications.tex}
-\input{intro.tex}
-\input{model.tex}
-\input{structured.tex}
-\input{future.tex}
+% \input{intro.tex}
+% \input{model.tex}
+% \input{structured.tex}
+% \input{future.tex}
 
 
 

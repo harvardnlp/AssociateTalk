@@ -1,13 +1,28 @@
-\section{Section 2: Applications}
-\begin{frame}
-  \begin{center}
-    \textbf{The Modern Text Generation Challenge} 
-  \end{center}
-  \begin{center}
-\begin{tikzpicture}
-\node{\includegraphics[width=5cm]{galaxy}};
+%%% Local Variables:
+%%% TeX-master: "slides"
+%%% End:
+
+
+% \begin{frame}{The Modern Text Generation Challenge} 
+%   \begin{center}
+% \begin{tikzpicture}
+% \node{\includegraphics[width=5cm]{galaxy}};
+% \end{tikzpicture}
+%   \end{center}
+% \end{frame}
+
+
+\begin{frame}{Text Generation}
+  
+ \[ y^*_{\tikzmark{pd}1:T} = \argmax_{y_{1:T}} f(y_{1:T}; x, \theta) \] 
+
+\begin{tikzpicture}[
+  remember picture,
+  overlay]
+
+\node (ptdex) [below = of {pic cs:pd}] {Some explanation};
+\draw[->] (ptdex.north) -- ({pic cs:pd}); 
 \end{tikzpicture}
-  \end{center}
 \end{frame}
 
 
@@ -21,15 +36,36 @@
 \node{\includegraphics[width=5cm]{galaxy}};
 \path<2>[draw] (0, 0) --  (2,0) ;
 
-\node[inner sep=1pt, rounded corners, text width=15em, xshift=-4cm,]{\small
+\node[rectangle, xshift=-5cm, scale=0.8, draw,thick,fill=blue!0,text width=16em, rounded corners, inner sep =5pt, minimum height=1em] {
+\small
+cambodian leader hun sen on friday rejected opposition parties ' demands for talks outside the country , accusing them of trying to `` internationalize '' the political crisis .};
 
-\vspace{0.5cm}
-\tiny
-mexico city , mexico -lrb- cnn -rrb- -- heavy rains and flooding have forced hundreds of thousands of people from homes in southern mexico 's state of tabasco over the past four days , with nearly as many trapped by the rising waters , state officials said thursday . officials say about 300,000 people are still trapped by the worst flooding in the region for 50 years . the grijalva river pushed over its banks through the state capital of villahermosa on thursday , forcing government workers to evacuate and leaving up to 80 percent of the city flooded , gov. andres granier 's office told cnn . about 700,000 people have seen their homes flooded , with about 300,000 of those still trapped there , granier 's office reported . one death had been blamed on the floods , which followed weeks of heavy rain in the largely swampy state . tabasco borders guatemala to the south and the gulf of mexico to the north . \ldots
+ \node [xshift=4.5cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=16em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
+Cambodian government rejects opposition's call for talks abroad
+\par};
+\end{tikzpicture}
+  \end{center}
+\end{frame}
 
+
+
+\begin{frame}{Talk about Text (Summarization) }
+
+  \research{\citet{Rush2015} w/ Facebook}
+
+
+  \begin{center}
+\begin{tikzpicture}
+\node{\includegraphics[width=5cm]{galaxy}};
+\path<2>[draw] (0, 0) --  (2,0) ;
+
+\node[rectangle, xshift=-5cm, scale=0.6, draw,thick,fill=blue!0,text width=30em, rounded corners, inner sep =5pt, minimum height=1em] {
+\small
+london , england -lrb- reuters -rrb- -- harry potter star daniel radcliffe gains access to a reported \$ 20 million -lrb- \$ 41.1 million -rrb- fortune as he turns 18 on monday , but he insists the money won't  cast a spell on him . daniel radcliffe as harry potter in `` harry potter and the order of the phoenix '' to the disappointment of gossip columnists around the world , the young actor says he has no plans to fritter his cash away on fast cars , drink and celebrity parties . `` i do n't plan to be one of those people who , as soon as they turn 18 , suddenly buy themselves a massive sports car collection or something similar , '' he told an australian interviewer earlier this month . `` i do n't think i 'll be particularly extravagant '' . `` the things i like buying are things that cost about 10 pounds -- books and cds and dvds . '' at 18 , radcliffe will be able to gamble in a casino , buy a drink in a pub or see the horror film `` hostel : part ii , '' currently six places below his number one movie on the uk box office chart  . details of how he 'll mark his landmark birthday are under wraps . his agent and publicist had no comment on his plans . `` i 'll definitely have some sort of party , '' he said in an interview . `` hopefully none of you will be reading about it . '' radcliffe 's earnings from the first five potter films have been held in a trust fund which he has not been able to touch . despite his growing fame and riches , the actor says he is keeping his feet firmly on the ground . `` people are always $\ldots$
 };
-\visible<2>{
-\node [xshift=3.5cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize tabasco and chiapas states hardest hit. authorities say 700,000 affected \ldots   \par};}
+
+ \node [xshift=4.5cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=16em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
+ harry potter star daniel radcliffe gets\$ 20m fortune as he turns 18 monday . young actor  says he has no plans to fritter his cash away . radcliffe 's earnings from first five potter films have been held in trust fund .  \par};
 \end{tikzpicture}
   \end{center}
 \end{frame}
@@ -46,46 +82,85 @@ mexico city , mexico -lrb- cnn -rrb- -- heavy rains and flooding have forced hun
 \begin{tikzpicture}
 \node{\includegraphics[width=5cm]{galaxy}};
 \path<2>[draw] (0, 0) --  (2,0) ;
-\node[inner sep=1pt, rounded corners, text width=15em, xshift=-4cm,]{\small
+
+\node[xshift=-5cm, draw, scale=0.5, inner sep=10pt, rounded corners, text width=30em, xshift=-7.5cm,]{
+\small
   \begin{center}
-\vspace{0.5cm}
-\footnotesize
+
 \begin{tabular}{lcccccc}
 \toprule
-{} & W & L & PTS &  \ldots \\
-TEAM &           &             &          &                      \\
+{} & WIN & LOSS & PTS & FG\_PCT & RB & AS \ldots \\
+TEAM &           &             &          &             &          &          \\
 \midrule
-Heat   &        11 &          12 &      103 &     \ldots      \\
-Hawks  &         7 &          15 &       95 &     \ldots      \\
+Heat      &        11 &          12 &      103 &          49 &       47 &       27 \\
+Hawks     &         7 &          15 &       95 &          43 &       33 &       20 \\
 \bottomrule
-
-\vspace*{0.3cm}
 \end{tabular}
+\vspace{0.5cm}
 
-% \begin{tabular}{lccccccccc}
+\begin{tabular}{lccccccccc}
+\toprule
+{} &  AS &    RB &   PT &  FG &  FGA & CITY  $\ldots$ \\
+PLAYER      &      &      &      &       &      &      &           \\
+\midrule
+Tyler Johnson    &    5 &    2 &  27 &    8 &   16 &     Miami \\
+Dwight Howard    &    11 &    17 &  23 &    9 &   11 &   Atlanta \\
+Paul Millsap     &    2 &    9 &  21 &    8 &   12 &   Atlanta \\
+Goran Dragic     &    4 &    2 &  21 &    8 &   17 &     Miami \\
+Wayne Ellington  &    2 &    3 &  19 &    7 &   15 &     Miami \\
+Dennis Schroder  &    7 &    4 &  17 &    8 &   15 &   Atlanta \\
+Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
+\ldots \\
+\bottomrule
+\end{tabular}
+  \end{center}
+};
+
+
+% \node[inner sep=1pt, rounded corners, text width=15em, xshift=-4cm,]{\small
+%   \begin{center}
+% \vspace{0.5cm}
+% \footnotesize
+% \begin{tabular}{lcccccc}
 % \toprule
-% {} &  AS &    RB &   PT &  FG &  FGA & CITY  $\ldots$ \\
-% PLAYER      &      &      &      &       &      &      &           \\
+% {} & W & L & PTS &  \ldots \\
+% TEAM &           &             &          &                      \\
 % \midrule
-% Tyler Johnson    &    5 &    2 &  27 &    8 &   16 &     Miami \\
-% Dwight Howard    &    11 &    17 &  23 &    9 &   11 &   Atlanta \\
-% Paul Millsap     &    2 &    9 &  21 &    8 &   12 &   Atlanta \\
-% Goran Dragic     &    4 &    2 &  21 &    8 &   17 &     Miami \\
-% Wayne Ellington  &    2 &    3 &  19 &    7 &   15 &     Miami \\
-% Dennis Schroder  &    7 &    4 &  17 &    8 &   15 &   Atlanta \\
-% Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
-% \ldots \\
+% Heat   &        11 &          12 &      103 &     \ldots      \\
+% Hawks  &         7 &          15 &       95 &     \ldots      \\
 % \bottomrule
+
+% \vspace*{0.3cm}
 % \end{tabular}
 
-  \end{center}
+% % \begin{tabular}{lccccccccc}
+% % \toprule
+% % {} &  AS &    RB &   PT &  FG &  FGA & CITY  $\ldots$ \\
+% % PLAYER      &      &      &      &       &      &      &           \\
+% % \midrule
+% % Tyler Johnson    &    5 &    2 &  27 &    8 &   16 &     Miami \\
+% % Dwight Howard    &    11 &    17 &  23 &    9 &   11 &   Atlanta \\
+% % Paul Millsap     &    2 &    9 &  21 &    8 &   12 &   Atlanta \\
+% % Goran Dragic     &    4 &    2 &  21 &    8 &   17 &     Miami \\
+% % Wayne Ellington  &    2 &    3 &  19 &    7 &   15 &     Miami \\
+% % Dennis Schroder  &    7 &    4 &  17 &    8 &   15 &   Atlanta \\
+% % Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
+% % \ldots \\
+% % \bottomrule
+% % \end{tabular}
+
+%   \end{center}
 
 
 
 
-};
+% };
  % \node [xshift=-3.5cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta  ... \par};
-\visible<2>{\node[xshift=3.5cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta  ... \par};}
+\visible<2>{
+\node [scale=0.5, xshift=-4cm, rectangle, draw,thick,fill=blue!0,text width=30em, rounded corners, inner sep =10pt, minimum height=1em]{\baselineskip=100pt \large  The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta was in desperate need of a win and they were able to take care of a shorthanded Miami team here. Defense was key for the Hawks, as they held the Heat to 42 percent shooting and forced them to commit 16 turnovers. Atlanta also dominated in the paint, winning the rebounding battle, 47 - 34, and outscoring them in the paint 58 - 26. The Hawks shot 49 percent from the field and assisted on 27 of their 43 made baskets. This was a near wire-to-wire win for the Hawks, as Miami held just one lead in the first five minutes. Miami ( 7 - 15 ) are as beat-up as anyone right now and it's taking a toll on the heavily used starters. Hassan Whiteside really struggled in this game, as he amassed eight points, 12 rebounds and one blocks on 4 - of - 12 shooting ... \par};
+}
+
+% \visible<2>{\node[xshift=3.5cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta  ... \par};}
 \end{tikzpicture}
   \end{center}
 \end{frame}
@@ -149,6 +224,16 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 \end{frame}
 
 
+\begin{myverbbox}{\sTWO}
+ { \cal K } ^ { L } ( \sigma = 2 ) = \left( \begin{array} 
+{ c c } { - \frac { d ^ { 2 } } { d x ^ { 2 } } + 4 - \frac
+ { 3 } { \operatorname { c o s h } ^ { 2 } x } } \& { \frac
+ { 3 } { d x ^ { 2 } } }  { \frac { 3 } { \operatorname
+ { c o s h } ^ { 2 } x } } \& { - \frac { d ^ { 2 } } 
+{ d x ^ { 2 } } + 4 - \frac { 3 } { \operatorname { c o s h } 
+^ { 2 } x } }  \end{array} \right) \qquad 
+\end{myverbbox}
+
 
 \begin{frame}{Talk about the Environment (Multimodal) } 
 \research{\cite{Deng2016 w/ Bloomberg}}
@@ -156,15 +241,18 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 \begin{tikzpicture}
 \node{\includegraphics[width=5cm]{galaxy}};
 \path<2>[draw] (0, 0) --  (2,0) ;
- \node [xshift=-4cm, rectangle, thick,fill=blue!0,text width=5cm, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt};
+ \node [xshift=-4cm, rectangle, thick,fill=blue!0,text width=5cm, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \includegraphics{latexin}};
 \visible<2>{
-\node [xshift=3.5cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize Dow and S\&P 500 close out week at all-time highs ... \par};}
+\node [xshift=3.5cm, rectangle, scale=0.6, draw,thick,fill=blue!0,text width=24em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
+\sTWO
+};}
+
 \end{tikzpicture}
   \end{center}
 \end{frame}
 
 
 \begin{frame}{Im2Latex}
-  \multiinclude[format=png,start=100,graphics={width=\textwidth}]{figs/recognition}
+%  \multiinclude[format=png,start=100,graphics={width=\textwidth}]{figs/recognition}
 \end{frame}
   
