@@ -1,0 +1,293 @@
+Authors,Title,Model,"Corpora
+R-1
+R-2
+R-LCS"
+Rush et.al 2015,A Neural Attention Model for Sentence Summarization,"Conv-Seq2Seq + attn 
+LM 
+Code","Gigaword
+31
+12.65
+28.34"
+,,,
+Nallapati et.al 2016,Abstractive Text Summarization using Sequence-to-sequence RNNs and Beyond,"RNN-Seq2Seq + attn 
+Large vocabulary trick 
+H-attn 
+Pointer-attn 
+Code","CNN-DM
+32.49
+11.84
+29.47
+Gigaword
+34.19
+16.29
+32.13"
+,,,
+Chopra et.al 2016,Abstractive Sentence Summarization with Attentive Recurrent Neural Networks,"Conv-enc 
+RNN-dec 
+attn 
+Pos-emb","Gigaword
+33.78
+15.97
+31.15"
+,,,
+Nallapati et.al 2017,SummaRuNNer: A Recurrent Neural Network based Sequence Model for Extractive Summarization of Documents,RNN-Seq2Seq + attn,"CNN-DM
+39.6
+16.2
+35.3"
+,,,
+Xu et.al 2017,Decoupling Encoder and Decoder Networks for Abstractive Document Summarization,"doc2vec-enc 
+RNN-dec","Gigaword
+30.7
+11.3
+27.6"
+,,,
+Suzuki et.al 2017,Cutting-off Redundant Repeating Generations for Neural Abstractive Summarization,RNN-Seq2Seq + attn,"Gigaword
+36.30
+17.31
+33.88"
+,,,
+Tan et.al 2017,Abstractive Document Summarization with a Graph-Based Attentional Neural Model,"RNN-Seq2Seq 
+H-attn 
+Code","CNN-DM
+38.1
+13.9
+34"
+,,,
+Cheng et.al 2016,Neural Summarization by Extracting Sentences and Words,"Conv-enc + RNN-enc 
+H-attn 
+RNN-dec 
+Code","DailyMail
+21.2
+8.3
+12"
+,,,
+Zhou et.al 2017,Selective Encoding for Abstractive Sentence Summarization,"RNN-Seq2Seq 
+GRU-selection-gate 
+Code","Gigaword
+36.15
+17.54
+33.63"
+,,,
+Tan et.al 2017,From Neural Sentence Summarization to Headline Generation: A Coarse-to-Fine Approach,"RNN-Seq2Seq + attn 
+Code","NYT
+29.6
+8.17
+26.05"
+,,,
+Li et.al 2017,Deep Recurrent Generative Decoder for Abstractive Text Summarization,"RNN-Seq2Seq + attn 
+Code","Gigaword
+36.27
+17.57
+33.62"
+,,,
+Pasunuru et.al 2017,Towards Improving Abstractive Summarization via Entailment Generation,"RNN-Seq2Seq + attn 
+Code","Gigaword
+32.75
+15.35
+30.82"
+,,,
+Paulus et.al 2017,A Deep Reinforced Model for Abstractive Summarization,"RNN-Seq2Seq + Intra-attn 
+Code","CNN-DM
+39.87
+15.82
+36.90
+NYT
+47.03
+30.72
+43.10"
+,,,
+See et.al 2017,Get To The Point: Summarization with Pointer-Generator Networks,"RNN-Seq2Seq 
+Pointer-attn 
+Coverage-attn 
+Code","CNN-DM
+39.53
+17.28
+36.38"
+,,,
+Chen et.al 2018,Fast Abstractive Summarization with Reinforce-Selected Sentence Rewriting,"Extractor : 
+Conv-enc 
+RNN-Pointer 
+RNN-dec 
+Abstractor : 
+RNN-Seq2Seq + attn 
+Copy-attn 
+Code","CNN-DM
+40.88
+17.8
+38.54"
+,,,
+Cao et.al 2018,Faithful to the Original: Fact-Aware Neural Abstractive Summarization,RNN-Seq2Seq + attn,"Gigaword
+37.27
+17.65
+34.24"
+,,,
+Cao et.al 2018,"Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization","RNN-Seq2Seq + attn 
+Code","Gigaword
+37.04
+19.03
+34.46"
+,,,
+Zhou et.al.2018,Neural Document Summarization by Jointly Learning to Score and Select Sentences [extractive],"RNN-Seq2Seq + attn 
+Code","CNN-DM
+41.59
+19.01
+37.98"
+,,,
+Amplayo et.al 2018,Entity Commonsense Representation for Neural Abstractive Summarization,"RNN-Seq2Seq + attn 
+Conv-enc 
+Code","CNN-DM
+31.9
+10.1
+23.9
+Gigaword
+37.04
+16.66
+34.93"
+,,,
+Liu et.al 2018,Generative Adversarial Network for Abstractive Text Summarization,"Generator : 
+RNN-Seq2Seq + attn 
+Discriminator : 
+Conv-classifier","CNN-DM
+39.92
+17.65
+36.71"
+,,,
+Lin et.al 2018,Global Encoding for Abstractive Summarization,"RNN-Seq2Seq 
+Conv-gate + Self-attn 
+Code","Gigaword
+36.3
+18
+33.8"
+,,,
+Hsu et.al 2018,A Unified Model for Extractive and Abstractive Summarization using Inconsistency Loss,"Extractor : RNN 
+Abstractor : 
+RNN-Seq2Seq + attn 
+Coverage-attn 
+Copy-attn 
+Code","CNN-DM
+40.68
+17.97
+37.13"
+,,,
+Fan et.al 2018,Controllable Abstractive Summarization,"Conv-Seq2Seq 
+Multi-hop-attn 
+Intra-attn","CNN-DM
+40.38
+17.44
+37.15"
+,,,
+Song et.al 2018,Structure-Infused Copy Mechanisms for Abstractive Summarization,"RNN-Seq2Seq + attn 
+Copy-attn 
+Code","Gigaword
+35.47
+17.66
+33.52"
+,,,
+Wang et.al 2018,A Reinforced Topic-Aware Convolutional Sequence-to-Sequence Model for Abstractive Text Summarization,"Conv-Seq2Seq 
+Pos-emb 
+Topic-emb 
+Multi-hop-attn 
+Joint-attn","Gigaword
+36.92
+18.29
+34.58"
+,,,
+Celikyilmaz et.al.2018,Deep Communicating Agents for Abstractive Summarization,"RNN-Seq2Seq + H-attn 
+Word-attn 
+Agent-attn 
+Copy-attn","CNN-DM
+41.69
+19.47
+37.92
+NYT
+48.08
+31.19
+42.33"
+,,,
+Cohan et.al 2018,A Discourse-Aware Attention Model for Abstractive Summarization of Long Documents,"RNN-Seq2Seq + attn 
+Copy-attn 
+Coverage-attn","arXiv
+35.80
+11.05
+31.80
+PubMed
+38.93
+15.37
+35.21"
+,,,
+Li et.al 2018,Guiding Generation for Abstractive Text Summarization based on Key Information Guide Network,"RNN-Seq2Seq + attn 
+Copy-attn 
+Prediction-attn","CNN-DM
+38.95
+17.12
+35.68"
+,,,
+Xie et.al 2018,Abstractive Summarization Improved by WordNet-Based Extractive Sentences,"RNN-Seq2Seq + attn 
+Pointer-attn 
+Coverage-attn","CNN-DM
+39.32
+17.15
+36.02"
+,,,
+Wu et.al 2018,Learning to Extract Coherent Summary via Deep Reinforcement Learning,"Conv-Seq2Seq + attn 
+Neural coherence 
+RL","CNN-DM
+41.25
+18.87
+37.75"
+,,,
+Jadhav et.al 2018,Extractive Summarization with SWAP-NET: Sentences and Words from Alternating Pointer Networks,"RNN-Seq2Seq + attn 
+Dual-pointer-attn","CNN-DM
+41.6
+18.3
+37.7"
+,,,
+Al-Sabahl et.al 2018,A Hierarchical Structured Self-Attentive Model for Extractive Document Summarization (HSSAS),"RNN-Seq2Seq + attn 
+HSS-attn","CNN-DM
+42.3
+17.8
+37.6"
+,,,
+Gehrmann et.al 2018,Bottom-Up Abstractive Summarization,"RNN-Seq2Seq + attn 
+Pointer-attn 
+Coverage-attn 
+Bottom-up copy attn","CNN-DM
+41.22
+18.68
+38.34"
+,,,
+Narayan et.al 2018,Ranking Sentences for Extractive Summarization with Reinforcement Learning,"Conv-sent-enc 
+RNN-doc-enc 
+RNN-sent-extractor 
+RL 
+Code","CNN-DM
+40
+18.2
+36.6"
+,,,
+Pasunuru et.al 2018,Multi-Reward Reinforced Summarization with Saliency and Entailment,"RNN-Seq2Seq + attn 
+Pointer-attn 
+Coverage-attn 
+RL 
+ROUGE reward 
+Entailment reward","CNN-DM
+40.43
+18
+37.10"
+,,,
+Guo et.al 2018,Soft Layer-Specific Multi-Task Summarization with Entailment and Question Generation,"RNN-Seq2Seq + attn 
+Pointer-attn 
+Coverage-attn 
+Question generation 
+Entailment generation 
+MTL","CNN-DM
+39.81
+17.64
+36.54"
+,,,
+Li et.al 2018,Ensure the Correctness of the Summary: Incorporate Entailment Knowledge into Abstractive Sentence Summarization,"RNN-Seq2Seq + attn 
+Entailment classifier 
+MTL, RAML","Gigaword
+35.33
+17.27
+33.19"
