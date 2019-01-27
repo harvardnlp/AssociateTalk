@@ -1,60 +1,141 @@
 \section{Introduction}
 
 
-\begin{frame}
+% \begin{frame}
 
-  % Application pictures
-\end{frame}
+%   % Application pictures
+% \end{frame}
 
-\begin{frame}{Text Generation}
+% \begin{frame}{Text Generation}
 
-  \[ \argmax_{y_{1:T}} f(y_{1:T} ; x, \theta)\]
+%   \[ \argmax_{y_{1:T}} f(y_{1:T} ; x, \theta)\]
 
-\end{frame}
+% \end{frame}
 
 \begin{frame}{Natural Language Processing, 2009}
 
   % Picture
-  \begin{tikzpicture}
-    \node{};
-  \end{tikzpicture}
+  \begin{center}
+    
+    \scalebox{0.8}{
+  \begin{tikzpicture}[node distance=0.2cm]
+    \node(task)[minimum height=2em] {\textbf{Task}}; 
+    \node(aa) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of task]{Syntax};
+    \node(bb) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of aa]{Surface Structure};
+    \node(cc) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of bb]{Translation};
+    \node(dd) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of cc]{Summarization};
+    \node(ee) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of dd]{Coreference};
+    \node     [below= of ee]{$\vdots$};
 
+
+
+    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class}};
+    \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model]{Parsing};
+    \node(b) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of a]{CRF Tagging};
+    \node(c) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of b]{Alignment EM};
+    \node(d) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of c]{Logistic Regression};
+    \node(e) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of d]{Language Modeling};
+    \node [below= of e]{$\vdots$};
+
+    \draw (aa.east) -- (a.west);
+    \draw (aa.east) -- (b.west);
+    \draw (bb.east) -- (b.west);
+    \draw (bb.east) -- (e.west);
+    \draw (cc.east) -- (c.west);
+    \draw (cc.east) -- (e.west);
+    \draw (dd.east) -- (a.west);
+    \draw (dd.east) -- (c.west);
+    \draw (dd.east) -- (e.west);
+    \draw (ee.east) -- (a.west);
+    \draw (ee.east) -- (b.west);
+    \draw (ee.east) -- (c.west);
+
+  \end{tikzpicture}
+}
+  \end{center}
 \end{frame}
 
 \begin{frame}{Natural Language Processing, 2019}
+\begin{center}
+    \scalebox{0.8}{
+  \begin{tikzpicture}[node distance=0.2cm]
+    \node(task)[minimum height=2em] {\textbf{Task}}; 
+    \node(aa) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of task]{Syntax};
+    \node(bb) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of aa]{Surface Structure};
+    \node(cc) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of bb]{Translation};
+    \node(dd) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of cc]{Summarization};
+    \node(ee) [draw, fill=red!10, rounded corners, minimum width=12em,minimum height=3em, below= of dd]{New Tasks};
+    \node     [below= of ee]{$\vdots$};
 
-  % Picture
-  \begin{tikzpicture}
-    \node{};
+
+
+    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class}};
+    \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model, yshift=-2.5cm]{Recurrent Neural Networks};
+    % \node[below  = of a, xshift=3cm]{\includegraphics[width=8cm]{nmt}} ;
+
+    % \node(b) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of a]{CRF Tagging};
+    % \node(c) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of b]{Alignment EM};
+    % \node(d) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of c]{Logistic Regression};
+    % \node(e) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of d]{Language Modeling};
+    \node [below= of e]{$\vdots$};
+
+    \draw (aa.east) -- (a.west);
+    \draw (bb.east) -- (a.west);
+    \draw (cc.east) -- (a.west);
+    \draw (dd.east) -- (a.west);
+    \draw (ee.east) -- (a.west);
+
+
   \end{tikzpicture}
+}
 
+  
+\end{center}
 \end{frame}
 
-\begin{frame}{Performance}
+% \begin{frame}{Performance}
 
-\end{frame}
+% \end{frame}
 
 
-\begin{frame}
+% \begin{frame}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Central}
+% \begin{frame}{Central}
+%   % Picture
+%   \begin{tikzpicture}
+%     \node{};
+%   \end{tikzpicture}
+% \end{frame}
+
+
+\begin{frame}{Research}{}
   % Picture
+  % \research{\cite{Deng2016}}
+
+  \begin{center}
+    \scalebox{2}{
   \begin{tikzpicture}
-    \node{};
+
+    \node at (10mm, 15mm){\includegraphics[width=3.5cm]{nmt}};
+
+    \node[draw, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
+    \node[draw, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
+    \node[draw, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
+
+
+    \node[draw,rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
+    \node[draw,rounded corners, scale=0.5] (dep) at (25mm, 0mm){Deployment};
+
+    \node[draw, rounded corners,scale=0.5] (imp) at (0, 0) {Implementation};
+
+    \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
+
   \end{tikzpicture}
-\end{frame}
+}
+  \end{center}
 
-
-\begin{frame}{My Research}{}
-  % Picture
-  \research{\cite{Deng2016}}
-
-
-  \begin{tikzpicture}
-    \node{};
-  \end{tikzpicture}
 \end{frame}
 
 
@@ -63,52 +144,65 @@
 
 
 
-
-
-
   \begin{center}
   \begin{tikzpicture}
 
-    \node at (-35mm, 15mm) {
-      \scriptsize
-      \citet{Kim2016}
-      };
-    \node[draw] (ana) at (-15mm, 15mm) {Analysis};
-    \node[draw] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
-    \node at (0mm, 40mm) {
-      \scriptsize
-      \citet{Kim2016}
-      };
+    \node at (10mm, 15mm) {\includegraphics[width=2cm]{nmt}};
 
-    \node[draw] (app) at (25mm, 30mm) {Applications};
-    \node at (25mm, 40mm) {
-      \scriptsize
-      \citet{Kim2016}
+
+    \node[rounded corners, draw] (ana) at (-15mm, 15mm) {Analysis};
+
+    \node at (-40mm, 15mm) [text width=30mm]{
+      \baselineskip=-5pt  \scriptsize
+      \textcolor{blue}{
+      \citet{Strobelt2016}
+      \citet{strobelt2019s}
+    }
+      \par
       };
 
 
 
-    \node[draw] (und) at (35mm, 15mm) {Understanding};
-
-
-    \node at (60mm, 15mm) {
-      \scriptsize
+    \node[rounded corners, draw] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
+    \node at (-10mm, 40mm) [anchor=south, text width=30mm] {
+      \baselineskip=-5pt \scriptsize 
       \citet{Kim2016}
+      \textcolor{red}{\cite{DBLP:journals/corr/KimDHR17}}
+      \cite{EMNLP2017}
+      \par
+      };
+
+    \node[rounded corners, draw] (app) at (25mm, 30mm) {Applications};
+    \node at (35mm, 40mm) [anchor=south, text width=30mm]{
+      \baselineskip=-5pt \scriptsize 
+      \citet{Rush2015} 
+      \textcolor{red}{\citet{Deng2016}}
+      \citet{Schmaltz2016}
+      \ldots
+      \par
       };
 
 
-    \node[draw] (dep) at (25mm, 0mm){Deployment};
+    \node[rounded corners, draw] (und) at (35mm, 15mm) {Understanding};
 
-    \node at (25mm, -10mm) {
+    \node at (65mm, 15mm) [text width=30mm]{
       \scriptsize
-      \citet{Kim2016}
+      \citet{DBLP:conf/emnlp/WisemanSR17}
+      \textcolor{red}{\citet{DBLP:journals/corr/abs-1802-02550}}
+      \par
       };
 
-    \node[draw] (imp) at (0, 0) {Development};
 
-      \node at (0mm, -10mm) {
+    \node[rounded corners, draw] (dep) at (25mm, 0mm){Deployment};
+    \node at (35mm, -10mm) {
       \scriptsize
-      \citet{Kim2016}
+      \citet{Kim2016a}
+      };
+
+    \node[rounded corners, draw] (imp) at (0, 0) {Implement};
+      \node at (-10mm, -10mm) {
+      \scriptsize
+      \citet{DBLP:conf/acl/KleinKDSR17}
       };
 
 

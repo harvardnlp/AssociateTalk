@@ -1,4 +1,4 @@
-\documentclass[draft, aspectratio=169]{beamer}
+\documentclass[aspectratio=169]{beamer}
 
 
 % \mode<presentation>
@@ -7,11 +7,11 @@
 \let\temptwo\enditemize
 \renewenvironment{itemize}{\tempone\addtolength{\itemsep}{0.5\baselineskip}}{\temptwo}
 % \usepackage[texcoord,grid,gridunit=mm,gridcolor=red!10,subgridcolor=green!10]{eso-pic}
+\usepackage{verbatimbox}
+\usepackage[absolute,overlay]{textpos}
+
 
 \usepackage{multimedia}
-\usepackage{fancyvrb, verbatimbox}
-
-\usepackage[absolute,overlay]{textpos}
 
 %%%%%%%%%%%%%%%%%%%%%%
 \usepackage{beamerthemeshadow}
@@ -56,7 +56,6 @@
 \setbeamertemplate{headline}{}
 \setbeamertemplate{footline}{}
 \usefonttheme{professionalfonts}
-\setbeamercovered{transparent}
 \mode<presentation>
 \linespread{1.25}
 \newcommand{\thetitle}[1]{{\begin{center}\structure{{#1}}\end{center}}}
@@ -159,17 +158,21 @@ Language Generation post Deep Learning
 
 \def\argmax{\operatornamewithlimits{arg\,max}}
 \def\kargmax{\operatornamewithlimits{K-arg\,max}}
-\setbeamercovered{transparent}
-
+%  \setbeamercovered{transparent}
+% \setbeamercovered{transparent}
 
 \begin{document}
 \maketitle
 
-\input{applications.tex}
+% \begin{frame}{Autoregressive Neural Networks}
+% \multiinclude[<+>][format=png,start=1,graphics={width=\textwidth}]{nmt-noattn}
+% \end{frame}
+
+%  \input{applications.tex}
 % \input{intro.tex}
-% \input{model.tex}
-% \input{structured.tex}
-% \input{future.tex}
+%  \input{model.tex}
+\input{structured.tex}
+\input{future.tex}
 
 
 
