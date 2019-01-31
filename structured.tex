@@ -215,28 +215,13 @@
 
   \begin{center}
   \begin{tikzpicture}
-
-    % \node at (10mm, 15mm) {\includegraphics[width=2cm]{nmt}};
-
-
     \node[rounded corners, draw] (ana) at (-15mm, 15mm) {Analysis};
-
-
     \node[rounded corners, fill=yellow,  draw] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
-
     \node[rounded corners, draw] (app) at (25mm, 30mm) {Applications};
-
-
     \node[rounded corners, draw] (und) at (35mm, 15mm) {Understanding};
-
-
     \node[rounded corners, fill=yellow,  draw] (dep) at (25mm, 0mm){Deployment};
-
     \node[rounded corners, fill=yellow, draw] (imp) at (0, 0) {Implement};
-
-
     \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
-
   \end{tikzpicture}
   \end{center}
 
