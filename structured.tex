@@ -22,6 +22,7 @@
   % \includegraphics[height=3.5cm, trim={12cm 3cm 7cm 0.5cm}, clip]{nmt-noattn-3}
   \includegraphics[height=3.5cm, trim={12cm 3cm 7cm 0.5cm}, clip]{nmt-noattn-4}
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-5}
+
   \includegraphics[width=7cm]{beam}
 
 
@@ -271,7 +272,7 @@
 % \end{frame}
 
 
-\begin{frame}{Seq2Seq as Beam Search Optimization}
+\begin{frame}{Structured Seq2Seq}
 
   Main Idea: Replace next word model with a sequence model $f$. 
 
@@ -288,7 +289,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Scoring a Sequence $f$}
+\begin{frame}{Sequence-to-Sequence as Beam Search Optimization}
   \begin{center}
     % \structure{(Idea 1)} Replace local softmax with sequence scorer 
     % \air 
@@ -296,12 +297,12 @@
   \end{center}
 
   Same model, but replace 
-  $  \log p(\wvec_{t} | \wvec^{(k)}_{1:t-1}, \cvec; \theta)$
+  $  \log p(y_{t} | y^{(k)}_{1:t-1}, \cvec; \theta)$
   with unnormalized 
-  $f(\wvec_t, \wvec_{1:t-1}^{(k)}, \cvec; \theta)$
+  $f(y_t, y_{1:t-1}^{(k)}, \cvec; \theta)$
 \end{frame}
 
-\begin{frame}{(Idea 2)} Run beam search during training
+\begin{frame}{Sequence-to-Sequence as Beam Search Optimization}
   \begin{enumerate}
   \item Start with $K$ partial starting hypotheses $\wvec^{(1:K)}$
   \item For timesteps $t$ from  $1$ to $T$:
@@ -321,7 +322,7 @@
 \end{frame}
 
 
-\begin{frame}{\structure{(Idea 3)} Replace local training objective with beam-search margin}
+\begin{frame}{ Replace local training objective with beam-search margin}
 
   New Objective: 
   \begin{itemize}
@@ -647,24 +648,24 @@
 
 % \end{frame}
 
-\begin{frame}
-  \centerline{\structure{Related Work: Compressing Deep Models}}
-\air
+% \begin{frame}
+%   \centerline{\structure{Related Work: Compressing Deep Models}}
+% \air
 
-\begin{itemize}
-\item \textbf{Pruning}: Prune weights based on importance criterion 
-\cite{LeCun1990,Han2016}
-\item \textbf{Knowledge Distillation}: Train a \textit{student} model to learn 
-from a \textit{teacher} model \cite{Bucila2006,Ba2014,Hinton2015}.
-\end{itemize}
-\air
-Other methods: 
-\begin{itemize}
-\item low-rank matrix factorization of weight matrices \cite{Denton2014}
-\item weight binarization \cite{Lin2016}
-\item weight sharing \cite{Chen2015}
-\end{itemize}
-\end{frame}
+% \begin{itemize}
+% \item \textbf{Pruning}: Prune weights based on importance criterion 
+% \cite{LeCun1990,Han2016}
+% \item \textbf{Knowledge Distillation}: Train a \textit{student} model to learn 
+% from a \textit{teacher} model \cite{Bucila2006,Ba2014,Hinton2015}.
+% \end{itemize}
+% \air
+% Other methods: 
+% \begin{itemize}
+% \item low-rank matrix factorization of weight matrices \cite{Denton2014}
+% \item weight binarization \cite{Lin2016}
+% \item weight sharing \cite{Chen2015}
+% \end{itemize}
+% \end{frame}
 
 
 
@@ -686,12 +687,16 @@ Other methods:
 % \end{columns}
 % \end{frame}
 
-\begin{frame}{Baseline Model}
-\air 
+\begin{frame}{Sequence Knowledge Distillation}
+  \research{\cite{Kim2016a}}
 
+  
+\end{frame}
+
+\begin{frame}{Baseline Model}
 
 \begin{columns}
-\begin{column}{6.5cm}
+\begin{column}{7cm}
 Standard model minimize $\text{NLL}(\theta)$: 
 \air
 $$-\sum_t \log p(\wvec_t=y_t \given \wvec_{1:t-1}, \cvec ; \theta)$$
@@ -703,8 +708,8 @@ where $y_t$ is the ground truth word at time $t$.
 Cross-entropy with ground truth.
 
 \end{column}
-\begin{column}{5.5cm}
-\includegraphics[width=5.5cm]{word-kd-0}
+\begin{column}{8cm}
+\includegraphics[trim={0.5cm 0.5cm 0.5cm 0.5cm}, clip, width=6cm]{word-kd-0}
 \end{column}
 \end{columns}
 \end{frame}
@@ -728,10 +733,9 @@ Cross-entropy with ground truth.
 
 
 \begin{frame}{Word-Level Knowledge Distillation}
-\air 
-\begin{columns}
-\begin{column}{6.5cm}
 
+\begin{columns}
+\begin{column}{7cm}
 Teacher network: $q(\wvec_{t} | \wvec_{1:t-1}, \cvec  ; \theta_T$)  
 \air 
 
@@ -743,8 +747,10 @@ Minimize cross-entropy between teacher and student distribution  $\mathcal{L}_{\
 \end{align*}
 \end{column}
 
-\begin{column}{5.5cm}
-\includegraphics[width=5.5cm]{word-kd-2}
+\begin{column}{7cm}
+\centering
+
+\includegraphics[trim={0.2cm 0.2cm 0.2cm 3cm}, clip, width=7cm]{word-kd-2}
 \end{column}
 \end{columns}
 \end{frame}
@@ -809,25 +815,24 @@ Empirically, point estimate captures
 significant mass
 
 \end{column}
-\begin{column}{6cm}
-\includegraphics[width=6cm]{seq-kd-1}
+\begin{column}{8cm}
+\includegraphics[trim={0.5cm 0.5cm 0.5cm 0.5cm}, clip, width=8cm]{seq-kd-1}
 \end{column}
 \end{columns}
 \end{frame}
 
 \begin{frame}{Sequence-Level Knowledge Distillation}
 
-\air  
 \begin{columns}
-\begin{column}{5.5cm}
+\begin{column}{5cm}
 \begin{align*}
 \mathcal{L}_\text{SEQ-KD}(\theta) &= -\log p(\wvec^*_{1:T} \given \cvec ; \theta)  \\
-& \displaystyle \approx   -\sum_{\wvec_{1:T}} q(\wvec_{1:T} | \cvec; \theta_T) \log p(\wvec_{1:T} | \cvec ; \theta)
+& \hspace*{-1cm} \displaystyle \approx   -\sum_{\wvec_{1:T}} q(\wvec_{1:T} | \cvec; \theta_T) \log p(\wvec_{1:T} | \cvec ; \theta)
 \end{align*}
 Simplest model: train the student model on $\wvec^*$ with NLL
 \end{column}
-\begin{column}{5.5cm}
-\includegraphics[width=5.5cm]{seq-kd-2}
+\begin{column}{7cm}
+\includegraphics[trim={0.2cm 0.2cm 0.2cm 0.2cm}, clip, width=7cm]{seq-kd-2}
 \end{column}
 \end{columns}
 \end{frame}
@@ -882,15 +887,13 @@ $2 \times 500$ &  $90\%$& $8$ m &  $18.5$  & $26 \times$ \\
 \end{frame}
 
 
-\begin{frame}
-  % \centerline{An Application}
+\begin{frame}{Application}
   
   \begin{center}
-    \includegraphics[height=0.9\textheight]{phonemt}
+    \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Temporary}{videos/translate.mp4}
   \end{center}
 \end{frame}
 
-\begin{frame}{Application: }
-
+\begin{frame}{}
+  
 \end{frame}
-
