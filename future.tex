@@ -5,7 +5,7 @@
   Goal: Expose specific choices as explicit latent variables.   
    \begin{center}
   \begin{tikzpicture}
-    \node[rounded corners, fill=yellow, draw] (ana) at (-15mm, 15mm) {Analysis};
+    \node[rounded corners, draw] (ana) at (-15mm, 15mm) {Analysis};
     \node[rounded corners, fill=yellow,  draw] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
     \node[rounded corners, draw] (app) at (25mm, 30mm) {Applications};
     \node[rounded corners, fill=yellow, draw] (und) at (35mm, 15mm) {Understanding};
@@ -217,10 +217,7 @@ Fitzbillies,ty[coffee shop],pr[$<$ \pounds 20],food[Chinese],cust[3/5],area[city
 
 
 
-\begin{frame}
-  \begin{center}
-    \structure{(Neural) Template Generation Approach}
-  \end{center}
+\begin{frame}{(Neural) Template Generation Approach}
 
 \textbf{Step 1: Encode the Source}
 
@@ -263,8 +260,7 @@ $\|$ \underline{Fitzbillies} $\|$  \pause is a $\|$ \pause   \underline{coffee s
 \end{frame}
 
 
-\begin{frame}
-  \center{\textbf{Criteria}}
+\begin{frame}{Criteria}
 
 \begin{enumerate}
 \item Interpretable in its content selection.
@@ -405,8 +401,7 @@ How can we learn them from data?
 \end{frame}
 
 
-\begin{frame}
-\centerline{\textbf{Neural Template}}
+\begin{frame}{Neural Template}
 \air
 
       \begin{center}
@@ -605,14 +600,32 @@ priceRange[cheap] custRating[5 out of 5], area[city centre], \\
 
 \section{Future}
 
-\begin{frame}{Model}  
+
+
+\begin{frame}{Future Work}
+  NLP post deep learning 
+
   \begin{center}
-    \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Temporary}{videos/latnm.mp4}
+  \begin{tikzpicture}
+    \node[rounded corners, draw] (ana) at (-15mm, 15mm) {Analysis};
+    \node[rounded corners, draw] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
+    \node[rounded corners, draw] (app) at (25mm, 30mm) {Applications};
+    \node[rounded corners, draw] (und) at (35mm, 15mm) {Understanding};
+    \node[rounded corners, draw] (dep) at (25mm, 0mm){Deployment};
+    \node[rounded corners, draw] (imp) at (0, 0) {Implement};
+    \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
+  \end{tikzpicture}
   \end{center}
 \end{frame}
 
 \begin{frame}{Probabilistic Programming}
+\research{Preprint}
+
 \begin{center}
+\includegraphics[width=2.5cm]{pyro}
+
+\air
+
   \begin{tikzpicture}
 \node[latent] (Y) {$y$};
 \node[factor, xshift=1.25cm] (FYS) {$F$};
@@ -644,7 +657,22 @@ priceRange[cheap] custRating[5 out of 5], area[city centre], \\
 \end{frame}
 
 
-\begin{frame}
+
+
+\begin{frame}{Reasoning-Based Models }  
+  \begin{center}
+    \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Temporary}{videos/latnm.mp4}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}{Hardware for NLP}
+\research{Preprint}
+
+\end{frame}
+
+
+\begin{frame}{Long-Form Generation with Reasoning}
 
 \end{frame}
 
