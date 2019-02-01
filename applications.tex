@@ -3,7 +3,7 @@
 %%% End:
 
 
-% \begin{frame}{The Modern Text Generation Challenge} 
+% \begin{frame}{The Modern Text Generation Challenge}
 %   \begin{center}
 % \begin{tikzpicture}
 % \node{\includegraphics[width=5cm]{galaxy}};
@@ -11,10 +11,14 @@
 %   \end{center}
 % \end{frame}
 
+\begin{frame}{Machine Learning Standard Setup}
+(Picture )
+\end{frame}
+
 
 \begin{frame}{Machine Learning for Text Generation}
-  
-  \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \] 
+
+  \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \]
 
 % \begin{tikzpicture}[
 %   remember picture,
@@ -24,51 +28,54 @@
 % \node (ptdexa) [below right =  of {pic cs:nn}] {Neural Network};
 % \node (ptdexb) [below = of {pic cs:opt}] {Optimization};
 % \node (ptdexc) [below = of {pic cs:input}] {Input};
-% \draw[->] (ptdex.north) -- ({pic cs:pd}); 
-% \draw[->] (ptdexa.north) -- ({pic cs:nn}); 
-% \draw[->] (ptdexb.north) -- ({pic cs:opt}); 
-% \draw[->] (ptdexc.north) -- ({pic cs:input}); 
+% \draw[->] (ptdex.north) -- ({pic cs:pd});
+% \draw[->] (ptdexa.north) -- ({pic cs:nn});
+% \draw[->] (ptdexb.north) -- ({pic cs:opt});
+% \draw[->] (ptdexc.north) -- ({pic cs:input});
 % \end{tikzpicture}
 
   \begin{itemize}
     \pause
   \item Input \alert<2>{$x$},  \textit{what to talk about}
-    \air 
+    \air
     \pause
   \item Output text \alert<3>{$y^*_{1:T}$}, \textit{how to say it}
     \air
     \pause
   \item Model \alert<4>{$f(.; \theta)$}, learned from data
   \end{itemize}
-  
+\end{frame}
+
+\begin{frame}{Translation}
+
 \end{frame}
 
 
 \begin{frame}{Talk about Text (Summary) }
-  
+
   \research{\citet{Rush2015} w/ Facebook}
-  
-  
+
+
   \begin{center}
     \begin{tikzpicture}
-      
+
       \node (gal) {\includegraphics[width=2cm]{galaxy}};
       \node [rounded corners, above =(0.2cm) of gal] {$f$};
-      
-      
+
+
       \node (a) [rectangle, yshift=1cm, xshift=-5cm, scale=0.8, draw,thick,fill=blue!0,text width=20em, rounded corners, inner sep =5pt, minimum height=1em] {
         \small
         Cambodian leader Hun Sen on friday rejected opposition parties' demands for talks outside the country, accusing them of trying to ``internationalize'' the political crisis.};
       \path<2>[draw, ->] (a) --  (a -|  gal.west) ;
-      
+
 
       \node [rounded corners, above =(0.2cm) of a] {\alert<1>{$x$}};
-      
+
       \visible<2>{
-        \node(b) [xshift=4.5cm, yshift=-1cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
+        \node(b) [xshift=4.5cm, yshift=-1cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
           Cambodian government rejects opposition's call for talks abroad
           \par};
-        
+
         \node [rounded corners, above = (0.2cm) of b] {\alert<2>{$y_{1:T}$}};
         \path[draw, <-] (b) --  (b -| gal.east) ;
       }
@@ -77,19 +84,29 @@
 \end{frame}
 
 
+\begin{frame}{Dataset}
 
+\end{frame}
+
+
+\begin{frame}{Metric}
+
+\end{frame}
 
 \begin{frame}{Sentence Summarization}
-  
+
   \begin{center}
     \includegraphics[height=0.75\textheight]{Gigaword}
   \end{center}
+
+  (Human / Pre-deep)
+
 \end{frame}
 
 \begin{frame}{Talk about Text (Summary) }
   \begin{center}
     \begin{tikzpicture}
-      
+
       \node{\includegraphics[width=2cm]{galaxy}};
 
 
@@ -102,7 +119,7 @@
 \path[draw, ->] (a) --  (a -|  gal.west) ;
 
 \visible<2>{
-  \node (b) [xshift=4.2cm, yshift=-0.2cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
+  \node (b) [xshift=4.2cm, yshift=-0.2cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
     Harry Potter star Daniel Radcliffe gets \$20m fortune as he turns 18 monday. Young actor says he has no plans to fritter his cash away. Radcliffe 's earnings from first five potter films have been held in trust fund.  \par};
   \path[draw, <-] (b) --  (b -| gal.east);
   }
@@ -119,7 +136,7 @@
 \end{frame}
 
 
-\begin{frame}{Talk about Data } 
+\begin{frame}{Talk about Data }
 
   \research{\cite{EMNLP2017}}
   \begin{center}
@@ -272,34 +289,34 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 
 
 \begin{myverbbox}{\sTWO}
- { \cal K } ^ { L } ( \sigma = 2 ) = \left( \begin{array} 
+ { \cal K } ^ { L } ( \sigma = 2 ) = \left( \begin{array}
 { c c } { - \frac { d ^ { 2 } } { d x ^ { 2 } } + 4 - \frac
  { 3 } { \operatorname { c o s h } ^ { 2 } x } } \& { \frac
  { 3 } { d x ^ { 2 } } }  { \frac { 3 } { \operatorname
- { c o s h } ^ { 2 } x } } \& { - \frac { d ^ { 2 } } 
-{ d x ^ { 2 } } + 4 - \frac { 3 } { \operatorname { c o s h } 
-^ { 2 } x } }  \end{array} \right) \qquad 
+ { c o s h } ^ { 2 } x } } \& { - \frac { d ^ { 2 } }
+{ d x ^ { 2 } } + 4 - \frac { 3 } { \operatorname { c o s h }
+^ { 2 } x } }  \end{array} \right) \qquad
 \end{myverbbox}
 
 \begin{frame}{E2E Challenge 2018}
   \begin{figure}
     \centering
-    
+
     \footnotesize
 \begin{tabular}{@{}ll@{}}
 \toprule
 \bf MR        & \begin{tabular}[c]{@{}l@{}}name{[}The Golden Palace{]},  eatType{[}coffee shop{]},  food{[}Fast food{]}, \\ priceRange{[}cheap{]},  customer rating{[}5 out of 5{]},  area{[}riverside{]}\end{tabular}         \\ \midrule
 \bf Reference & \begin{tabular}[c]{@{}l@{}}A coffee shop located on the riverside  called The Golden Palace,  \\ has a 5 out of 5 customer rating.  Its price range are fairly cheap  \\for its excellent Fast food.\end{tabular} \\ \bottomrule
 \end{tabular}
-  \end{figure}  
+  \end{figure}
   \begin{center}
-    \includegraphics[width=10cm]{E2EChallenge}
+    \includegraphics[width=\textwidth]{E2EChallenge}
   \end{center}
 \end{frame}
 
 
 
-\begin{frame}{Talk about the Diagrams} 
+\begin{frame}{Talk about the Diagrams}
 \research{\cite{Deng2016} w/ Bloomberg}
   \begin{center}
 \begin{tikzpicture}
@@ -309,7 +326,7 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
  \node [yshift=4cm, rectangle, thick,fill=blue!0,text width=5cm, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \includegraphics[width=10cm]{latexin}};
 
 \visible<2> {
-\node (b)[xshift=6cm, rectangle, scale=0.6, draw,thick,fill=blue!0,text width=32em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
+\node (b)[xshift=6cm, rectangle, scale=0.6, draw,thick,fill=blue!0,text width=32em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
 \sTWO
 
 };
@@ -337,4 +354,3 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
   \end{center}
 
 \end{frame}
-  

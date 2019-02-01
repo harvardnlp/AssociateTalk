@@ -9,7 +9,7 @@
 
 
 
-\begin{frame}{Research Direction}
+\begin{frame}{Research Direction - Analysis and Implementation}
   \begin{center}
     \scalebox{2}{
   \begin{tikzpicture}
@@ -33,7 +33,7 @@
 \end{frame}
 
 \begin{frame}{Generation Setup (Reminder)}
-    \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \]
+    \[ {y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} {f}({y_{1:T}}; \tikzmark{input}{x}_{1:S}, \tikzmark{nn}{\theta}) \]
 
 % \begin{tikzpicture}[
 %   remember picture,
@@ -51,17 +51,17 @@
 
   \begin{itemize}
 
-  \item Input \alert<2>{$x_{1:S}$},  \textit{what to talk about}
+  \item Input {$x_{1:S}$},  text sequence to talk about
     \air
 
-  \item Output text \alert<3>{$y^*_{1:T}$}, \textit{how to say it}
+  \item Output text {$y^*_{1:T}$}, \textit{how to say it}
     \air
 
-  \item Model \alert<4>{$f(.; \theta)$}, learned from data
+  \item Model {$f(.; \theta)$}, learned from data
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Recurrent Neural Networks}
+\begin{frame}{Sequence-to-Sequence with Recurrent Neural Networks}
   \vspace{-0.25cm}
 
   \begin{center}
@@ -70,7 +70,7 @@
 \end{frame}
 
 
-\begin{frame}{RNN Math}
+\begin{frame}{Sequence-to-Sequence Math}
   \textcolor{blue}{Encoder}:
   \[{\mathbf{h}^{x}_s \gets \RNN(\mathbf{h}^{x}_{s-1}, x_s)} \]
 
@@ -81,7 +81,7 @@
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
 
   Prediction:
-  \[ p(y_{t+1}\  |\  y_{1:t}, x) = \softmax( \mathbf{W} [\mathbf{h}_t, \mathbf{c}]) \]
+  \[ p(y_{t}\  |\  y_{1:t-1}, x) = \softmax( \mathbf{W} [\mathbf{h}_{t-1}, \mathbf{c}]) \]
 
   \pause
 
@@ -90,10 +90,13 @@
 
 \end{frame}
 
-\begin{frame}{Toy Example: Parenthesis Language}
+\begin{frame}{Toy Example: Well-Balanced Parenthesis Language}
   \begin{center}
     \includegraphics[width=10cm]{parenlang}
   \end{center}
+
+  (Much better description)
+
 \end{frame}
 
 \begin{frame}{LSTMVis - Parenthesis Language}
@@ -106,6 +109,10 @@
 \end{frame}
 
 
+\begin{frame}
+  (Description of natural language task)
+\end{frame}
+
 \begin{frame}{LSTMVis - Natural Language}
   \research{\citet{Strobelt2016} w/ IBM}
   \vspace{-0.25cm}
@@ -117,7 +124,7 @@
 \end{frame}
 
 
-\begin{frame}{Seq2Seq + Attention Model}
+\begin{frame}{Sequence-to-Sequence + Attention Model}
   \vspace{-0.25cm}
 
   \begin{center}
@@ -139,7 +146,7 @@
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
 
   Prediction:
-  \[ p(y_{t+1}\  |\  y_{1:t}, x) = \softmax( \mathbf{W} [\mathbf{h}_t; \mathbf{c}]) \]
+  \[ p(y_{t}\  |\  y_{1:t-1}, x) = \softmax( \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]) \]
 
 \end{frame}
 
