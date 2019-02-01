@@ -1,7 +1,7 @@
 
-\section{Section 3: Structured Modeling }
 
-\begin{frame}
+
+\begin{frame}{Research Direction}
   \begin{center}
     \scalebox{2}{
   \begin{tikzpicture}
@@ -20,18 +20,20 @@
   \end{tikzpicture}
 }
   \end{center}
+\end{frame}
 
+\begin{frame}{Structured Modeling}
 
 \end{frame}
 
 \begin{frame}{Generation Setup (Reminder)}
-    \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \] 
+    \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \]
 
 
   \begin{itemize}
 
   \item Input \alert<2>{$x_{1:S}$},  \textit{what to talk about}
-    \air 
+    \air
 
   \item Output text \alert<3>{$y^*_{1:T}$}, \textit{how to say it}
     \air
@@ -51,7 +53,7 @@
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-8}
   \end{center}
   Pretend it is Multiclass classification:
-  \[ \text{NLL}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, \cvec; \theta) \] 
+  \[ \text{NLL}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, \cvec; \theta) \]
 \end{frame}
 
 \begin{frame}{Deploying Seq2Seq}
@@ -66,10 +68,10 @@
   \end{center}
 
   Deploy as a structured model:
-  \[ y^*_{1:T} = \argmax_{y_{1:T}} f(y_{1:T}; \theta) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, \cvec; \theta) \] 
+  \[ y^*_{1:T} = \argmax_{y_{1:T}} f(y_{1:T}; \theta) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, \cvec; \theta) \]
   % \pause
   % % \begin{itemize}
-  % % \item Note: Completely intractable $O(\text{\#vocab} ^T)$ 
+  % % \item Note: Completely intractable $O(\text{\#vocab} ^T)$
   % % \end{itemize}
 \end{frame}
 
@@ -81,7 +83,7 @@
     \tikzset{>=stealth',every on chain/.append style={join},
       every join/.style={->}}
 
-     
+
        \begin{scope}
    \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
     \node<1->(G-1-1){a}; & \node<2->(G-1-2){red}; & \node<3->(G-1-3){dog}; & \node<4->(G-1-4){smells}; & \node<5->(G-1-5){home};  & \node<6->(G-1-6){today}; \\
@@ -89,36 +91,36 @@
     \node<1->(G-3-1){red}; & \node<2->(G-3-2){blue}; & \node<3->(G-3-3){cat}; &  \node<4->(G-3-4){barks}; & \node<5->(G-3-5){straight}; & \node<6->(G-3-6){now}; \\    };
 
     \only<2->{
-      \draw[->] (G-1-1.east) -> (G-1-2.west); 
-      \draw[->] (G-2-1.east) -> (G-2-2.west); 
-      \draw[->] (G-1-1.east) -> (G-3-2.west); 
+      \draw[->] (G-1-1.east) -> (G-1-2.west);
+      \draw[->] (G-2-1.east) -> (G-2-2.west);
+      \draw[->] (G-1-1.east) -> (G-3-2.west);
       \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-2.south east);
     }
-  
+
     \only<3->{
-      \draw[->] (G-1-2.east) -> (G-2-3.west); 
-      \draw[->] (G-3-2.east) -> (G-3-3.west); 
-      \draw[->] (G-3-2.east) -> (G-1-3.west); 
+      \draw[->] (G-1-2.east) -> (G-2-3.west);
+      \draw[->] (G-3-2.east) -> (G-3-3.west);
+      \draw[->] (G-3-2.east) -> (G-1-3.west);
       \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-3.south east);
     }
-    
+
  \only<4->{
-    \draw[->] (G-1-3.east) -> (G-3-4.west); 
-    \draw[->] (G-2-3.east) -> (G-2-4.west); 
-    \draw[->] (G-1-3.east) -> (G-1-4.west); 
+    \draw[->] (G-1-3.east) -> (G-3-4.west);
+    \draw[->] (G-2-3.east) -> (G-2-4.west);
+    \draw[->] (G-1-3.east) -> (G-1-4.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-4.south east);
 }
  \only<6->{
-    \draw[->] (G-1-5.east) -> (G-1-6.west); 
-    \draw[->] (G-1-5.east) -> (G-3-6.west); 
-    \draw[->] (G-2-5.east) -> (G-2-6.west); 
+    \draw[->] (G-1-5.east) -> (G-1-6.west);
+    \draw[->] (G-1-5.east) -> (G-3-6.west);
+    \draw[->] (G-2-5.east) -> (G-2-6.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-6.south east);
 }
 
  \only<5->{
-    \draw[->] (G-3-4.east) -> (G-1-5.west); 
-    \draw[->] (G-3-4.east) -> (G-2-5.west); 
-    \draw[->] (G-3-4.east) -> (G-3-5.west); 
+    \draw[->] (G-3-4.east) -> (G-1-5.west);
+    \draw[->] (G-3-4.east) -> (G-2-5.west);
+    \draw[->] (G-3-4.east) -> (G-3-5.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-5.south east);
 }
          \node[left=0.2cm of G]{K = 3};
@@ -127,8 +129,8 @@
 \end{scope}
 \end{tikzpicture}
     \end{center}
-   
-\air 
+
+\air
     \air
 
 \air
@@ -138,8 +140,8 @@
    \item Compute the score of every possible next word.
      \[f(y_t, y_{1:t-1}^{(k)}) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, \cvec) + \log p(y^{(k)}_{1:t-1} \ |\  \cvec) \]
      \pause
-   \item Prune to only the $K$ highest-scoring, 
-     \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]  
+   \item Prune to only the $K$ highest-scoring,
+     \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]
    \end{enumerate}
 }
 
@@ -150,18 +152,18 @@
   %  \item Compute for all $k, \wvec_{t}$
   %    \[s(\wvec_t, k) \gets \log p(\wvec_{t} | \wvec^{(k)}_{1:t-1}, \cvec; \theta) + \log p(\wvec^{(k)}_{1:t-1}| \cvec;\theta) \]
   %  \item Save $K$ highest scoring target sequences
-  %    \[\wvec_{1:t+1}^{(1:K)} \gets K\arg\max_{\wvec_t, k} s(\wvec_t, k)\]  
+  %    \[\wvec_{1:t+1}^{(1:K)} \gets K\arg\max_{\wvec_t, k} s(\wvec_t, k)\]
   %  \end{enumerate}
   % \end{enumerate}
   \pause
   % \begin{itemize}
-  % \item Note: Requires computing $p(\wvec_{t} | \wvec^{(k)}_{1:t-1}, \cvec; \theta)$ for many  $\wvec^{(k)}_{1:t-1}$ 
+  % \item Note: Requires computing $p(\wvec_{t} | \wvec^{(k)}_{1:t-1}, \cvec; \theta)$ for many  $\wvec^{(k)}_{1:t-1}$
   % \end{itemize}
 \end{frame}
 
 % \begin{frame}[fragile]{Beam Search Example} ($K=3$)
 
-  
+
 %     \begin{center}
 %   \begin{tikzpicture}[transform canvas = {scale=0.8}]
 %     \tikzstyle{beam}=[draw, minimum height=0.6cm, anchor=base, text height=5, text depth=0, minimum width=1.5cm,thin, rounded corners, line width=0.03cm]
@@ -169,45 +171,45 @@
 %     \tikzset{>=stealth',every on chain/.append style={join},
 %       every join/.style={->}}
 
-     
+
 %        \begin{scope}
-         
+
 %    \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
 %     \node<1->(G-1-1){a}; & \node<2->(G-1-2){red}; & \node<3->(G-1-3){dog}; & \node<4->(G-1-4){smells}; & \node<5->(G-1-5){home};  & \node<6->(G-1-6){today}; \\
 %     \node<1->(G-2-1){the}; & \node<2->(G-2-2){dog}; & \node<3->(G-2-3){dog}; & \node<4->(G-2-4){barks}; & \node<5->(G-2-5){quickly}; & \node<6->(G-2-6){Friday}; \\
 %     \node<1->(G-3-1){red}; & \node<2->(G-3-2){blue}; & \node<3->(G-3-3){cat}; &  \node<4->(G-3-4){runs}; & \node<5->(G-3-5){straight}; & \node<6->(G-3-6){now}; \\    };
 
 %     \only<2->{
-%       \draw[->] (G-1-1.east) -> (G-1-2.west); 
-%       \draw[->] (G-2-1.east) -> (G-2-2.west); 
-%       \draw[->] (G-1-1.east) -> (G-3-2.west); 
+%       \draw[->] (G-1-1.east) -> (G-1-2.west);
+%       \draw[->] (G-2-1.east) -> (G-2-2.west);
+%       \draw[->] (G-1-1.east) -> (G-3-2.west);
 %       \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-2.south east);
 %     }
-  
+
 %     \only<3->{
-%       \draw[->] (G-1-2.east) -> (G-2-3.west); 
-%       \draw[->] (G-3-2.east) -> (G-3-3.west); 
-%       \draw[->] (G-3-2.east) -> (G-1-3.west); 
+%       \draw[->] (G-1-2.east) -> (G-2-3.west);
+%       \draw[->] (G-3-2.east) -> (G-3-3.west);
+%       \draw[->] (G-3-2.east) -> (G-1-3.west);
 %       \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-3.south east);
 %     }
-    
+
 %  \only<4->{
-%     \draw[->] (G-1-3.east) -> (G-3-4.west); 
-%     \draw[->] (G-2-3.east) -> (G-2-4.west); 
-%     \draw[->] (G-1-3.east) -> (G-1-4.west); 
+%     \draw[->] (G-1-3.east) -> (G-3-4.west);
+%     \draw[->] (G-2-3.east) -> (G-2-4.west);
+%     \draw[->] (G-1-3.east) -> (G-1-4.west);
 %     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-4.south east);
 % }
 %  \only<6->{
-%     \draw[->] (G-1-5.east) -> (G-1-6.west); 
-%     \draw[->] (G-1-5.east) -> (G-3-6.west); 
-%     \draw[->] (G-2-5.east) -> (G-2-6.west); 
+%     \draw[->] (G-1-5.east) -> (G-1-6.west);
+%     \draw[->] (G-1-5.east) -> (G-3-6.west);
+%     \draw[->] (G-2-5.east) -> (G-2-6.west);
 %     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-6.south east);
 % }
 
 %  \only<5->{
-%     \draw[->] (G-3-4.east) -> (G-1-5.west); 
-%     \draw[->] (G-3-4.east) -> (G-2-5.west); 
-%     \draw[->] (G-3-4.east) -> (G-3-5.west); 
+%     \draw[->] (G-3-4.east) -> (G-1-5.west);
+%     \draw[->] (G-3-4.east) -> (G-2-5.west);
+%     \draw[->] (G-3-4.east) -> (G-3-5.west);
 %     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-5.south east);
 % }
 
@@ -221,7 +223,7 @@
 %    \item Compute for all $k, \wvec_{t}$
 %      \[f(\wvec_t, \wvec_{1:t-1}^{(k)}) \gets \log p(\wvec_{t} | \wvec^{(k)}_{1:t-1}, \cvec) + \log p(\wvec^{(k)}_{1:t-1}| \cvec) \]
 %    \item Replace the $K$ highest scoring target sequences
-%      \[\wvec_{1:t}^{(1:K)} \gets K\argmax_{\wvec_{1:t}} (\wvec_t, \wvec_{1:t-1}^{(k)})\]  
+%      \[\wvec_{1:t}^{(1:K)} \gets K\argmax_{\wvec_{1:t}} (\wvec_t, \wvec_{1:t-1}^{(k)})\]
 %    \end{enumerate}
 
 % \end{frame}
@@ -234,7 +236,7 @@
     \item Training by conditioning on true $y_{1:t-1}$.
     \end{itemize}
     \air
-  \item Metric Bias 
+  \item Metric Bias
     \begin{itemize}
     \item Training with local NLL, evaluate with hamming-style losses.
     \end{itemize}
@@ -249,70 +251,70 @@
 \end{frame}
 
 \begin{frame}{Work}
-  Can we exploit discrete sequences to improve models for text generation? 
+  Can we exploit discrete sequences to improve models for text generation?
 
-  
-  \air 
+
+  \air
 
   Applications:
 
   \begin{itemize}
   \item (1) Sequence-to-Sequence as Beam Search Optimization for training.
-    \air 
+    \air
   \item (2) Sequence Knowledge Distillation for deployment.
-    \air 
+    \air
   \end{itemize}
 \end{frame}
 
 
 % \begin{frame}{\structure{Related Work:} Modify training data}
-%   \air 
+%   \air
 %   \begin{itemize}
 %   \item Data as Demonstrator \Cite{Venkatraman}, Scheduled Sampling \Cite{Bengio2015}
 %   \end{itemize}
-%   \air 
+%   \air
 
 %   \centerline{\structure{Related Work:} Use Reinforcement Learning}
-%   \air 
+%   \air
 %   \begin{itemize}
 %   \item MIXER \Cite{Ranzato2016}
 %   \item Actor-Critic \Cite{Bahdanau2016}
 %   \end{itemize}
-  
+
 %   \pause
 
-%   Opinion: 
+%   Opinion:
 %   \begin{itemize}
-%   \item 
-%     DAD methods only address exposure bias, 
+%   \item
+%     DAD methods only address exposure bias,
 %   \item RL is too strong a hammer .
 %   \end{itemize}
 
 %   % \begin{itemize}
-%   % \item 
+%   % \item
 %   % \end{itemize}
 % \end{frame}
 
 \begin{frame}{Beam Search Optimization}
   \research{\citet{Wiseman2016a}}
 
-  Motivation: Can we fix target theoretical issues by unifying training 
-and test objective?  
-  
+  Motivation: Can we fix target theoretical issues by unifying training
+and test objective?
+
 \end{frame}
 
 \begin{frame}{Change 1: Modify Scoring Function  }
 
-  
+
   % \begin{center}
-  %   % \structure{(Idea 1)} Replace local softmax with sequence scorer 
-  %   % \air 
+  %   % \structure{(Idea 1)} Replace local softmax with sequence scorer
+  %   % \air
   %   \includegraphics[width=0.6\textwidth]{rnnlm6}
   % \end{center}
 
-  Same model, but replace 
+  Same model, but replace
   $  \log p(y_{t} | y^{(k)}_{1:t-1}, \cvec; \theta)$
-  with globally normalized 
+  with globally normalized
   $f(y_t, y_{1:t-1}^{(k)}, \cvec; \theta)$
 \end{frame}
 
@@ -321,14 +323,14 @@ and test objective?
 
    \begin{enumerate}
    \item Compute the score of every possible next word.
-     
+
      \only<1>{\[f(y_t, y_{1:t-1}^{(k)}) \gets \alert{\log p(y_{t}\ |\ y^{(k)}_{1:t-1}, \cvec) + \log p(y^{(k)}_{1:t-1} \ |\  \cvec)} \]}
 
    \only<2>{
      \[f(y_t, y_{1:t-1}^{(k)})  \gets  \structure{f(y_t, y_{1:t-1}^{(k)}, \cvec; \theta)} \]}
 
-   \item Prune to only the $K$ highest-scoring, 
-     \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]  
+   \item Prune to only the $K$ highest-scoring,
+     \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]
    \end{enumerate}
   % \begin{enumerate}
   % % \item Start with $K$ partial starting hypotheses $\wvec^{(1:K)}$
@@ -342,7 +344,7 @@ and test objective?
   %    \[f(\wvec_t, \wvec_{1:t-1}^{(k)})  \gets  \structure{f(\wvec_t, \wvec_{1:t-1}^{(k)}, \cvec; \theta)} \]
   %  }
   %  \item Replace the  $K$ highest scoring target sequences
-  %    \[\wvec_{1:t}^{(1:K)} \gets K\argmax_{\wvec_{1:t}} s(\wvec_t, \wvec_{1:t-1}^{(k)})\]  
+  %    \[\wvec_{1:t}^{(1:K)} \gets K\argmax_{\wvec_{1:t}} s(\wvec_t, \wvec_{1:t-1}^{(k)})\]
   %  \end{enumerate}
   % \end{enumerate}
 
@@ -351,18 +353,18 @@ and test objective?
 
 \begin{frame}{ Change 3: Replace train to enforce beam-search margin}
 
-  New Global Objective: 
+  New Global Objective:
   \begin{itemize}
 
-  \item Margin between gold seq $y^{(g)}$ and last seq on beam $y^{(K)}$  
+  \item Margin between gold seq $y^{(g)}$ and last seq on beam $y^{(K)}$
   \end{itemize}
 \begin{align*}
- \mathcal{L}&(\theta) = \sum_{t} \Delta(y^{(g)}_{1:t}, y_{1:t}^{K}) \left[1 - f(y^{(g)}_t, y^{(g)}_{1:t-1}, \cvec) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, \cvec) \right] 
+ \mathcal{L}&(\theta) = \sum_{t} \Delta(y^{(g)}_{1:t}, y_{1:t}^{K}) \left[1 - f(y^{(g)}_t, y^{(g)}_{1:t-1}, \cvec) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, \cvec) \right]
 \end{align*}
 
 \begin{itemize}
-  \item Slack-rescaled, margin-based sequence criterion, at each time step.  
-    \air 
+  \item Slack-rescaled, margin-based sequence criterion, at each time step.
+    \air
 
 \item When violation occurs, target replaces current beam (learning as search optimization \cite{daume05learning})
 \end{itemize}
@@ -372,7 +374,7 @@ and test objective?
 \begin{frame}[fragile]{ Beam Search Optimization Training Example}
   \begin{center}
     \begin{center}
-     
+
     \end{center}
     \air
     \air
@@ -385,11 +387,11 @@ and test objective?
 \tikzset{>=stealth',every on chain/.append style={join},
          every join/.style={->}}
 
-     
+
        % \node[draw = white, yshift=1.8cm]{Time Step};
        %\node[draw = white, xshift=-7.5cm, yshift=0.5cm]{Beam:};
        \begin{scope}
-         
+
 
    \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
     \node<1->[fill=yellow](G-1-1){\textcolor{blue}{a}}; & \node<2->[fill=yellow](G-1-2){red}; & \node<3->[fill=lightgray](G-1-3){\textcolor{blue}{dog}}; & \node<4->(G-1-4){smells}; & \node<5->[fill=lightgray](G-1-5){\textcolor{red}{home}};  & \node<6->[fill=lightgray](G-1-6){\textcolor{red}{today}}; \\
@@ -399,41 +401,41 @@ and test objective?
     };
 
     \only<2->{
-      \draw[->] (G-1-1.east) -> (G-1-2.west); 
-      \draw[->] (G-2-1.east) -> (G-2-2.west); 
-      \draw[->] (G-1-1.east) -> (G-3-2.west); 
+      \draw[->] (G-1-1.east) -> (G-1-2.west);
+      \draw[->] (G-2-1.east) -> (G-2-2.west);
+      \draw[->] (G-1-1.east) -> (G-3-2.west);
       \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-2.south east);
     }
-  
+
     \only<3->{
-      \draw[->] (G-1-2.east) -> (G-2-3.west); 
-      \draw[->] (G-3-2.east) -> (G-3-3.west); 
-      \draw[->] (G-3-2.east) -> (G-1-3.west); 
+      \draw[->] (G-1-2.east) -> (G-2-3.west);
+      \draw[->] (G-3-2.east) -> (G-3-3.west);
+      \draw[->] (G-3-2.east) -> (G-1-3.west);
       \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-3.south east);
     }
-    
+
  \only<4->{
-    \draw[->] (G-2-3.east) -> (G-4-4.west); 
-    \draw[->] (G-1-3.east) -> (G-3-4.west); 
-    \draw[->] (G-2-3.east) -> (G-2-4.west); 
-    \draw[->] (G-1-3.east) -> (G-1-4.west); 
+    \draw[->] (G-2-3.east) -> (G-4-4.west);
+    \draw[->] (G-1-3.east) -> (G-3-4.west);
+    \draw[->] (G-2-3.east) -> (G-2-4.west);
+    \draw[->] (G-1-3.east) -> (G-1-4.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-4.south east);
 }
  \only<6->{
-    \draw[->] (G-1-5.east) -> (G-1-6.west); 
-    \draw[->] (G-1-5.east) -> (G-3-6.west); 
-    \draw[->] (G-2-5.east) -> (G-2-6.west); 
-    \draw[->] (G-2-5.east) -> (G-4-6.west); 
+    \draw[->] (G-1-5.east) -> (G-1-6.west);
+    \draw[->] (G-1-5.east) -> (G-3-6.west);
+    \draw[->] (G-2-5.east) -> (G-2-6.west);
+    \draw[->] (G-2-5.east) -> (G-4-6.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-6.south east);
 }
 
-    % \draw[->] (G-3-2.east) -> (G-3-3.west); 
-    % \draw[->] (G-3-2.east) -> (G-1-3.west); 
+    % \draw[->] (G-3-2.east) -> (G-3-3.west);
+    % \draw[->] (G-3-2.east) -> (G-1-3.west);
 
  \only<5->{
-    \draw[->, dashed] (G-4-4.east) -> (G-1-5.west); 
-    \draw[->, dashed] (G-4-4.east) -> (G-2-5.west); 
-    \draw[->, dashed] (G-4-4.east) -> (G-3-5.west); 
+    \draw[->, dashed] (G-4-4.east) -> (G-1-5.west);
+    \draw[->, dashed] (G-4-4.east) -> (G-2-5.west);
+    \draw[->, dashed] (G-4-4.east) -> (G-3-5.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-5.south east);
 }
 
@@ -447,26 +449,26 @@ and test objective?
     %     \node[fill=yellow](G-1-1){a}; & \node[fill=yellow](G-1-2){red}; & \node[fill=yellow](G-1-3){dog}; & \node[fill=yellow](G-1-4){runs}; & \node[fill=yellow](G-1-5){quickly}; & \node[fill=yellow](G-1-6){today}; \\
     %      & \node[fill=lightgray](G-2-2){\textcolor{blue}{blue}}; & \node[fill=lightgray](G-2-3){\textcolor{blue}{dog}}; & \node[fill=lightgray](G-2-4){\textcolor{blue}{barks}}; & \node[fill=lightgray](G-2-5){\textcolor{red}{home}}; & \node[fill=lightgray](G-2-6){\textcolor{red}{today}}; \\
     %   };
-    % \draw[->] (G-1-1.east) -> (G-1-2.west); 
-    % \draw[->] (G-1-2.east) -> (G-1-3.west); 
-    % \draw[->] (G-1-3.east) -> (G-1-4.west); 
-    % \draw[->] (G-1-4.east) -> (G-1-5.west); 
-    % \draw[->] (G-1-5.east) -> (G-1-6.west); 
+    % \draw[->] (G-1-1.east) -> (G-1-2.west);
+    % \draw[->] (G-1-2.east) -> (G-1-3.west);
+    % \draw[->] (G-1-3.east) -> (G-1-4.west);
+    % \draw[->] (G-1-4.east) -> (G-1-5.west);
+    % \draw[->] (G-1-5.east) -> (G-1-6.west);
 
-    % \draw[->] (G-1-1.east) -> (G-2-2.west); 
-    % \draw[->] (G-2-2.east) -> (G-2-3.west); 
-    % \draw[->] (G-2-3.east) -> (G-2-4.west); 
-    % \draw[->] (G-1-4.east) -> (G-2-5.west); 
-    % \draw[->] (G-2-5.east) -> (G-2-6.west); 
-      
+    % \draw[->] (G-1-1.east) -> (G-2-2.west);
+    % \draw[->] (G-2-2.east) -> (G-2-3.west);
+    % \draw[->] (G-2-3.east) -> (G-2-4.west);
+    % \draw[->] (G-1-4.east) -> (G-2-5.west);
+    % \draw[->] (G-2-5.east) -> (G-2-6.west);
+
     % \end{scope}
 \end{tikzpicture}
-  \end{center}  
+  \end{center}
 
-  \air 
-  \air 
+  \air
+  \air
 % \begin{align*}
-%  \mathcal{L}&(\theta) = \sum_{t} \Delta(\wvec_{1:t}, \wvec_{1:t}^{(K)}) \left[1 - f(\wvec_t, \wvec_{1:t-1}, \cvec) +  f(\wvec_t^{(K)}, \wvec_{1:t-1}^{(K)}, \cvec) \right] 
+%  \mathcal{L}&(\theta) = \sum_{t} \Delta(\wvec_{1:t}, \wvec_{1:t}^{(K)}) \left[1 - f(\wvec_t, \wvec_{1:t-1}, \cvec) +  f(\wvec_t^{(K)}, \wvec_{1:t-1}^{(K)}, \cvec) \right]
 % \end{align*}
 
   \begin{itemize}
@@ -477,21 +479,21 @@ and test objective?
 
 \begin{frame}[fragile]{Structured Backpropagation}
   \begin{center}
-    
-  \air 
-  \air 
+
+  \air
+  \air
 
   \begin{tikzpicture}[transform canvas = {scale=0.8}]
     \tikzstyle{beam}=[draw, minimum height=0.6cm, anchor=base, text height=5, text depth=0, minimum width=1.5cm,thin, rounded corners, line width=0.03cm]
     \tikzstyle{mat}=[draw=white]
     \tikzset{>=stealth',every on chain/.append style={join},
       every join/.style={->}}
-    
-     
+
+
        % \node[draw = white, yshift=1.8cm]{Time Step};
        %\node[draw = white, xshift=-7.5cm, yshift=0.5cm]{Beam:};
        \begin{scope}
-         
+
 
    \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
      \node[fill=yellow](G-1-1){\textcolor{blue}{a}}; & \node[fill=yellow](G-1-2){red}; & \node[fill=lightgray](G-1-3){\textcolor{blue}{dog}}; & \node(G-1-4){smells}; & \node[fill=lightgray](G-1-5){\textcolor{red}{home}};  & \node[fill=lightgray](G-1-6){\textcolor{red}{today}}; \\
@@ -501,37 +503,37 @@ and test objective?
     };
 
 
-    \draw[->] (G-1-1.east) -> (G-1-2.west); 
-    \draw[->] (G-2-1.east) -> (G-2-2.west); 
-    \draw[->] (G-1-1.east) -> (G-3-2.west); 
+    \draw[->] (G-1-1.east) -> (G-1-2.west);
+    \draw[->] (G-2-1.east) -> (G-2-2.west);
+    \draw[->] (G-1-1.east) -> (G-3-2.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-2.south east);
 
 
-    \draw[->] (G-1-2.east) -> (G-2-3.west); 
-    \draw[->] (G-3-2.east) -> (G-3-3.west); 
-    \draw[->] (G-3-2.east) -> (G-1-3.west); 
+    \draw[->] (G-1-2.east) -> (G-2-3.west);
+    \draw[->] (G-3-2.east) -> (G-3-3.west);
+    \draw[->] (G-3-2.east) -> (G-1-3.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-3.south east);
 
-    \draw[->] (G-2-3.east) -> (G-4-4.west); 
-    \draw[->] (G-1-3.east) -> (G-3-4.west); 
-    \draw[->] (G-2-3.east) -> (G-2-4.west); 
-    \draw[->] (G-1-3.east) -> (G-1-4.west); 
+    \draw[->] (G-2-3.east) -> (G-4-4.west);
+    \draw[->] (G-1-3.east) -> (G-3-4.west);
+    \draw[->] (G-2-3.east) -> (G-2-4.west);
+    \draw[->] (G-1-3.east) -> (G-1-4.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-4.south east);
 
-    \draw[->] (G-1-5.east) -> (G-1-6.west); 
-    \draw[->] (G-1-5.east) -> (G-3-6.west); 
-    \draw[->] (G-2-5.east) -> (G-2-6.west); 
-    \draw[->] (G-2-5.east) -> (G-4-6.west); 
+    \draw[->] (G-1-5.east) -> (G-1-6.west);
+    \draw[->] (G-1-5.east) -> (G-3-6.west);
+    \draw[->] (G-2-5.east) -> (G-2-6.west);
+    \draw[->] (G-2-5.east) -> (G-4-6.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-6.south east);
 
 
-    % \draw[->] (G-3-2.east) -> (G-3-3.west); 
-    % \draw[->] (G-3-2.east) -> (G-1-3.west); 
+    % \draw[->] (G-3-2.east) -> (G-3-3.west);
+    % \draw[->] (G-3-2.east) -> (G-1-3.west);
 
 
-    \draw[->, dashed] (G-4-4.east) -> (G-1-5.west); 
-    \draw[->, dashed] (G-4-4.east) -> (G-2-5.west); 
-    \draw[->, dashed] (G-4-4.east) -> (G-3-5.west); 
+    \draw[->, dashed] (G-4-4.east) -> (G-1-5.west);
+    \draw[->, dashed] (G-4-4.east) -> (G-2-5.west);
+    \draw[->, dashed] (G-4-4.east) -> (G-3-5.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-5.south east);
 
 
@@ -543,24 +545,24 @@ and test objective?
         \node[fill=yellow](G-1-1){a}; & \node[fill=yellow](G-1-2){red}; & \node[fill=yellow](G-1-3){dog}; & \node[fill=yellow](G-1-4){runs}; & \node[fill=yellow](G-1-5){quickly}; & \node[fill=yellow](G-1-6){today}; \\
          & \node[fill=lightgray](G-2-2){\textcolor{blue}{blue}}; & \node[fill=lightgray](G-2-3){\textcolor{blue}{dog}}; & \node[fill=lightgray](G-2-4){\textcolor{blue}{barks}}; & \node[fill=lightgray](G-2-5){\textcolor{red}{home}}; & \node[fill=lightgray](G-2-6){\textcolor{red}{today}}; \\
       };
-    \draw[->] (G-1-1.east) -> (G-1-2.west); 
-    \draw[->] (G-1-2.east) -> (G-1-3.west); 
-    \draw[->] (G-1-3.east) -> (G-1-4.west); 
-    \draw[->] (G-1-4.east) -> (G-1-5.west); 
-    \draw[->] (G-1-5.east) -> (G-1-6.west); 
+    \draw[->] (G-1-1.east) -> (G-1-2.west);
+    \draw[->] (G-1-2.east) -> (G-1-3.west);
+    \draw[->] (G-1-3.east) -> (G-1-4.west);
+    \draw[->] (G-1-4.east) -> (G-1-5.west);
+    \draw[->] (G-1-5.east) -> (G-1-6.west);
 
-    \draw[->] (G-1-1.east) -> (G-2-2.west); 
-    \draw[->] (G-2-2.east) -> (G-2-3.west); 
-    \draw[->] (G-2-3.east) -> (G-2-4.west); 
-    \draw[->] (G-1-4.east) -> (G-2-5.west); 
-    \draw[->] (G-2-5.east) -> (G-2-6.west); 
-      
+    \draw[->] (G-1-1.east) -> (G-2-2.west);
+    \draw[->] (G-2-2.east) -> (G-2-3.west);
+    \draw[->] (G-2-3.east) -> (G-2-4.west);
+    \draw[->] (G-1-4.east) -> (G-2-5.west);
+    \draw[->] (G-2-5.east) -> (G-2-6.west);
+
     \end{scope}
-  \end{tikzpicture}  
+  \end{tikzpicture}
   \end{center}
   \vspace{2cm}
   \vspace{1cm}
-  
+
   \begin{itemize}
   \item Margin gradients are sparse, only violating sequences get updates.
   \item Backprop as efficient as standard models.
@@ -582,7 +584,7 @@ and test objective?
     \item Beam search at training
     \end{itemize}
     \air
-  \item Train/Test Loss Mismatch 
+  \item Train/Test Loss Mismatch
     \begin{itemize}
     \item Slack-rescaled margin can capture correct loss.
     \end{itemize}
@@ -598,7 +600,7 @@ and test objective?
 
 
 % \begin{frame}{Experiments}
-%   \air 
+%   \air
 
 %   Experiments run on three different seq2seq baseline tasks
 
@@ -606,7 +608,7 @@ and test objective?
 %   \item Word Ordering
 %     \air
 %   \item Dependency Parsing
-%     \air 
+%     \air
 %   \item Machine Translation
 %   \end{itemize}
 
@@ -614,11 +616,11 @@ and test objective?
 
 %   Details:
 %   \begin{itemize}
-%   \item Utilize our \textit{seq2seq-attn} code, very strong attention-based system 
-%   \item Pretrained with NLL. 
+%   \item Utilize our \textit{seq2seq-attn} code, very strong attention-based system
+%   \item Pretrained with NLL.
 %   \item Trained with a curriculum to gradually increase beam size.
 %   \end{itemize}
- 
+
 % \end{frame}
 
 
@@ -629,9 +631,9 @@ and test objective?
     \footnotesize
   \begin{tabular}{lccc}
     \toprule
-    & $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\ 
+    & $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\
     \midrule
-     & \multicolumn{3}{c}{Word Ordering (BLEU) } \\ 
+     & \multicolumn{3}{c}{Word Ordering (BLEU) } \\
     \midrule
     seq2seq & 25.2 & 29.8 & 31.0 \\
     BSO     & 28.0 & 33.2 & 34.3 \\
@@ -647,26 +649,26 @@ and test objective?
 %   \centering
 %   \hspace*{-0.3cm}\begin{tabular}{lccc}
 %     \toprule
-    & \multicolumn{3}{c}{Dependency Parsing (UAS/LAS) } \\ 
+    & \multicolumn{3}{c}{Dependency Parsing (UAS/LAS) } \\
     % \midrule
     seq2seq & \textbf{87.33/82.26} & 88.53/84.16 & 88.66/84.33\\
     BSO & 86.91/82.11 & 91.00/\textbf{87.18} & 91.17/\textbf{87.41} \\
     BSO-Con & 85.11/79.32 & \textbf{91.25}/86.92 & \textbf{91.57}/87.26 \\
     % \midrule
-    % Andor & 93.17/91.18 & - & - \\ 
+    % Andor & 93.17/91.18 & - & - \\
     % \bottomrule
 
     \midrule
     \pause
-    & \multicolumn{3}{c}{Machine Translation (BLEU) } \\ 
-    % &  $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\ 
+    & \multicolumn{3}{c}{Machine Translation (BLEU) } \\
+    % &  $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\
     % \midrule
     seq2seq & 22.53 & 24.03 & 23.87 \\
     BSO, SB-$\Delta$, $K_t$=6 & \textbf{23.83} & \textbf{26.36} & \textbf{25.48} \\
     % \midrule
     XENT & 17.74 & $\leq$ 20.5 & $\leq$ 20.5 \\
-    DAD & 20.12 & $\leq$ 22.5 & $\leq$ 23.0 \\ 
-    MIXER & 20.73 & - & $\leq$ 22.0 \\    
+    DAD & 20.12 & $\leq$ 22.5 & $\leq$ 23.0 \\
+    MIXER & 20.73 & - & $\leq$ 22.0 \\
     \bottomrule
   \end{tabular}
   \label{tab:mtfinal}
@@ -684,13 +686,13 @@ and test objective?
 % \air
 
 % \begin{itemize}
-% \item \textbf{Pruning}: Prune weights based on importance criterion 
+% \item \textbf{Pruning}: Prune weights based on importance criterion
 % \cite{LeCun1990,Han2016}
-% \item \textbf{Knowledge Distillation}: Train a \textit{student} model to learn 
+% \item \textbf{Knowledge Distillation}: Train a \textit{student} model to learn
 % from a \textit{teacher} model \cite{Bucila2006,Ba2014,Hinton2015}.
 % \end{itemize}
 % \air
-% Other methods: 
+% Other methods:
 % \begin{itemize}
 % \item low-rank matrix factorization of weight matrices \cite{Denton2014}
 % \item weight binarization \cite{Lin2016}
@@ -702,7 +704,7 @@ and test objective?
 
 % \begin{frame}
 % \centerline{\structure{Word-Level Knowledge Distillation}}
-% \air 
+% \air
 % \air
 
 % \begin{columns}
@@ -728,13 +730,13 @@ and test objective?
   Goal: Compress text generation models.
 
 \begin{itemize}
-\item \textbf{Pruning}: Prune weights based on importance criterion 
+\item \textbf{Pruning}: Prune weights based on importance criterion
 \cite{LeCun1990,Han2016}
-\item \textbf{Knowledge Distillation}: Train a \textit{student} model to learn 
+\item \textbf{Knowledge Distillation}: Train a \textit{student} model to learn
 from a \textit{teacher} model \cite{Bucila2006,Ba2014,Hinton2015}.
 \end{itemize}
 \air
-Other methods: 
+Other methods:
 \begin{itemize}
 \item low-rank matrix factorization of weight matrices \cite{Denton2014}
 \item weight binarization \cite{Lin2016}
@@ -743,20 +745,20 @@ Other methods:
 % \end{frame}
 
 
-  
+
 \end{frame}
 
 \begin{frame}{Baseline Model}
 
 \begin{columns}
 \begin{column}{7cm}
-Standard model minimize $\text{NLL}(\theta)$: 
+Standard model minimize $\text{NLL}(\theta)$:
 \air
 $$-\sum_t \log p(y_t=y^{(g)}_t \given y^{(g)}_{1:t-1}, \cvec ; \theta)$$
 
 where $y^{(g)}_t$ is the ground truth word at time $t$.
 
-\air 
+\air
 
 Cross-entropy with ground truth.
 
@@ -789,8 +791,8 @@ Cross-entropy with ground truth.
 
 \begin{columns}
 \begin{column}{7cm}
-Teacher network: $q(y_{t} | y_{1:t-1}, \cvec  ; \theta_T$)  
-\air 
+Teacher network: $q(y_{t} | y_{1:t-1}, \cvec  ; \theta_T$)
+\air
 
 Minimize cross-entropy between teacher and student distribution  $\mathcal{L}_{\text{WORD-KD}}(\theta)$ \\
 
@@ -813,7 +815,7 @@ Minimize cross-entropy between teacher and student distribution  $\mathcal{L}_{\
 % \air
 % \begin{columns}
 % \begin{column}{6.5cm}
-% Add a term for NLL (equivalent to minimizing cross-entropy between student a mixture distribution of teacher/data distributions)  
+% Add a term for NLL (equivalent to minimizing cross-entropy between student a mixture distribution of teacher/data distributions)
 % \air
 % $$\mathcal{L}(\theta) = \alpha\mathcal{L}_{\text{WORD-KD}}(\theta) + (1-\alpha)\mathcal{L}_{\text{NLL}}(\theta)$$
 % \air
@@ -827,18 +829,18 @@ Minimize cross-entropy between teacher and student distribution  $\mathcal{L}_{\
 % \end{frame}
 
 \begin{frame}{Sequence-Level Knowledge Distillation}
-\air 
+\air
 \air
 
-Proposal: Replace multi-class with sequence distribution. Instead of word NLL, 
+Proposal: Replace multi-class with sequence distribution. Instead of word NLL,
 
 \begin{align*}
 -\sum_t \sum_v &q(y_t=v \given y^{(g)}_{1: t-1}, \cvec ; \theta_T)\times  \log p(y_t =v \given y^{(g)}_{1: t-1}, \cvec ; \theta)
 \end{align*}
- 
+
 % $$-\sum_t \log p(y_t=y_t \given y_{1:t-1}, \cvec ; \theta)$$
 
-Minimize cross-entropy between $q$ and $p$ implied sequence-distribution 
+Minimize cross-entropy between $q$ and $p$ implied sequence-distribution
 \[
  -\sum_{v_1} \ldots \sum_{v_T} q(y_{1:T}= v_{1:T}  | \cvec; \theta_T) \times \log p(y_{1:T}=v_{1:T} | \cvec ; \theta)
 \]
@@ -851,7 +853,7 @@ However, as before this term is intractable.
 \end{frame}
 
 \begin{frame}{A Simple Approximation}
-\air 
+\air
 \air
 
 %\centerline{Sequence-Level Knowledge Distillation}
@@ -860,10 +862,10 @@ However, as before this term is intractable.
 Approximate $q(y_{1:T} \given \cvec )$ with mode
 $$q(y_{1:T} \given \cvec ) \approx \mathbf{1}\{\argmax_{y} q(y_{1:T} \given \cvec )\}$$
 \air
-Roughly obtained with  beam search 
+Roughly obtained with  beam search
 $$ y^*_{1:T} \approx  \argmax_{y_{1:T}} q(y_{1:T} \given \cvec ) $$
 \\
-Empirically, point estimate captures 
+Empirically, point estimate captures
 significant mass
 
 \end{column}
@@ -902,7 +904,7 @@ $4 \times 1000$ \\
 Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ &   $6.7$ &  $1.3\%$ \\
 \hspace{1mm} Seq-Inter    & $19.6$ & $+1.9$&  $19.8$& $+0.3$&   $10.4$ & $8.2\%$   \\
 \midrule
-$2 \times 500$ \\ 
+$2 \times 500$ \\
 Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ &  $8.2$ & $0.9\%$  \\
 \hspace{1mm} Word-KD  & $15.4$ & $+0.7$& $17.7$& $+0.1$&  $8.0$ & $1.0\%$  \\
 \hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$&  $22.7$ & $16.9\%$ \\
@@ -924,12 +926,12 @@ Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ &  $8.2$ & $0.9\%$  \\
 
 
 \begin{frame}{Application}
-  
+
   \begin{center}
     \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Temporary}{videos/translate.mp4}
   \end{center}
 \end{frame}
 
 \begin{frame}{}
-  
+
 \end{frame}

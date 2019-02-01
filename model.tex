@@ -3,13 +3,13 @@
 %%% End:
 
 \begin{frame}
-  
+
 \end{frame}
 
 
 
 
-\begin{frame}
+\begin{frame}{Research Direction}
   \begin{center}
     \scalebox{2}{
   \begin{tikzpicture}
@@ -33,7 +33,7 @@
 \end{frame}
 
 \begin{frame}{Generation Setup (Reminder)}
-    \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \] 
+    \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \]
 
 % \begin{tikzpicture}[
 %   remember picture,
@@ -43,16 +43,16 @@
 % \node (ptdexa) [below right =  of {pic cs:nn}] {Neural Network};
 % \node (ptdexb) [below = of {pic cs:opt}] {Optimization};
 % \node (ptdexc) [below = of {pic cs:input}] {Input};
-% \draw[->] (ptdex.north) -- ({pic cs:pd}); 
-% \draw[->] (ptdexa.north) -- ({pic cs:nn}); 
-% \draw[->] (ptdexb.north) -- ({pic cs:opt}); 
-% \draw[->] (ptdexc.north) -- ({pic cs:input}); 
+% \draw[->] (ptdex.north) -- ({pic cs:pd});
+% \draw[->] (ptdexa.north) -- ({pic cs:nn});
+% \draw[->] (ptdexb.north) -- ({pic cs:opt});
+% \draw[->] (ptdexc.north) -- ({pic cs:input});
 % \end{tikzpicture}
 
   \begin{itemize}
 
   \item Input \alert<2>{$x_{1:S}$},  \textit{what to talk about}
-    \air 
+    \air
 
   \item Output text \alert<3>{$y^*_{1:T}$}, \textit{how to say it}
     \air
@@ -83,10 +83,10 @@
   Prediction:
   \[ p(y_{t+1}\  |\  y_{1:t}, x) = \softmax( \mathbf{W} [\mathbf{h}_t, \mathbf{c}]) \]
 
-  \pause 
+  \pause
 
   Generation:
-  \[ \argmax_{y_{1:T}} f(y_{1:T}; x, \theta) = \argmax_{y_{1:T}} \log \sum_{t=1}^T p(y_{t}\  |\  y_{1:t-1}, x) \] 
+  \[ \argmax_{y_{1:T}} f(y_{1:T}; x, \theta) = \argmax_{y_{1:T}} \log \sum_{t=1}^T p(y_{t}\  |\  y_{1:t-1}, x) \]
 
 \end{frame}
 
@@ -132,7 +132,7 @@
 
 
   \textcolor{orange}{Attention}
-  \[\alpha \gets  \softmax(   [\mathbf{h}^{x}_1 ; \ldots; \mathbf{h}^{x}_S]^\top \mathbf{h}_{t} ) \ \ \ \ 
+  \[\alpha \gets  \softmax(   [\mathbf{h}^{x}_1 ; \ldots; \mathbf{h}^{x}_S]^\top \mathbf{h}_{t} ) \ \ \ \
   {\mathbf{c}} \gets \sum_{s =1}^S \alpha_s \mathbf{h}_s^{x}  \]
 
   \textcolor{red}{Decoder}:
@@ -150,12 +150,12 @@
   \begin{center}
     \movie[width=\textwidth, height=0.85\textheight, poster, showcontrols]{Temporary}{videos/seq2seq.mp4}
   \end{center}
-  
+
 \end{frame}
 
 
 \begin{frame}
-  
+
   \begin{center}
     \includegraphics[width=\linewidth]{opennmt}
   \end{center}
@@ -169,12 +169,12 @@
 
   \begin{itemize}
   \item Collaborative open-source project started at Harvard, now self-sustaining.
-    \air 
+    \air
   \item Used in production by Systran, Ubiqus, Booking.com, and others.
     \air
   \item Over 100 developers in France, China, Japan, Portugal, and the US.
     \air
-  \item Designed to be research extensible to latest machine translation techniques. 
+  \item Designed to be research extensible to latest machine translation techniques.
     \air
 
   \item Pretrained models for translation as well as everything in this talk.
