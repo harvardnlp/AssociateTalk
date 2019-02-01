@@ -2,7 +2,11 @@
 %%% TeX-master: "slides"
 %%% End:
 
-\section{Section 1}
+\begin{frame}
+  
+\end{frame}
+
+
 
 
 \begin{frame}
@@ -46,7 +50,7 @@
 % \end{tikzpicture}
 
   \begin{itemize}
-    \pause
+
   \item Input \alert<2>{$x_{1:S}$},  \textit{what to talk about}
     \air 
 
@@ -82,7 +86,7 @@
   \pause 
 
   Generation:
-  \[ \argmax_{y_{1:T}} f(y_{1:T}; x, \theta) = \argmax_{y_{1:T}} \prod_{t=1}^T p(y_{t+1}\  |\  y_{1:t}, x) \] 
+  \[ \argmax_{y_{1:T}} f(y_{1:T}; x, \theta) = \argmax_{y_{1:T}} \log \sum_{t=1}^T p(y_{t}\  |\  y_{1:t-1}, x) \] 
 
 \end{frame}
 

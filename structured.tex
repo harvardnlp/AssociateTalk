@@ -1,8 +1,48 @@
 
 \section{Section 3: Structured Modeling }
 
+\begin{frame}
+  \begin{center}
+    \scalebox{2}{
+  \begin{tikzpicture}
+
+    \node<1> at (10mm, 15mm){\includegraphics[width=3cm]{rnnlm6}};
+    \node[draw,  thick, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
+    \node[draw,  fill=yellow, thick, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
+    \node[draw,  thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
+    \node[draw, thick, rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
+    \node[draw, fill=yellow, thick, rounded corners, scale=0.5] (dep) at (25mm, 0mm){Deployment};
+
+    \node[draw, thick, rounded corners,scale=0.5] (imp) at (0, 0) {Implementation};
+
+    \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
+
+  \end{tikzpicture}
+}
+  \end{center}
+
+
+\end{frame}
+
+\begin{frame}{Generation Setup (Reminder)}
+    \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \] 
+
+
+  \begin{itemize}
+
+  \item Input \alert<2>{$x_{1:S}$},  \textit{what to talk about}
+    \air 
+
+  \item Output text \alert<3>{$y^*_{1:T}$}, \textit{how to say it}
+    \air
+
+  \item Model \alert<4>{$f(.; \theta)$}, learned from data
+  \end{itemize}
+\end{frame}
+
+
 \begin{frame}{Training Seq2Seq}
-  Seq2Seq is trained to predict the next word \textit{given the true history.}
+  Parameters $\theta$ are trained to predict the next word \textit{given the true history.}
 
   \begin{center}
   \includegraphics[height=3.5cm, trim={12cm 3cm 7cm 0.5cm}, clip]{nmt-noattn-4}
@@ -10,32 +50,30 @@
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-7}
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-8}
   \end{center}
-  Multiclass Classification:
+  Pretend it is Multiclass classification:
   \[ \text{NLL}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, \cvec; \theta) \] 
 \end{frame}
 
 \begin{frame}{Deploying Seq2Seq}
-  Seq2Seq is deployed to predict a next word \textit{given its predictions}.
+  Parameters $\theta$ is deployed to predict a next word \textit{given the predicted history}.
 
 
   \begin{center}
   % \includegraphics[height=3.5cm, trim={12cm 3cm 7cm 0.5cm}, clip]{nmt-noattn-3}
   \includegraphics[height=3.5cm, trim={12cm 3cm 7cm 0.5cm}, clip]{nmt-noattn-4}
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-5}
-
   \includegraphics[width=7cm]{beam}
-
-
   \end{center}
 
-  \[ y^*_{1:T} = \argmax_{y_{1:T}} f(y_{1:t}; \theta) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, \cvec; \theta) \] 
+  Deploy as a structured model:
+  \[ y^*_{1:T} = \argmax_{y_{1:T}} f(y_{1:T}; \theta) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, \cvec; \theta) \] 
   % \pause
   % % \begin{itemize}
   % % \item Note: Completely intractable $O(\text{\#vocab} ^T)$ 
   % % \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Heuristic:  Beam Search}
+\begin{frame}[fragile]{Best Sequence Heuristic:  Beam Search}
     \begin{center}
   \begin{tikzpicture}[transform canvas = {scale=0.8}]
     \tikzstyle{beam}=[draw, minimum height=0.6cm, anchor=base, text height=5, text depth=0, minimum width=1.5cm,thin, rounded corners, line width=0.03cm]
@@ -83,7 +121,7 @@
     \draw[->] (G-3-4.east) -> (G-3-5.west); 
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-5.south east);
 }
-         \node[left=0.2cm of G]{K};
+         \node[left=0.2cm of G]{K = 3};
          \node[below=0.1cm of G]{T};
 
 \end{scope}
@@ -93,16 +131,17 @@
 \air 
     \air
 
+\air
 
-
-  For time $t$:
+\only<6->{
    \begin{enumerate}
-   \item Compute the score of every possible next word for each sequence,
+   \item Compute the score of every possible next word.
      \[f(y_t, y_{1:t-1}^{(k)}) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, \cvec) + \log p(y^{(k)}_{1:t-1} \ |\  \cvec) \]
-   \item Prune to only the $K$ highest-scoring target sequences, 
+     \pause
+   \item Prune to only the $K$ highest-scoring, 
      \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]  
    \end{enumerate}
-
+}
 
   % \begin{enumerate}
   % \item Start with $K$ partial starting hypotheses $\wvec^{(1:K)}$
@@ -210,23 +249,21 @@
 \end{frame}
 
 \begin{frame}{Work}
-  Can we exploit the nature of discrete sequences to improve 
-  deep learning models for text generation and translation? 
+  Can we exploit discrete sequences to improve models for text generation? 
 
-  \begin{center}
-  \begin{tikzpicture}
-    \node[rounded corners, draw] (ana) at (-15mm, 15mm) {Analysis};
-    \node[rounded corners, fill=yellow,  draw] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
-    \node[rounded corners, draw] (app) at (25mm, 30mm) {Applications};
-    \node[rounded corners, draw] (und) at (35mm, 15mm) {Understanding};
-    \node[rounded corners, fill=yellow,  draw] (dep) at (25mm, 0mm){Deployment};
-    \node[rounded corners, fill=yellow, draw] (imp) at (0, 0) {Implement};
-    \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
-  \end{tikzpicture}
-  \end{center}
+  
+  \air 
 
+  Applications:
 
+  \begin{itemize}
+  \item (1) Sequence-to-Sequence as Beam Search Optimization for training.
+    \air 
+  \item (2) Sequence Knowledge Distillation for deployment.
+    \air 
+  \end{itemize}
 \end{frame}
+
 
 % \begin{frame}{\structure{Related Work:} Modify training data}
 %   \air 
@@ -256,76 +293,83 @@
 %   % \end{itemize}
 % \end{frame}
 
+\begin{frame}{Beam Search Optimization}
+  \research{\citet{Wiseman2016a}}
 
-\begin{frame}{Structured Seq2Seq}
-
-  Main Idea: Replace next word model with a sequence model $f$. 
-
+  Motivation: Can we fix target theoretical issues by unifying training 
+and test objective?  
   
-  \air 
-
-  Applications:
-
-  \begin{itemize}
-  \item (1) Sequence-to-Sequence as Beam Search Optimization 
-    \air 
-  \item (2) Sequence Knowledge Distillation.
-    \air 
-  \end{itemize}
 \end{frame}
 
-\begin{frame}{Sequence-to-Sequence as Beam Search Optimization}
-  \begin{center}
-    % \structure{(Idea 1)} Replace local softmax with sequence scorer 
-    % \air 
-    \includegraphics[width=0.6\textwidth]{rnnlm6}
-  \end{center}
+\begin{frame}{Change 1: Modify Scoring Function  }
+
+  
+  % \begin{center}
+  %   % \structure{(Idea 1)} Replace local softmax with sequence scorer 
+  %   % \air 
+  %   \includegraphics[width=0.6\textwidth]{rnnlm6}
+  % \end{center}
 
   Same model, but replace 
   $  \log p(y_{t} | y^{(k)}_{1:t-1}, \cvec; \theta)$
-  with unnormalized 
+  with globally normalized 
   $f(y_t, y_{1:t-1}^{(k)}, \cvec; \theta)$
 \end{frame}
 
-\begin{frame}{Sequence-to-Sequence as Beam Search Optimization}
-  \begin{enumerate}
-  \item Start with $K$ partial starting hypotheses $\wvec^{(1:K)}$
-  \item For timesteps $t$ from  $1$ to $T$:
+\begin{frame}{Change 2: Run Beam Search During Training}
+
+
    \begin{enumerate}
-   \item Compute for all $k, \wvec_{t}$
-     \only<1>{
-     \[s(\wvec_t, \wvec_{1:t-1}^{(k)}) \gets \alert{\log p(\wvec_{t} | \wvec^{(k)}_{1:t-1}, \cvec; \theta) + \log p(\wvec^{(k)}_{1:t-1}| \cvec;\theta)} \]
-   }
+   \item Compute the score of every possible next word.
+     
+     \only<1>{\[f(y_t, y_{1:t-1}^{(k)}) \gets \alert{\log p(y_{t}\ |\ y^{(k)}_{1:t-1}, \cvec) + \log p(y^{(k)}_{1:t-1} \ |\  \cvec)} \]}
+
    \only<2>{
-     \[s(\wvec_t, \wvec_{1:t-1}^{(k)})  \gets  \structure{f(\wvec_t, \wvec_{1:t-1}^{(k)}, \cvec; \theta)} \]
-   }
-   \item Replace the  $K$ highest scoring target sequences
-     \[\wvec_{1:t}^{(1:K)} \gets K\argmax_{\wvec_{1:t}} s(\wvec_t, \wvec_{1:t-1}^{(k)})\]  
+     \[f(y_t, y_{1:t-1}^{(k)})  \gets  \structure{f(y_t, y_{1:t-1}^{(k)}, \cvec; \theta)} \]}
+
+   \item Prune to only the $K$ highest-scoring, 
+     \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]  
    \end{enumerate}
-  \end{enumerate}
+  % \begin{enumerate}
+  % % \item Start with $K$ partial starting hypotheses $\wvec^{(1:K)}$
+  % % \item For timesteps $t$ from  $1$ to $T$:
+  %  \begin{enumerate}
+  %  \item Compute for all $k, \wvec_{t}$
+  %    \only<1>{
+  %    \[f(\wvec_t, \wvec_{1:t-1}^{(k)}) \gets \alert{\log p(\wvec_{t} | \wvec^{(k)}_{1:t-1}, \cvec; \theta) + \log p(\wvec^{(k)}_{1:t-1}| \cvec;\theta)} \]
+  %  }
+  %  \only<2>{
+  %    \[f(\wvec_t, \wvec_{1:t-1}^{(k)})  \gets  \structure{f(\wvec_t, \wvec_{1:t-1}^{(k)}, \cvec; \theta)} \]
+  %  }
+  %  \item Replace the  $K$ highest scoring target sequences
+  %    \[\wvec_{1:t}^{(1:K)} \gets K\argmax_{\wvec_{1:t}} s(\wvec_t, \wvec_{1:t-1}^{(k)})\]  
+  %  \end{enumerate}
+  % \end{enumerate}
 
 \end{frame}
 
 
-\begin{frame}{ Replace local training objective with beam-search margin}
+\begin{frame}{ Change 3: Replace train to enforce beam-search margin}
 
-  New Objective: 
+  New Global Objective: 
   \begin{itemize}
 
-  \item Margin between target seq $y$ and last seq on beam $\wvec^{(K)}$  
+  \item Margin between gold seq $y^{(g)}$ and last seq on beam $y^{(K)}$  
   \end{itemize}
 \begin{align*}
- \mathcal{L}&(\theta) = \sum_{t} \Delta(y_{1:t}, \wvec_{1:t}^{K}) \left[1 - f(y_t, y_{1:t-1}, \cvec) +  f(\wvec_t^{(K)}, \wvec_{1:t-1}^{(K)}, \cvec) \right] 
+ \mathcal{L}&(\theta) = \sum_{t} \Delta(y^{(g)}_{1:t}, y_{1:t}^{K}) \left[1 - f(y^{(g)}_t, y^{(g)}_{1:t-1}, \cvec) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, \cvec) \right] 
 \end{align*}
 
 \begin{itemize}
   \item Slack-rescaled, margin-based sequence criterion, at each time step.  
+    \air 
+
 \item When violation occurs, target replaces current beam (learning as search optimization \cite{daume05learning})
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}[fragile]{ Beam Search Optimization Example ($K=3$)}
+\begin{frame}[fragile]{ Beam Search Optimization Training Example}
   \begin{center}
     \begin{center}
      
@@ -426,8 +470,8 @@
 % \end{align*}
 
   \begin{itemize}
-  \item Color \textcolor{yellow}{Gold}: target sequence $y$
-  \item Color \textcolor{gray}{Gray}: violating sequence $\wvec^{(K)}$
+  \item Color \textcolor{yellow}{Gold}: target sequence $y^{(g)}$
+  \item Color \textcolor{gray}{Gray}: violating sequence $y^{(K)}$
   \end{itemize}
 \end{frame}
 
@@ -553,36 +597,36 @@
 \end{frame}
 
 
-\begin{frame}{Experiments}
-  \air 
+% \begin{frame}{Experiments}
+%   \air 
 
-  Experiments run on three different seq2seq baseline tasks
+%   Experiments run on three different seq2seq baseline tasks
 
-  \begin{itemize}
-  \item Word Ordering
-    \air
-  \item Dependency Parsing
-    \air 
-  \item Machine Translation
-  \end{itemize}
+%   \begin{itemize}
+%   \item Word Ordering
+%     \air
+%   \item Dependency Parsing
+%     \air 
+%   \item Machine Translation
+%   \end{itemize}
 
 
 
-  Details:
-  \begin{itemize}
-  \item Utilize our \textit{seq2seq-attn} code, very strong attention-based system 
-  \item Pretrained with NLL. 
-  \item Trained with a curriculum to gradually increase beam size.
-  \end{itemize}
+%   Details:
+%   \begin{itemize}
+%   \item Utilize our \textit{seq2seq-attn} code, very strong attention-based system 
+%   \item Pretrained with NLL. 
+%   \item Trained with a curriculum to gradually increase beam size.
+%   \end{itemize}
  
-\end{frame}
+% \end{frame}
 
 
-\begin{frame}{Results}
+\begin{frame}
   \vspace{-0.2cm}
   \begin{table}
   \centering
-    \small
+    \footnotesize
   \begin{tabular}{lccc}
     \toprule
     & $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\ 
@@ -593,6 +637,7 @@
     BSO     & 28.0 & 33.2 & 34.3 \\
     BSO-Con & \textbf{28.6} & \textbf{34.3} & \textbf{34.5} \\
     \midrule
+    \pause
 %   \end{tabular}
 %   \label{tab:wo}
 % \end{table}
@@ -612,6 +657,7 @@
     % \bottomrule
 
     \midrule
+    \pause
     & \multicolumn{3}{c}{Machine Translation (BLEU) } \\ 
     % &  $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\ 
     % \midrule
@@ -675,6 +721,28 @@
 \begin{frame}{Sequence Knowledge Distillation}
   \research{\cite{Kim2016a}}
 
+% \begin{frame}
+%   \centerline{\structure{Related Work: Compressing Deep Models}}
+% \air
+
+  Goal: Compress text generation models.
+
+\begin{itemize}
+\item \textbf{Pruning}: Prune weights based on importance criterion 
+\cite{LeCun1990,Han2016}
+\item \textbf{Knowledge Distillation}: Train a \textit{student} model to learn 
+from a \textit{teacher} model \cite{Bucila2006,Ba2014,Hinton2015}.
+\end{itemize}
+\air
+Other methods: 
+\begin{itemize}
+\item low-rank matrix factorization of weight matrices \cite{Denton2014}
+\item weight binarization \cite{Lin2016}
+\item weight sharing \cite{Chen2015}
+\end{itemize}
+% \end{frame}
+
+
   
 \end{frame}
 
@@ -684,9 +752,9 @@
 \begin{column}{7cm}
 Standard model minimize $\text{NLL}(\theta)$: 
 \air
-$$-\sum_t \log p(\wvec_t=y_t \given \wvec_{1:t-1}, \cvec ; \theta)$$
+$$-\sum_t \log p(y_t=y^{(g)}_t \given y^{(g)}_{1:t-1}, \cvec ; \theta)$$
 
-where $y_t$ is the ground truth word at time $t$.
+where $y^{(g)}_t$ is the ground truth word at time $t$.
 
 \air 
 
@@ -705,10 +773,10 @@ Cross-entropy with ground truth.
 % \air
 % \begin{columns}
 % \begin{column}{6.5cm}
-% Teacher network: $q(\wvec_{t} | \wvec_{1:t-1}, \cvec  ; \theta_T$)  \\
+% Teacher network: $q(y_{t} | y_{1:t-1}, \cvec  ; \theta_T$)  \\
 % \air
 % \air
-% Student network: $p(\wvec_{t} | \wvec_{1:t-1}, \cvec; \theta$)
+% Student network: $p(y_{t} | y_{1:t-1}, \cvec; \theta$)
 % \end{column}
 % \begin{column}{5.5cm}
 % \includegraphics[width=5.5cm]{word-kd-1}
@@ -717,18 +785,18 @@ Cross-entropy with ground truth.
 % \end{frame}
 
 
-\begin{frame}{Word-Level Knowledge Distillation}
+\begin{frame}{Standard Method: Word-Level Knowledge Distillation}
 
 \begin{columns}
 \begin{column}{7cm}
-Teacher network: $q(\wvec_{t} | \wvec_{1:t-1}, \cvec  ; \theta_T$)  
+Teacher network: $q(y_{t} | y_{1:t-1}, \cvec  ; \theta_T$)  
 \air 
 
 Minimize cross-entropy between teacher and student distribution  $\mathcal{L}_{\text{WORD-KD}}(\theta)$ \\
 
 \begin{align*}
--\sum_t \sum_v &q(\wvec_t=v \given \wvec_{1: t-1}, \cvec ; \theta_T)\times \\
-& \log p(\wvec_t =v \given \wvec_{1: t-1}, \cvec ; \theta)
+-\sum_t \sum_v &q(y_t=v \given y^{(g)}_{1: t-1}, \cvec ; \theta_T)\times \\
+& \log p(y_t =v \given y^{(g)}_{1: t-1}, \cvec ; \theta)
 \end{align*}
 \end{column}
 
@@ -761,23 +829,22 @@ Minimize cross-entropy between teacher and student distribution  $\mathcal{L}_{\
 \begin{frame}{Sequence-Level Knowledge Distillation}
 \air 
 \air
-\air  
 
-Instead of word NLL, 
+Proposal: Replace multi-class with sequence distribution. Instead of word NLL, 
 
 \begin{align*}
--\sum_t \sum_v &q(\wvec_t=v \given \wvec_{1: t-1}, \cvec ; \theta_T)\times  \log p(\wvec_t =v \given \wvec_{1: t-1}, \cvec ; \theta)
+-\sum_t \sum_v &q(y_t=v \given y^{(g)}_{1: t-1}, \cvec ; \theta_T)\times  \log p(y_t =v \given y^{(g)}_{1: t-1}, \cvec ; \theta)
 \end{align*}
  
-% $$-\sum_t \log p(\wvec_t=y_t \given \wvec_{1:t-1}, \cvec ; \theta)$$
+% $$-\sum_t \log p(y_t=y_t \given y_{1:t-1}, \cvec ; \theta)$$
 
-Minimize cross-entropy between $q$ and $p$ implied \emph{sequence}-distributions 
+Minimize cross-entropy between $q$ and $p$ implied sequence-distribution 
 \[
- -\sum_{\wvec_{1:T}} q(\wvec_{1:T} | \cvec; \theta_T) \times \log p(\wvec_{1:T} | \cvec ; \theta)
+ -\sum_{v_1} \ldots \sum_{v_T} q(y_{1:T}= v_{1:T}  | \cvec; \theta_T) \times \log p(y_{1:T}=v_{1:T} | \cvec ; \theta)
 \]
 \air
 
-Note: Exponential sum over possible $\wvec_{1:T}$ . \\ 
+However, as before this term is intractable.
 \air
 \air
 
@@ -790,11 +857,11 @@ Note: Exponential sum over possible $\wvec_{1:T}$ . \\
 %\centerline{Sequence-Level Knowledge Distillation}
 \begin{columns}
 \begin{column}{6cm}
-Approximate $q(\wvec_{1:T} \given \cvec )$ with mode
-$$q(\wvec_{1:T} \given \cvec ) \approx \mathbf{1}\{\argmax_{\wvec} q(\wvec_{1:T} \given \cvec )\}$$
+Approximate $q(y_{1:T} \given \cvec )$ with mode
+$$q(y_{1:T} \given \cvec ) \approx \mathbf{1}\{\argmax_{y} q(y_{1:T} \given \cvec )\}$$
 \air
-Roughly obtained wtih  beam search 
-$$ \wvec^*_{1:T} \approx  \argmax_{\wvec_{1:T}} q(\wvec_{1:T} \given \cvec ) $$
+Roughly obtained with  beam search 
+$$ y^*_{1:T} \approx  \argmax_{y_{1:T}} q(y_{1:T} \given \cvec ) $$
 \\
 Empirically, point estimate captures 
 significant mass
@@ -811,10 +878,10 @@ significant mass
 \begin{columns}
 \begin{column}{5cm}
 \begin{align*}
-\mathcal{L}_\text{SEQ-KD}(\theta) &= -\log p(\wvec^*_{1:T} \given \cvec ; \theta)  \\
-& \hspace*{-1cm} \displaystyle \approx   -\sum_{\wvec_{1:T}} q(\wvec_{1:T} | \cvec; \theta_T) \log p(\wvec_{1:T} | \cvec ; \theta)
+\mathcal{L}_\text{SEQ-KD}(\theta) &= -\log p(y^*_{1:T} \given \cvec ; \theta)  \\
+& \hspace*{-1cm} \displaystyle \approx   -\sum_{v_{1:T}} q(y_{1:T}=v_{1:t}| \cvec; \theta_T) \log p(y_{1:T} | \cvec ; \theta)
 \end{align*}
-Simplest model: train the student model on $\wvec^*$ with NLL
+Simplest model: train the student model on $y^*$ with NLL
 \end{column}
 \begin{column}{7cm}
 \includegraphics[trim={0.2cm 0.2cm 0.2cm 0.2cm}, clip, width=7cm]{seq-kd-2}
@@ -827,10 +894,9 @@ Simplest model: train the student model on $\wvec^*$ with NLL
 \air
 \begin{table}
 \centering
-\small
 \begin{tabular}{lccccrr}
 \toprule
-Model &    BLEU$_{K=1}$   & $\Delta_{K=1}$ & BLEU$_{K=5}$ & $\Delta_{K=5}$ & PPL & $p(\wvec^*)$ \\
+Model &    BLEU$_{K=1}$   & $\Delta_{K=1}$ & BLEU$_{K=5}$ & $\Delta_{K=5}$ & PPL & $p(y^*)$ \\
 \midrule
 $4 \times 1000$ \\
 Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ &   $6.7$ &  $1.3\%$ \\
@@ -852,23 +918,8 @@ Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ &  $8.2$ & $0.9\%$  \\
 \begin{frame}{Combining Knowledge Distillation and Pruning}
 \air
 \air
-\begin{table}[t] \label{prune}
 \centering
-\small
-\begin{tabular}{l  r  r c  r }
-\toprule
-Model & Prune $\%$ & Params & BLEU & Ratio \\
-\midrule 
-$4 \times 1000$ & $0\%$ &$221$ m& $19.5$& $1 \times$   \\
-$2 \times 500$ &  $0\%$& $84$ m& $19.3$& $3 \times$   \\
-$2 \times 500$ & $50\%$& $42$ m&  $19.3$ & $5 \times$ \\
-$2 \times 500$ &  $80\%$& $17$ m&  $19.1$ & $13 \times$ \\
-$2 \times 500$ &  $85\%$& $13$ m&  $18.8$ & $18 \times$ \\
-$2 \times 500$ &  $90\%$& $8$ m &  $18.5$  & $26 \times$ \\
-
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=0.8\textwidth]{modelsize}
 \end{frame}
 
 

@@ -16,7 +16,7 @@
   \end{center}
 \end{frame}
 
-\begin{frame}{Research Direction: \\
+\begin{frame}{Research Direction: 
       Deep Latent-Variable Models for NLP }
 
   Goal: Expose specific choices as explicit \textit{discrete} latent variables.
@@ -150,7 +150,7 @@ Generative process:
 \end{frame}
 
 
-\begin{frame}{ In Applications: Copy-Attention \\
+\begin{frame}{ In Applications: Copy-Attention 
       \small{(Gu et al, 2016) (Gulcehre et al, 2016)}}
 
 Let $z$ be a binary latent variable.
@@ -196,11 +196,7 @@ Inference:
   \end{center}
 \end{frame}
 
-\begin{frame}
-  \begin{center}
-    \structure{Standard Copy Generation Approach}
-  \end{center}
-
+\begin{frame}{Standard Copy Generation Approach}
 
 \textbf{Step 1: Encode the Source}
 \air
@@ -209,10 +205,6 @@ Inference:
 Fitzbillies,ty[coffee shop],pr[$<$ \pounds 20],food[Chinese],cust[3/5],area[city centre]
 \end{small}
 
-% Fitzbillies \\
-% type[coffee shop],  price[$<$ \pounds 20], food[Chinese] \\
-% custRating[3/5], area[city centre]
-
 \vspace{0.3cm}
 
 \textbf{Step 2: Generate with Copy Decoder}
@@ -220,13 +212,6 @@ Fitzbillies,ty[coffee shop],pr[$<$ \pounds 20],food[Chinese],cust[3/5],area[city
 \air
 
 \underline{Fitzbillies}  is a  \underline{coffee shop}  providing  \underline{Chinese} food in the  moderate  price range  .  It is  located in the  \underline{city centre}  .  Its customer rating is  \underline{3} out of \underline{5}.
-
-    % \caption{An example from the E2E Generation dataset~\citep{novikova2017e2e}; knowledge base $x$ (top) contains 5 records, and $\hat{y}$ (middle) is a system generation; records are shown as \texttt{type[value]}.
-    % (bottom) An induced neural template learned by the system and employed in generating $\hat{y}$. %Each cell shows the possible output choices and each underscore represents a slot fillable with copy attention.
-    % Each cell represents a segment in the learned segmentation, and underscores show where slots are (typically) filled through copy attention during generation.
-    % }
-    \label{fig:e2eex}
-\end{figure}
 
 \end{frame}
 
@@ -302,7 +287,7 @@ $\|$ \underline{Fitzbillies} $\|$  \pause is a $\|$ \pause   \underline{coffee s
 
 
 
-\alert{However:} templates feel much less ``end-to-end''. \\
+\alert{However:} templates feel much less ``end-to-end''. 
 How can we learn them from data?
 
 \end{frame}
@@ -410,7 +395,7 @@ How can we learn them from data?
 
   \item Compute argmax segmentations to find common \textit{templates}.
     \[ z^{(j)} = \argmax_z p(y^{(j)}, z \ |\ x^{(j)}; \theta)\]
-    \\
+
 
     {\it
     [The Wrestlers]$_{185}$ [is a]$_{29}$ [coffee shop]$_{164}$ [that serves]$_{188}$ [English]$_{139}$ [food]$_{18}$ [in the]$_{32}$ [moderate]$_{125}$ [price range]$_{180}$ [.]$_{90}$
@@ -457,34 +442,36 @@ $\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt
 
 
 
-\begin{frame}{WikiBio (500k)}
+% \begin{frame}{WikiBio (500k)}
 
-  \begin{center}
+%   \begin{center}
 
 
 
-      \begin{figure}[t]
-\centering
-\begin{tabular}{@{}l@{}}
-\toprule
-\begin{tabular}[c]{c}
-  \hspace{2.5cm}
-    \includegraphics[scale=0.7]{wbpage_cropped.pdf}
-\end{tabular} \\
-\midrule
-\begin{tabular}[c]{@{}l@{}}
-{\small Frederick Parker-Rhodes (21 March 1914 - 21 November} \\
-{\small 1987) was an English linguist, plant pathologist, computer} \\
-{\small scientist, mathematician, mystic, and mycologist.}
-\end{tabular} \\
-\bottomrule
-\end{tabular}
-% \caption{An example from the WikiBio dataset~\citep{lebret2016neural} for entity \texttt{Frederick Parker-Rhodes}; $x$ (top) and $y$ (bottom) is the corresponding reference generation.}
-\label{fig:wbex}
-\end{figure}
+%       \begin{figure}[t]
+% \centering
+% \begin{tabular}{@{}l@{}}
+% \toprule
+% \\
+% % \begin{tabular}[c]{c}
+% %   \hspace{2.5cm}
+% %     % \includegraphics[scale=0.7]{wbpage_cropped.pdf}
+% % \end{tabular} 
+% \midrule
+% \begin{tabular}[c]{@{}l@{}}
+% {\small Frederick Parker-Rhodes (21 March 1914 - 21 November} \\
+% {\small 1987) was an English linguist, plant pathologist, computer} \\
+% {\small scientist, mathematician, mystic, and mycologist.}
+% \end{tabular} \\
+% \bottomrule
+% \end{tabular}
+% % \caption{An example from the WikiBio dataset~\citep{lebret2016neural} for entity \texttt{Frederick Parker-Rhodes}; $x$ (top) and $y$ (bottom) is the corresponding reference generation.}
+% \label{fig:wbex}
+% \end{figure}
 
-  \end{center}
-\end{frame}
+%   \end{center}
+% \end{frame}
+
 
 \begin{frame}{E2E Challenge}
 \begin{table}[t!]
@@ -535,7 +522,7 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
 
 \begin{itemize}
 \item Custom KN and NNLM Baselines from LeBret et al (2016)
-\end{itemize}
+\end{itemize}k
 
 \end{frame}
 
@@ -544,44 +531,43 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
 % \begin{frame}
 % \end{frame}
 
-\begin{frame}
-  \center{Interpretability}
+% \begin{frame}{Interpretability}
 
-  \begin{center}
+%   \begin{center}
 
 
-\scalebox{0.8}{
-  \begin{table}[t]
-\small
-\centering
+% \scalebox{0.8}{
+%   \begin{table}[t]
+% \small
+% \centering
 
-\begin{tabular}{@{}l@{}}
-\toprule
-\textbf{kenny warren} \\
-\midrule
-\begin{tabular}[c]{@{}l@{}}
-\textbf{name:} kenny warren, \textbf{birth date:} 1 april 1946, \\
-\textbf{birth name:} kenneth warren deutscher, \textbf{birth place:} brooklyn, new york, \\ \textbf{occupation:} ventriloquist, comedian, author, \\
-\textbf{notable work:} book - the revival of ventriloquism in america \\
-\end{tabular}         \\
-\midrule
+% \begin{tabular}{@{}l@{}}
+% \toprule
+% \textbf{kenny warren} \\
+% \midrule
+% \begin{tabular}[c]{@{}l@{}}
+% \textbf{name:} kenny warren, \textbf{birth date:} 1 april 1946, \\
+% \textbf{birth name:} kenneth warren deutscher, \textbf{birth place:} brooklyn, new york, \\ \textbf{occupation:} ventriloquist, comedian, author, \\
+% \textbf{notable work:} book - the revival of ventriloquism in america \\
+% \end{tabular}         \\
+% \midrule
 
-\begin{tabular}[c]{@{}l@{}}
-1. \colorbox{green}{kenny warren deutscher} (\colorbox{pink}{april 1, 1946}) is an \colorbox{cyan}{american} ventriloquist. \\
-2. \colorbox{green}{kenny warren deutscher} (\colorbox{pink}{april 1, 1946}, brooklyn,) is an \colorbox{cyan}{american} ventriloquist.\\
-3. \colorbox{green}{kenny warren deutscher} (\colorbox{pink}{april 1, 1946}) is an \colorbox{cyan}{american} \\
-\hspace{1cm} ventriloquist, best known for his the revival of ventriloquism. \\
-4. \colorbox{yellow}{``kenny'' warren} is an \colorbox{cyan}{american} ventriloquist. \\
-5. kenneth warren \colorbox{yellow}{``kenny'' warren} (born \colorbox{pink}{april 1, 1946}) is \\
-\hspace{1cm} an \colorbox{cyan}{american} ventriloquist, and author. \\
-\end{tabular} \\
-\bottomrule
-\end{tabular}
-\label{tab:wbcontrol}
-\end{table}
-}
-  \end{center}
-\end{frame}
+% \begin{tabular}[c]{@{}l@{}}
+% 1. \colorbox{green}{kenny warren deutscher} (\colorbox{pink}{april 1, 1946}) is an \colorbox{cyan}{american} ventriloquist. \\
+% 2. \colorbox{green}{kenny warren deutscher} (\colorbox{pink}{april 1, 1946}, brooklyn,) is an \colorbox{cyan}{american} ventriloquist.\\
+% 3. \colorbox{green}{kenny warren deutscher} (\colorbox{pink}{april 1, 1946}) is an \colorbox{cyan}{american} \\
+% \hspace{1cm} ventriloquist, best known for his the revival of ventriloquism. \\
+% 4. \colorbox{yellow}{``kenny'' warren} is an \colorbox{cyan}{american} ventriloquist. \\
+% 5. kenneth warren \colorbox{yellow}{``kenny'' warren} (born \colorbox{pink}{april 1, 1946}) is \\
+% \hspace{1cm} an \colorbox{cyan}{american} ventriloquist, and author. \\
+% \end{tabular} 
+% \bottomrule
+% \end{tabular}
+% \label{tab:wbcontrol}
+% \end{table}
+% }
+%   \end{center}
+% \end{frame}
 
 
 \begin{frame}{Controllability}
