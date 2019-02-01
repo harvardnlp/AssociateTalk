@@ -23,7 +23,7 @@
 \end{frame}
 
 \begin{frame}{Structured Modeling}
-
+  Compare to multiclass.
 \end{frame}
 
 \begin{frame}{Generation Setup (Reminder)}
@@ -32,13 +32,13 @@
 
   \begin{itemize}
 
-  \item Input \alert<2>{$x_{1:S}$},  \textit{what to talk about}
+  \item Input {$x_{1:S}$},  \textit{what to talk about}
     \air
 
-  \item Output text \alert<3>{$y^*_{1:T}$}, \textit{how to say it}
+  \item Output text {$y^*_{1:T}$}, \textit{how to say it}
     \air
 
-  \item Model \alert<4>{$f(.; \theta)$}, learned from data
+  \item Model {$f(.; \theta)$}, learned from data
   \end{itemize}
 \end{frame}
 
@@ -52,7 +52,7 @@
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-7}
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-8}
   \end{center}
-  Pretend it is Multiclass classification:
+  Treat as Multiclass classification:
   \[ \text{NLL}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, \cvec; \theta) \]
 \end{frame}
 
@@ -73,6 +73,15 @@
   % % \begin{itemize}
   % % \item Note: Completely intractable $O(\text{\#vocab} ^T)$
   % % \end{itemize}
+\end{frame}
+(approximation)
+
+  \begin{itemize}
+  \item Note: Completely intractable $O(\text{\#vocab} ^T)$
+  \end{itemize}
+
+\begin{frame}
+
 \end{frame}
 
 \begin{frame}[fragile]{Best Sequence Heuristic:  Beam Search}
@@ -135,7 +144,7 @@
 
 \air
 
-\only<6->{
+\only<7->{
    \begin{enumerate}
    \item Compute the score of every possible next word.
      \[f(y_t, y_{1:t-1}^{(k)}) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, \cvec) + \log p(y^{(k)}_{1:t-1} \ |\  \cvec) \]
@@ -229,7 +238,7 @@
 % \end{frame}
 
 
-\begin{frame}{Theoretical Issues }
+\begin{frame}{Theoretical Issues: Discrete Time-Series Moels  }
   \begin{enumerate}
   \item Exposure Bias
     \begin{itemize}
@@ -244,7 +253,7 @@
     \air
   \item Label Bias  %\cite{Lafferty2001}
     \begin{itemize}
-    \item Locally normalized models have known pathological issues.
+    \item Locally normalized discriminative models have known pathological issues.
     \end{itemize}
 
   \end{enumerate}
@@ -356,7 +365,7 @@ and test objective?
   New Global Objective:
   \begin{itemize}
 
-  \item Margin between gold seq $y^{(g)}$ and last seq on beam $y^{(K)}$
+  \item Margin between ground truth seq $y^{(g)}$ and last seq on beam $y^{(K)}$
   \end{itemize}
 \begin{align*}
  \mathcal{L}&(\theta) = \sum_{t} \Delta(y^{(g)}_{1:t}, y_{1:t}^{K}) \left[1 - f(y^{(g)}_t, y^{(g)}_{1:t-1}, \cvec) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, \cvec) \right]
@@ -472,7 +481,7 @@ and test objective?
 % \end{align*}
 
   \begin{itemize}
-  \item Color \textcolor{yellow}{Gold}: target sequence $y^{(g)}$
+  \item Color \textcolor{yellow}{True}: target sequence $y^{(g)}$
   \item Color \textcolor{gray}{Gray}: violating sequence $y^{(K)}$
   \end{itemize}
 \end{frame}
@@ -720,6 +729,10 @@ and test objective?
 % \end{columns}
 % \end{frame}
 
+\begin{frame}
+  (Teacher-Student Diagram)
+\end{frame}
+
 \begin{frame}{Sequence Knowledge Distillation}
   \research{\cite{Kim2016a}}
 
@@ -932,6 +945,6 @@ Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ &  $8.2$ & $0.9\%$  \\
   \end{center}
 \end{frame}
 
-\begin{frame}{}
-
+\begin{frame}{WNMT }
+  (Competition for WNMT)
 \end{frame}
