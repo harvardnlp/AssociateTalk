@@ -189,8 +189,6 @@ Inference:
 
 
 
-
-
 \begin{frame}{Approach 1: Learning Neural Templates}
 
   \begin{center}
@@ -198,10 +196,424 @@ Inference:
   \end{center}
 \end{frame}
 
-\begin{frame}{Approach 2: Latent Alignment and Variational Attention}
+\begin{frame}
   \begin{center}
-    \includegraphics[width=0.7\textwidth]{AttentionVIS}
+    \structure{Standard Copy Generation Approach}
   \end{center}
+
+
+\textbf{Step 1: Encode the Source}
+\air
+
+\begin{small}
+Fitzbillies,ty[coffee shop],pr[$<$ \pounds 20],food[Chinese],cust[3/5],area[city centre]
+\end{small}
+
+% Fitzbillies \\
+% type[coffee shop],  price[$<$ \pounds 20], food[Chinese] \\
+% custRating[3/5], area[city centre]
+
+\vspace{0.3cm}
+
+\textbf{Step 2: Generate with Copy Decoder}
+
+\air
+
+\underline{Fitzbillies}  is a  \underline{coffee shop}  providing  \underline{Chinese} food in the  moderate  price range  .  It is  located in the  \underline{city centre}  .  Its customer rating is  \underline{3} out of \underline{5}.
+
+    % \caption{An example from the E2E Generation dataset~\citep{novikova2017e2e}; knowledge base $x$ (top) contains 5 records, and $\hat{y}$ (middle) is a system generation; records are shown as \texttt{type[value]}.
+    % (bottom) An induced neural template learned by the system and employed in generating $\hat{y}$. %Each cell shows the possible output choices and each underscore represents a slot fillable with copy attention.
+    % Each cell represents a segment in the learned segmentation, and underscores show where slots are (typically) filled through copy attention during generation.
+    % }
+    \label{fig:e2eex}
+\end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}
+  \begin{center}
+    \structure{(Neural) Template Generation Approach}
+  \end{center}
+
+\textbf{Step 1: Encode the Source}
+
+\begin{small}
+Fitzbillies,ty[coffee shop],pr[$<$ \pounds 20],food[Chinese],cust[3/5],area[city centre]
+\end{small}
+
+\pause
+\air
+\textbf{Step 2: Select a \textit{Template}}
+
+    \begin{center}
+
+$\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt}{1pt}}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \substack{\text{is a}\\\text{is an}\\\text{is an expensive}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{\rule{15pt}{1pt}} \ \textcolor{gray}{|} \  $ $ \substack{\text{providing}\\\text{serving}\\\text{offering}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{\rule{15pt}{1pt}} \ \textcolor{gray}{|} \  $ $ \substack{\text{food}\\\text{cuisine}\\\text{foods}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{in the} \ \textcolor{gray}{|} \  $ $ \substack{\text{high}\\\text{moderate}\\\text{less than average}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \substack{\text{price}\\\text{price range}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{.}$ $\textcolor{gray}{|}$ $ \text{It is} \ \textcolor{gray}{|} \  $ $ \substack{\text{located in the}\\\text{located near}\\\text{near}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{\rule{15pt}{1pt}} \ \textcolor{gray}{|} \  $ $ \text{.}$ $ \textcolor{gray}{|} \  $ $ \substack{\text{Its customer rating is}\\\text{Their customer rating is}\\\text{Customers have rated it}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{\rule{15pt}{1pt} out of \rule{15pt}{1pt}} \ \textcolor{gray}{|} \  .$
+    \end{center}
+\pause
+\air
+\textbf{Step 3: Fill-in Each Segment}
+    \air
+
+
+$\|$ \underline{Fitzbillies} $\|$  \pause is a $\|$ \pause   \underline{coffee shop} $\|$ \pause  providing $\|$  \underline{Chinese} $\|$ food $\|$ in the $\|$  moderate $\|$ price range $\|$ . $\|$ It is  $\|$ located in the $\|$ \underline{city centre} $\|$ . $\|$
+
+
+    % \caption{An example from the E2E Generation dataset~\citep{novikova2017e2e}; knowledge base $x$ (top) contains 5 records, and $\hat{y}$ (middle) is a system generation; records are shown as \texttt{type[value]}.
+    % (bottom) An induced neural template learned by the system and employed in generating $\hat{y}$. %Each cell shows the possible output choices and each underscore represents a slot fillable with copy attention.
+    % Each cell represents a segment in the learned segmentation, and underscores show where slots are (typically) filled through copy attention during generation.
+    % }
+
+
+
+\end{frame}
+
+
+\begin{frame}
+  \center{\textbf{Criteria}}
+
+\begin{enumerate}
+\item Interpretable in its content selection.
+  \air
+
+  \textit{Decisions are localized to a segment of the template.}
+
+  \air
+
+\item Easily controllable in terms of style and form.
+  \air
+
+  \textit{Alternative realizations through different templates.}
+\end{enumerate}
+
+
+\air
+
+\pause
+
+
+
+\alert{However:} templates feel much less ``end-to-end''. \\
+How can we learn them from data?
+
+\end{frame}
+
+\begin{frame}{Technical Methodology:  Hidden Semi-Markov Model}
+
+  \air
+  \begin{itemize}
+
+  \item HMM: discrete latent states with single emissions  (e.g. words).
+    \air
+
+  \item HSMM: discrete states produce multiple emissions (e.g. phrases).
+    \air
+
+  \item Parameterized with \textit{transition}, \textit{emission},
+      and \textit{length} distributions.
+      \air
+
+  \end{itemize}
+
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}[node distance=0.6cm]
+    % \draw [step=0.2cm,gray,very thin] (-1.11, -1.11) grid  (1.1, 1.11);
+    \node [circle](x){$$} ;
+    \node[circle, draw, above right=of x, xshift = 1cm, fill=red!20](z){$z_1$};
+    \node[ draw, rounded corners, below=of z, fill=red!10](rnn){};
+    \node[circle, draw, below= of rnn](y){$y_1$};
+    \node[circle, draw, right= of y](ya){$y_2$};
+    \node[circle, draw, right= of ya](yb){$y_3$};
+    \node[circle, draw, right= of yb](yc){$y_4$};
+    \node[draw, rounded corners,  above= of yc, fill=blue!10](rnnb){};
+    \node[circle, draw, above= of rnnb, fill=blue!20](zb){$z_{4}$};
+    \draw[-] (z) -- (rnn) -- (y);
+    \draw[-]  (rnn) -- (ya);
+    \draw[-] (rnn) -- (yb);
+
+    \draw[-] (zb) -- (rnnb) -- (yc);
+     \draw (z) --node(mlp)[fill=white, draw, rounded corners]{} (zb);
+     % \draw (x.north) edge [bend left=40] (mlp);
+     % \draw (x) edge[] (rnn);
+     % \draw (x) edge[bend left=20] (rnnb);
+
+    \end{tikzpicture}
+  \end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Technical Methodology:  Neural Hidden Semi-Markov Model}
+
+  \begin{itemize}
+  \item Employ HSMM as a conditional latent variable language model, $p(y_1, \ldots, y_T, z\ |\ x)$.
+
+    \air
+  \item Transition Distribution: NN between states.
+
+    \air
+  \item Emission Distribution: Seq2Seq+Copy-Attention, one per state $k$.
+
+
+  \end{itemize}
+
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}[node distance=0.6cm]
+    \draw [step=0.2cm,gray,very thin] (-1.11, -1.11) grid  (1.1, 1.11);
+    \node [draw, circle, fill=black!10](x){$x$} ;
+    \node[circle, draw, above right=of x, xshift = 1cm, fill=red!20](z){$z_1$};
+    \node[ draw, rounded corners, below=of z, fill=red!10](rnn){Decoder};
+    \node[circle, draw, below= of rnn](y){$y_1$};
+    \node[circle, draw, right= of y](ya){$y_2$};
+    \node[circle, draw, right= of ya](yb){$y_3$};
+    \node[circle, draw, right= of yb](yc){$y_4$};
+    \node[draw, rounded corners,  above= of yc, fill=blue!10](rnnb){Decoder};
+    \node[circle, draw, above= of rnnb, fill=blue!20](zb){$z_{4}$};
+    \draw[-] (z) -- (rnn) -- (y);
+    \draw[-]  (rnn) -- (ya);
+    \draw[-] (rnn) -- (yb);
+
+    \draw[-] (zb) -- (rnnb) -- (yc);
+     \draw (z) --node(mlp)[fill=white, draw, rounded corners]{T} (zb);
+     \draw (x.north) edge [bend left=40] (mlp);
+     \draw (x) edge[] (rnn);
+     \draw (x) edge[bend left=20] (rnnb);
+
+    \end{tikzpicture}
+
+    % \caption{HSMM factor graph (under a fixed segmentation) to illustrate parameters. Here we assume $z_1$ is in the ``red'' state (out of $K$ possibilities), and transitions to the ``blue'' state after emitting three words. The transition model, shown as $T$, is a function of the two states and the neural encoded source $x$. The emission model is a function of a ``red'' RNN model (with copy attention over $x$) that generates words 1, 2 and 3. After transitioning, the next word $y_4$ is generated by the ``blue'' RNN, but independently of the previous words.}
+    \label{fig:my_label}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Technical Methodology:  Learning Templates}
+
+  \begin{itemize}
+  \item Fit model by maximizing log-marginal likelihood on training data.
+    \[ \max_\theta \sum_{j} \ln \sum_z p(y^{(j)}, z \ |\ x^{(j)}; \theta)\]
+    \air
+  Details: Pre-score segmentations, HSMM forward algorithm for sum, backprop with autograd, all inference is exact.
+    \air
+
+    \pause
+
+  \item Compute argmax segmentations to find common \textit{templates}.
+    \[ z^{(j)} = \argmax_z p(y^{(j)}, z \ |\ x^{(j)}; \theta)\]
+    \\
+
+    {\it
+    [The Wrestlers]$_{185}$ [is a]$_{29}$ [coffee shop]$_{164}$ [that serves]$_{188}$ [English]$_{139}$ [food]$_{18}$ [in the]$_{32}$ [moderate]$_{125}$ [price range]$_{180}$ [.]$_{90}$
+  }
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\centerline{\textbf{Neural Template}}
+\air
+
+      \begin{center}
+
+$\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt}{1pt}}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \substack{\text{is a}\\\text{is an}\\\text{is an expensive}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{\rule{15pt}{1pt}} \ \textcolor{gray}{|} \  $ $ \substack{\text{providing}\\\text{serving}\\\text{offering}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{\rule{15pt}{1pt}} \ \textcolor{gray}{|} \  $ $ \substack{\text{food}\\\text{cuisine}\\\text{foods}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{in the} \ \textcolor{gray}{|} \  $ $ \substack{\text{high}\\\text{moderate}\\\text{less than average}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \substack{\text{price}\\\text{price range}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{.}$ $\textcolor{gray}{|}$ $ \text{It is} \ \textcolor{gray}{|} \  $ $ \substack{\text{located in the}\\\text{located near}\\\text{near}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{\rule{15pt}{1pt}} \ \textcolor{gray}{|} \  $ $ \text{.}$ $ \textcolor{gray}{|} \  $ $ \substack{\text{Its customer rating is}\\\text{Their customer rating is}\\\text{Customers have rated it}\\ \dots}
+\ \textcolor{gray}{|} \  $ $ \text{\rule{15pt}{1pt} out of \rule{15pt}{1pt}} \ \textcolor{gray}{|} \  .$
+    \end{center}
+\end{frame}
+
+\begin{frame}{Experimental Setup}
+
+  \begin{itemize}
+  \item Two datasets, E2E challenge and WikiBio
+    \air
+  \item Training with 35 and 65 state models, each 1x300 LSTMs.
+    \air
+  \item Extract 100 most common templates for each.
+    \air
+  \item Vocabulary limited to non-copy-able words.
+    \air
+
+  \item Generation with beam search with a pre-selected template.
+  \end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}{WikiBio (500k)}
+
+  \begin{center}
+
+
+
+      \begin{figure}[t]
+\centering
+\begin{tabular}{@{}l@{}}
+\toprule
+\begin{tabular}[c]{c}
+  \hspace{2.5cm}
+    \includegraphics[scale=0.7]{wbpage_cropped.pdf}
+\end{tabular} \\
+\midrule
+\begin{tabular}[c]{@{}l@{}}
+{\small Frederick Parker-Rhodes (21 March 1914 - 21 November} \\
+{\small 1987) was an English linguist, plant pathologist, computer} \\
+{\small scientist, mathematician, mystic, and mycologist.}
+\end{tabular} \\
+\bottomrule
+\end{tabular}
+% \caption{An example from the WikiBio dataset~\citep{lebret2016neural} for entity \texttt{Frederick Parker-Rhodes}; $x$ (top) and $y$ (bottom) is the corresponding reference generation.}
+\label{fig:wbex}
+\end{figure}
+
+  \end{center}
+\end{frame}
+
+\begin{frame}{E2E Challenge}
+\begin{table}[t!]
+\small
+\centering
+\begin{tabular}{@{}lccc@{\hspace{2.5mm}}c@{\hspace{2.5mm}}c@{}}
+\toprule
+ & BLEU & NIST \\
+\midrule
+Val & & &  \\
+\midrule
+
+Substitution  & 43.71 & 6.72 \\
+Neural Template & 66.06 & 7.93 \\
+Full Neural Model & 69.25 & 8.48 \\
+\midrule
+Test  & & \\
+\midrule
+
+Substitution & 43.78 & 6.88 \\
+Neural Template    & 56.72 & 7.63 \\
+Full Neural Model & 65.93 & 8.59 \\
+\bottomrule
+\end{tabular}
+% \caption{Comparison of the system of \citet{duvsek2016sequence}, which forms the baseline for the E2E challenge, a non-parametric, substitution-based baseline (see text), and our HSMM model on the validation and test portions of the E2E dataset. ``ROUGE'' is ROUGE-L. Models are evaluated using the official E2E NLG Challenge scoring scripts.}
+\label{tab:e2e}
+\end{table}
+
+\end{frame}
+
+
+\begin{frame}{WikiBio}
+\begin{table}[t!]
+\small
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+ & BLEU & NIST & ROUGE-4\\
+\midrule
+Conditional KN-LM  & 19.8 & 5.19 & 10.7 \\
+NNLM (field)  & 33.4 & 7.52 & 23.9 \\
+NNLM (field \& word)  & 34.7 & 7.98 & 25.8 \\
+Neural Template &  33.8 & 7.51 & 28.2 \\
+\bottomrule
+\end{tabular}
+\label{tab:wb}
+\end{table}
+
+\begin{itemize}
+\item Custom KN and NNLM Baselines from LeBret et al (2016)
+\end{itemize}
+
+\end{frame}
+
+
+
+% \begin{frame}
+% \end{frame}
+
+\begin{frame}
+  \center{Interpretability}
+
+  \begin{center}
+
+
+\scalebox{0.8}{
+  \begin{table}[t]
+\small
+\centering
+
+\begin{tabular}{@{}l@{}}
+\toprule
+\textbf{kenny warren} \\
+\midrule
+\begin{tabular}[c]{@{}l@{}}
+\textbf{name:} kenny warren, \textbf{birth date:} 1 april 1946, \\
+\textbf{birth name:} kenneth warren deutscher, \textbf{birth place:} brooklyn, new york, \\ \textbf{occupation:} ventriloquist, comedian, author, \\
+\textbf{notable work:} book - the revival of ventriloquism in america \\
+\end{tabular}         \\
+\midrule
+
+\begin{tabular}[c]{@{}l@{}}
+1. \colorbox{green}{kenny warren deutscher} (\colorbox{pink}{april 1, 1946}) is an \colorbox{cyan}{american} ventriloquist. \\
+2. \colorbox{green}{kenny warren deutscher} (\colorbox{pink}{april 1, 1946}, brooklyn,) is an \colorbox{cyan}{american} ventriloquist.\\
+3. \colorbox{green}{kenny warren deutscher} (\colorbox{pink}{april 1, 1946}) is an \colorbox{cyan}{american} \\
+\hspace{1cm} ventriloquist, best known for his the revival of ventriloquism. \\
+4. \colorbox{yellow}{``kenny'' warren} is an \colorbox{cyan}{american} ventriloquist. \\
+5. kenneth warren \colorbox{yellow}{``kenny'' warren} (born \colorbox{pink}{april 1, 1946}) is \\
+\hspace{1cm} an \colorbox{cyan}{american} ventriloquist, and author. \\
+\end{tabular} \\
+\bottomrule
+\end{tabular}
+\label{tab:wbcontrol}
+\end{table}
+}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}{Controllability}
+
+  \begin{table}[t]
+\small
+\centering
+\begin{tabular}{@{}l@{}}
+\toprule
+\textbf{The Golden Palace} \\
+\midrule
+\begin{tabular}[c]{@{}l@{}}
+name[The Golden Palace], type[coffee shop], food[Chinese], \\
+priceRange[cheap] custRating[5 out of 5], area[city centre], \\
+\end{tabular}         \\
+\midrule
+\begin{tabular}[c]{@{}l@{}}
+1. The Golden Palace is a coffee shop located in the city centre. \\
+2. In the city centre is a cheap Chinese coffee shop called \\
+\; \; The Golden Palace. \\
+3. The Golden Palace that serves Chinese food in the cheap \\
+\; \; price range. It is located in the city centre.  Its customer \\
+\; \; rating is 5 out of 5. \\
+4. The Golden Palace is a Chinese coffee shop. \\
+5. The Golden Palace is a Chinese coffee shop \\
+\; \; with a customer rating of 5 out of 5. \\
+\end{tabular} \\
+\bottomrule
+\end{tabular}
+% \caption{Impact of varying the template $z^{(i)}$ for a single $x$ from the E2E dataset.}
+\label{tab:e2econtrol}
+\end{table}
 \end{frame}
 
 
@@ -248,4 +660,9 @@ Inference:
 
 \begin{frame}
 
+\end{frame}
+
+
+\begin{frame}
+  
 \end{frame}

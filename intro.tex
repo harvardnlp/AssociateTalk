@@ -12,7 +12,11 @@
 
 % \end{frame}
 
-\begin{frame}{Natural Language Processing, 2009}
+\begin{frame}
+  NLP 
+\end{frame}
+
+\begin{frame}{State-of-the-Art Natural Language Processing, circa 2009}
 
   % Picture
   \begin{center}
@@ -28,7 +32,7 @@
     \node     [below= of ee]{$\vdots$};
 
 
-
+    \visible<2>{
     \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class}};
     \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model]{Parsing};
     \node(b) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of a]{CRF Tagging};
@@ -49,13 +53,13 @@
     \draw (ee.east) -- (a.west);
     \draw (ee.east) -- (b.west);
     \draw (ee.east) -- (c.west);
-
+}
   \end{tikzpicture}
 }
   \end{center}
 \end{frame}
 
-\begin{frame}{Natural Language Processing, 2019}
+\begin{frame}{State-of-the-Art Natural Language Processing, circa 2019}
 \begin{center}
     \scalebox{0.8}{
   \begin{tikzpicture}[node distance=0.2cm]
@@ -68,7 +72,7 @@
     \node     [below= of ee]{$\vdots$};
 
 
-
+   \visible<2>{
     \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class}};
     \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model, yshift=-2.5cm]{Recurrent Neural Networks};
     % \node[below  = of a, xshift=3cm]{\includegraphics[width=8cm]{nmt}} ;
@@ -84,7 +88,7 @@
     \draw (cc.east) -- (a.west);
     \draw (dd.east) -- (a.west);
     \draw (ee.east) -- (a.west);
-
+}
 
   \end{tikzpicture}
 }
@@ -110,7 +114,7 @@
 % \end{frame}
 
 
-\begin{frame}{Research}{}
+\begin{frame}{Harvard NLP Deep Learning Research}{}
   % Picture
   % \research{\cite{Deng2016}}
 
@@ -118,17 +122,18 @@
     \scalebox{2}{
   \begin{tikzpicture}
 
-    \node at (10mm, 15mm){\includegraphics[width=3.5cm]{nmt}};
+    \node<1> at (10mm, 15mm){\includegraphics[width=3cm]{rnnlm6}};
 
-    \node[draw, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
-    \node[draw, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
-    \node[draw, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
+    \node[draw,  thick, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
+    \node[draw,  thick, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
+    \node[draw,  thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
+    \node<2>[draw,  fill=yellow, thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
+    \node<2>[scale=0.5, text width=35mm] at (10mm, 15mm) {\small Translation, \\  Summary,  \\ Data-to-Text,  \\ Diagram-to-Text,  \\ $\ldots$};
 
+    \node[draw, thick, rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
+    \node[draw, thick, rounded corners, scale=0.5] (dep) at (25mm, 0mm){Deployment};
 
-    \node[draw,rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
-    \node[draw,rounded corners, scale=0.5] (dep) at (25mm, 0mm){Deployment};
-
-    \node[draw, rounded corners,scale=0.5] (imp) at (0, 0) {Implementation};
+    \node[draw,  thick, rounded corners,scale=0.5] (imp) at (0, 0) {Implementation};
 
     \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
 
@@ -139,72 +144,98 @@
 \end{frame}
 
 
-\begin{frame}{My Research}{}
+\begin{frame}{Selected Harvard NLP Deep Learning Research}{}
   % Pictured
 
-
+  \vspace{-1cm}
 
   \begin{center}
   \begin{tikzpicture}
 
-    \node at (10mm, 15mm) {\includegraphics[width=2cm]{nmt}};
+    \node at (10mm, 15mm) {\includegraphics[width=2cm]{rnnlm6}};
 
 
     \node[rounded corners, draw] (ana) at (-15mm, 15mm) {Analysis};
 
-    \node at (-40mm, 15mm) [text width=30mm]{
+    \visible<2,8>{
+    \node at (-40mm, 15mm) [text width=30mm]{ \centering 
       \baselineskip=-5pt  \scriptsize
-      \textcolor{blue}{
-      \citet{Strobelt2016}
-      \citet{strobelt2019s}
-    }
+      \structure{
+      \citet{Strobelt2016}}
+    \structure{
+      \citet{strobelt2019s}}
+      \citet{DBLP:conf/emnlp/WisemanSR17}
       \par
       };
-
-
+    }
 
     \node[rounded corners, draw] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
-    \node at (-10mm, 40mm) [anchor=south, text width=30mm] {
+
+    \visible<3,8>{
+    \node at (-10mm, 35mm) [anchor=south, text width=30mm] { \centering
+
       \baselineskip=-5pt \scriptsize 
-      \citet{Kim2016}
-      \textcolor{red}{\cite{DBLP:journals/corr/KimDHR17}}
+      \citet{Kim2016} \ \ 
+      \textcolor{red}{\cite{DBLP:journals/corr/KimDHR17}}\ \ 
       \cite{EMNLP2017}
       \par
       };
-
+    }
     \node[rounded corners, draw] (app) at (25mm, 30mm) {Applications};
-    \node at (35mm, 40mm) [anchor=south, text width=30mm]{
+    
+\visible<4,8>{
+
+    \node at (35mm, 35mm) [anchor=south, text width=30mm]{ \centering
       \baselineskip=-5pt \scriptsize 
       \citet{Rush2015} 
       \textcolor{red}{\citet{Deng2016}}
       \citet{Schmaltz2016}
-      \ldots
       \par
       };
-
+}
 
     \node[rounded corners, draw] (und) at (35mm, 15mm) {Understanding};
 
-    \node at (65mm, 15mm) [text width=30mm]{
-      \scriptsize
-      \citet{DBLP:conf/emnlp/WisemanSR17}
+\visible<5,8>{
+    \node at (65mm, 15mm) [text width=30mm]{ \centering
+      \baselineskip=-5pt \scriptsize 
+      \citet{wiseman2018learning}
+      \textcolor{red}{\citet{deng2018latent}}\ \ \ 
       \textcolor{red}{\citet{DBLP:journals/corr/abs-1802-02550}}
       \par
       };
-
+}
 
     \node[rounded corners, draw] (dep) at (25mm, 0mm){Deployment};
-    \node at (35mm, -10mm) {
-      \scriptsize
-      \citet{Kim2016a}
+
+\visible<6,8>{
+    \node at (35mm, -10mm) [text width=30mm] { \centering
+            \baselineskip=-5pt \scriptsize 
+            \citet{Kim2016a} 
+            \citet{senellart2018opennmt} 
+            \alert{\citet{reagen2017weightless}}
+            \par
       };
+}
+    \node at (75mm, -5mm) [draw, text width=35mm] {\centering
+            \baselineskip=-5pt \scriptsize 
+            Natural Lang. Processing \\
+            \alert{Machine Learning} \\
+            \structure{Visualization}
+            \par
+      };
+
 
     \node[rounded corners, draw] (imp) at (0, 0) {Implement};
-      \node at (-10mm, -10mm) {
-      \scriptsize
-      \citet{DBLP:conf/acl/KleinKDSR17}
+\visible<7,8>{
+      \node at (-10mm, -10mm) [text width=30mm]{
+        \baselineskip=-5pt \scriptsize 
+        \citet{DBLP:conf/acl/KleinKDSR17} \ \  
+        \citet{senellart2018opennmt} \ \ 
+        \citet{rush2018annotated}
+        \par
       };
-
+}
 
     \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
 

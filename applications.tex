@@ -12,74 +12,109 @@
 % \end{frame}
 
 
-\begin{frame}{Text Generation}
+\begin{frame}{Machine Learning for Text Generation}
   
- \[ y^*_{\tikzmark{pd}1:T} = \argmax_{y_{1:T}} f(y_{1:T}; x, \theta) \] 
+  \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \] 
 
-\begin{tikzpicture}[
-  remember picture,
-  overlay]
+% \begin{tikzpicture}[
+%   remember picture,
+%   overlay]
 
-\node (ptdex) [below = of {pic cs:pd}] {Some explanation};
-\draw[->] (ptdex.north) -- ({pic cs:pd}); 
-\end{tikzpicture}
+% \node (ptdex) [below left=  of {pic cs:pd}] {Output};
+% \node (ptdexa) [below right =  of {pic cs:nn}] {Neural Network};
+% \node (ptdexb) [below = of {pic cs:opt}] {Optimization};
+% \node (ptdexc) [below = of {pic cs:input}] {Input};
+% \draw[->] (ptdex.north) -- ({pic cs:pd}); 
+% \draw[->] (ptdexa.north) -- ({pic cs:nn}); 
+% \draw[->] (ptdexb.north) -- ({pic cs:opt}); 
+% \draw[->] (ptdexc.north) -- ({pic cs:input}); 
+% \end{tikzpicture}
+
+  \begin{itemize}
+    \pause
+  \item Input \alert<2>{$x$},  \textit{what to talk about}
+    \air 
+    \pause
+  \item Output text \alert<3>{$y^*_{1:T}$}, \textit{how to say it}
+    \air
+    \pause
+  \item Model \alert<4>{$f(.; \theta)$}, learned from data
+  \end{itemize}
+  
 \end{frame}
 
 
-\begin{frame}{Talk about Text (Summarization) }
-
+\begin{frame}{Talk about Text (Summary) }
+  
   \research{\citet{Rush2015} w/ Facebook}
-
-
+  
+  
   \begin{center}
-\begin{tikzpicture}
-\node{\includegraphics[width=4cm]{galaxy}};
-\path<2>[draw] (0, 0) --  (2,0) ;
+    \begin{tikzpicture}
+      
+      \node (gal) {\includegraphics[width=2cm]{galaxy}};
+      \node [rounded corners, above =(0.2cm) of gal] {$f$};
+      
+      
+      \node (a) [rectangle, yshift=1cm, xshift=-5cm, scale=0.8, draw,thick,fill=blue!0,text width=20em, rounded corners, inner sep =5pt, minimum height=1em] {
+        \small
+        Cambodian leader Hun Sen on friday rejected opposition parties' demands for talks outside the country, accusing them of trying to ``internationalize'' the political crisis.};
+      \path<2>[draw, ->] (a) --  (a -|  gal.west) ;
+      
 
-\node[rectangle, xshift=-5cm, scale=0.8, draw,thick,fill=blue!0,text width=20em, rounded corners, inner sep =5pt, minimum height=1em] {
-\small
-cambodian leader hun sen on friday rejected opposition parties ' demands for talks outside the country , accusing them of trying to `` internationalize '' the political crisis .};
-
- \node [xshift=4.5cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=16em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
-Cambodian government rejects opposition's call for talks abroad
-\par};
-\end{tikzpicture}
+      \node [rounded corners, above =(0.2cm) of a] {\alert<1>{$x$}};
+      
+      \visible<2>{
+        \node(b) [xshift=4.5cm, yshift=-1cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
+          Cambodian government rejects opposition's call for talks abroad
+          \par};
+        
+        \node [rounded corners, above = (0.2cm) of b] {\alert<2>{$y_{1:T}$}};
+        \path[draw, <-] (b) --  (b -| gal.east) ;
+      }
+    \end{tikzpicture}
   \end{center}
 \end{frame}
 
 
 
-\begin{frame}{Talk about Text (Summarization) }
 
-  \research{\citet{Rush2015} w/ Facebook}
-
-
+\begin{frame}{Sentence Summarization}
+  
   \begin{center}
-\begin{tikzpicture}
-\node{\includegraphics[width=4cm]{galaxy}};
-\path<2>[draw] (0, 0) --  (2,0) ;
+    \includegraphics[height=0.75\textheight]{Gigaword}
+  \end{center}
+\end{frame}
 
-\node[rectangle, xshift=-5cm, scale=0.6, draw,thick,fill=blue!0,text width=30em, rounded corners, inner sep =5pt, minimum height=1em] {
-\small
-london , england -lrb- reuters -rrb- -- harry potter star daniel radcliffe gains access to a reported \$ 20 million -lrb- \$ 41.1 million -rrb- fortune as he turns 18 on monday , but he insists the money won't  cast a spell on him . daniel radcliffe as harry potter in `` harry potter and the order of the phoenix '' to the disappointment of gossip columnists around the world , the young actor says he has no plans to fritter his cash away on fast cars , drink and celebrity parties . `` i do n't plan to be one of those people who , as soon as they turn 18 , suddenly buy themselves a massive sports car collection or something similar , '' he told an australian interviewer earlier this month . `` i do n't think i 'll be particularly extravagant '' . `` the things i like buying are things that cost about 10 pounds -- books and cds and dvds . '' at 18 , radcliffe will be able to gamble in a casino , buy a drink in a pub or see the horror film `` hostel : part ii , '' currently six places below his number one movie on the uk box office chart  . details of how he 'll mark his landmark birthday are under wraps . his agent and publicist had no comment on his plans . `` i 'll definitely have some sort of party , '' he said in an interview . `` hopefully none of you will be reading about it . '' radcliffe 's earnings from the first five potter films have been held in a trust fund which he has not been able to touch . despite his growing fame and riches , the actor says he is keeping his feet firmly on the ground . `` people are always $\ldots$
+\begin{frame}{Talk about Text (Summary) }
+  \begin{center}
+    \begin{tikzpicture}
+      
+      \node{\includegraphics[width=2cm]{galaxy}};
+
+
+
+      \node(a) [rectangle, yshift=0.2cm, xshift=-5cm, scale=0.6, draw,thick,fill=blue!0,text width=25em, rounded corners, inner sep =5pt, minimum height=1em] {
+        \small
+        London, England  (reuters) -- Harry Potter star Daniel Radcliffe gains access to a reported \$20 million fortune as he turns 18 on monday, but he insists the money won't  cast a spell on him. Daniel Radcliffe as harry potter in ``Harry Potter and the Order of the Phoenix'' to the disappointment of gossip columnists around the world , the young actor says he has no plans to fritter his cash away on fast cars , drink and celebrity parties . `` i do n't plan to be one of those people who , as soon as they turn 18 , suddenly buy themselves a massive sports car collection or something similar , '' he told an australian interviewer earlier this month . `` i do n't think i 'll be particularly extravagant '' . `` the things i like buying are things that cost about 10 pounds -- books and cds and dvds . '' at 18 , radcliffe will be able to gamble in a casino , buy a drink in a pub or see the horror film `` hostel : part ii , '' currently six places below his number one movie on the uk box office chart  . details of how he 'll mark his landmark birthday are under wraps . his agent and publicist had no comment on his plans . `` i 'll definitely have some sort of party , '' he said in an interview $\ldots$ %`` hopefully none of you will be reading about it . '' radcliffe 's earnings from the first five potter films have been held in a trust fund which he has not been able to touch . despite his growing fame and riches , the actor says he is keeping his feet firmly on the ground . `` people are always $\ldots$
 };
 
- \node [xshift=4cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=16em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
- harry potter star daniel radcliffe gets\$ 20m fortune as he turns 18 monday . young actor  says he has no plans to fritter his cash away . radcliffe 's earnings from first five potter films have been held in trust fund .  \par};
+\path[draw, ->] (a) --  (a -|  gal.west) ;
+
+\visible<2>{
+  \node (b) [xshift=4.2cm, yshift=-0.2cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
+    Harry Potter star Daniel Radcliffe gets \$20m fortune as he turns 18 monday. Young actor says he has no plans to fritter his cash away. Radcliffe 's earnings from first five potter films have been held in trust fund.  \par};
+  \path[draw, <-] (b) --  (b -| gal.east);
+  }
+
 \end{tikzpicture}
-  \end{center}
+\end{center}
 \end{frame}
 
-\begin{frame}{Summarization}
 
+\begin{frame}{Document Summarization}
   \begin{center}
-    \includegraphics[height=0.85\textheight]{Gigaword}
-  \end{center}
-\end{frame}
-
-\begin{frame}{Summarization}
-  \begin{center}
-    \includegraphics[height=0.85\textheight]{CNNDM}
+    \includegraphics[height=0.75\textheight]{CNNDM}
   \end{center}
 \end{frame}
 
@@ -89,12 +124,11 @@ london , england -lrb- reuters -rrb- -- harry potter star daniel radcliffe gains
   \research{\cite{EMNLP2017}}
   \begin{center}
 \begin{tikzpicture}
-\node[]{\includegraphics[width=4cm]{galaxy}};
+\node[]{\includegraphics[width=2cm]{galaxy}};
 
 
-\path<2>[draw] (0, 0) --  (2,0) ;
 
-\node[xshift=-4.5cm, draw, scale=0.5, inner sep=10pt, rounded corners, text width=30em]{
+\node(a)[xshift=-4.5cm, draw, scale=0.5, inner sep=10pt, rounded corners, text width=26em]{
 \small
   \begin{center}
 
@@ -126,6 +160,8 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 \end{tabular}
   \end{center}
 };
+
+\path[draw, ->] (a) --  (a -|  gal.west) ;
 
 
 % \node[inner sep=1pt, rounded corners, text width=15em, xshift=-4cm,]{\small
@@ -167,9 +203,10 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 
 % };
  % \node [xshift=-3.5cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta  ... \par};
-\node [xshift=6cm,scale=0.5, xshift=-4cm, rectangle, draw,thick,fill=blue!0,text width=30em, rounded corners, inner sep =10pt, minimum height=1em]{\baselineskip=100pt \large  The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta was in desperate need of a win and they were able to take care of a shorthanded Miami team here. Defense was key for the Hawks, as they held the Heat to 42 percent shooting and forced them to commit 16 turnovers. Atlanta also dominated in the paint, winning the rebounding battle, 47 - 34, and outscoring them in the paint 58 - 26. The Hawks shot 49 percent from the field and assisted on 27 of their 43 made baskets. This was a near wire-to-wire win for the Hawks, as Miami held just one lead in the first five minutes. Miami ( 7 - 15 ) are as beat-up as anyone right now and it's taking a toll on the heavily used starters. Hassan Whiteside really struggled in this game, as he amassed eight points, 12 rebounds and one blocks on 4 - of - 12 shooting ... \par};
+\visible<2>{\node(b) [xshift=4.5cm,scale=0.5,  rectangle, draw,thick,fill=blue!0,text width=26em, rounded corners, inner sep =10pt, minimum height=1em]{\baselineskip=100pt \large  The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta was in desperate need of a win and they were able to take care of a shorthanded Miami team here. Defense was key for the Hawks, as they held the Heat to 42 percent shooting and forced them to commit 16 turnovers. Atlanta also dominated in the paint, winning the rebounding battle, 47 - 34, and outscoring them in the paint 58 - 26. The Hawks shot 49 percent from the field and assisted on 27 of their 43 made baskets. This was a near wire-to-wire win for the Hawks, as Miami held just one lead in the first five minutes. Miami ( 7 - 15 ) are as beat-up as anyone right now and it's taking a toll on the heavily used starters. Hassan Whiteside really struggled in this game, as he amassed eight points, 12 rebounds and one blocks on 4 - of - 12 shooting ... \par};
 
-
+  \path[draw, <-] (b) --  (b -| gal.east);
+}
 % \visible<2>{\node[xshift=3.5cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta  ... \par};}
 \end{tikzpicture}
   \end{center}
@@ -244,27 +281,57 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 ^ { 2 } x } }  \end{array} \right) \qquad 
 \end{myverbbox}
 
-
-\begin{frame}{Talk about the Environment (Multimodal) } 
-\research{\cite{Deng2016} w/ Bloomberg}
+\begin{frame}{E2E Challenge 2018}
+  \begin{figure}
+    \centering
+    
+    \footnotesize
+\begin{tabular}{@{}ll@{}}
+\toprule
+\bf MR        & \begin{tabular}[c]{@{}l@{}}name{[}The Golden Palace{]},  eatType{[}coffee shop{]},  food{[}Fast food{]}, \\ priceRange{[}cheap{]},  customer rating{[}5 out of 5{]},  area{[}riverside{]}\end{tabular}         \\ \midrule
+\bf Reference & \begin{tabular}[c]{@{}l@{}}A coffee shop located on the riverside  called The Golden Palace,  \\ has a 5 out of 5 customer rating.  Its price range are fairly cheap  \\for its excellent Fast food.\end{tabular} \\ \bottomrule
+\end{tabular}
+  \end{figure}  
   \begin{center}
-\begin{tikzpicture}
-\node{\includegraphics[width=5cm]{galaxy}};
-\path<2>[draw] (0, 0) --  (2,0) ;
- \node [yshift=3cm, rectangle, thick,fill=blue!0,text width=5cm, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \includegraphics[width=12cm]{latexin}};
-
-\node [xshift=6cm, rectangle, scale=0.6, draw,thick,fill=blue!0,text width=32em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
-\sTWO
-};
-
-\end{tikzpicture}
+    \includegraphics[width=10cm]{E2EChallenge}
   \end{center}
 \end{frame}
 
 
-\begin{frame}{Im2Latex}
-  \vspace{-0.25cm}
 
+\begin{frame}{Talk about the Diagrams} 
+\research{\cite{Deng2016} w/ Bloomberg}
+  \begin{center}
+\begin{tikzpicture}
+
+
+\node(a){\includegraphics[width=2cm]{galaxy}};
+ \node [yshift=4cm, rectangle, thick,fill=blue!0,text width=5cm, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \includegraphics[width=10cm]{latexin}};
+
+\visible<2> {
+\node (b)[xshift=6cm, rectangle, scale=0.6, draw,thick,fill=blue!0,text width=32em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize 
+\sTWO
+
+};
+  \path[draw, <-] (b) --  (b -| gal.east);
+}
+\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Im2Latex}
+\research{\cite{Deng2016} w/ Bloomberg}
+\begin{center}
+  \includegraphics[height =0.75\textheight]{imlatex}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Im2Latex}
+\research{\cite{Deng2016} w/ Bloomberg}
+
+
+  \vspace{-0.25cm}
   \begin{center}
     \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Temporary}{videos/latex.mp4}
   \end{center}
