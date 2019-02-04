@@ -11,14 +11,46 @@
 %   \end{center}
 % \end{frame}
 
-\begin{frame}{Machine Learning Standard Setup}
-(Picture )
+% \begin{frame}{Machine Learning for Multiclass Prediction}
+%   \[ {y} = g({x}; {\theta}) \]
+% \end{frame}
+
+\begin{frame}{Machine Learning for Multiclass Classification}
+
+
+  \begin{center}
+    \begin{tikzpicture}
+      \node(a) [rectangle,  xshift=-5cm, scale=0.6, draw,thick,fill=blue!0, rounded corners, inner sep =5pt] {
+        \includegraphics[width=7cm]{moped}};
+      \node [rounded corners, above =(0.2cm) of a] {\alert<1>{$x$}};
+
+
+      \visible<2->{
+      \node(gal){\includegraphics[width=1.5cm]{galaxy}};
+      \node [rounded corners, above =(0.2cm) of gal] {\alert<2>{$g(\cdot; \alert<4>{\theta})$}};
+\path[draw, ->] (a) --  (a -|  gal.west) ;
+    }
+
+
+
+\visible<3->{
+
+  \node (b) [xshift=4.2cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em, text centered]{\baselineskip=50pt  \centering Moped};
+  \node [rounded corners, above = (0.2cm) of b] {\alert<3>{$y$}};
+  \path[draw, <-] (b) --  (b -| gal.east);
+  }
+
+\end{tikzpicture}
+\end{center}
+\note{If you have seen any problem in machine learning, its probably multiclass prediction. Here we are given an input x, which is passed to a model g, to predict a label y. The model's parameters $\theta$ 
+are set by looking at a large set of labeled examples. A major story in the last decade of machine learning has been the improvement of these types of tasks based on deep learning models. Deep learning 
+here describes the form and structure of the model g and its parameters theta.   }
 \end{frame}
 
 
 \begin{frame}{Machine Learning for Text Generation}
 
-  \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \]
+  \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}, \tikzmark{input}\alert<2>{x}; \tikzmark{nn}\alert<4>{\theta}) \]
 
 % \begin{tikzpicture}[
 %   remember picture,
@@ -46,20 +78,74 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Translation}
 
+\begin{frame}{Part 1: Generating Text}
+  \begin{center}
+    \begin{tikzpicture}
+      \node[draw, fill=yellow, thick, rounded corners] (app) at (0mm,
+      0mm) {Applications};
+    \end{tikzpicture}
+  \end{center}
 \end{frame}
 
 
-\begin{frame}{Talk about Text (Summary) }
+\begin{frame}{Machine Translation}
+  \begin{center}
+    \begin{tikzpicture}
 
-  \research{\citet{Rush2015} w/ Facebook}
+      \node (gal) {\includegraphics[width=1.5cm]{galaxy}};
+      \node [rounded corners, above =(0.2cm) of gal] {$f$};
+
+      \node (a) [rectangle, yshift=1cm, xshift=-5cm, scale=0.8, draw,thick,fill=blue!0,text width=16em, rounded corners, inner sep =5pt, minimum height=1em] {
+        Yalitza Aparicio acababa de graduarse de una escuela para maestros y aun no tenia empleo cuando el proceso de busqueda de actrices para la ultima pelicula de Alfonso Cuaron llego a su natal Tlaxiaco, Oaxaca.
+};
+      \path[draw, ->] (a) --  (a -|  gal.west) ;
+
+
+      \node [rounded corners, above =(0.2cm) of a] {\alert<1>{$x$}};
+
+      \visible<2>{
+        \node(b) [xshift=4.5cm, yshift=-1cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
+          Yalitza Aparicio had just finished her teaching degree and didn't yet have a job when the Mexican director Alfonso Cuaron held a casting call in her home of Tlaxiaco, Oaxaca, for the lead role in his semi-autobiographical drama, ``Roma.''
+          \par};
+
+        \node [rounded corners, above = (0.2cm) of b] {\alert<2>{$y^*_{1:T}$}};
+        \path[draw, <-] (b) --  (b -| gal.east) ;
+      }
+    \end{tikzpicture}
+  \end{center} 
+\end{frame}
+
+
+\begin{frame}{Translation Performance}
+  
+
+\textbf{Evaluation Metric:} 
+
+Target:\  \
+\texttt{[Yalitza Aparicio had] just [finished her] teaching [degree] .}
+\air 
+
+Predict:
+\texttt{[Yalitza Aparicio had] recently [finished her] [degree]. }
+\pause
+
+\air 
+\textbf{Deep Learning Performance:} 
+  \begin{center}
+     \includegraphics[width=8cm]{wmt}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Sentence Summarization }
+
+
 
 
   \begin{center}
     \begin{tikzpicture}
 
-      \node (gal) {\includegraphics[width=2cm]{galaxy}};
+      \node (gal) {\includegraphics[width=1.5cm]{galaxy}};
       \node [rounded corners, above =(0.2cm) of gal] {$f$};
 
 
@@ -72,7 +158,7 @@
       \node [rounded corners, above =(0.2cm) of a] {\alert<1>{$x$}};
 
       \visible<2>{
-        \node(b) [xshift=4.5cm, yshift=-1cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
+        \node(b) [xshift=4.5cm, yshift=-1cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
           Cambodian government rejects opposition's call for talks abroad
           \par};
 
@@ -84,14 +170,20 @@
 \end{frame}
 
 
-\begin{frame}{Dataset}
+\begin{frame}{GigaWord Dataset}
+  \research{\citet{Rush2015} w/ Facebook}
 
+  \begin{center}
+    \includegraphics[width=7cm]{ap}
+  \end{center}
+  \begin{itemize}
+  \item Several million headlines paired with article leads.
+  \item Simple model for  abstractive summarization / compression. 
+  \item Benchmark dataset for early deep summarization work.
+  \end{itemize}
 \end{frame}
 
 
-\begin{frame}{Metric}
-
-\end{frame}
 
 \begin{frame}{Sentence Summarization}
 
@@ -99,15 +191,13 @@
     \includegraphics[height=0.75\textheight]{Gigaword}
   \end{center}
 
-  (Human / Pre-deep)
-
 \end{frame}
 
-\begin{frame}{Talk about Text (Summary) }
+\begin{frame}{Document Summary}
   \begin{center}
     \begin{tikzpicture}
 
-      \node{\includegraphics[width=2cm]{galaxy}};
+      \node{\includegraphics[width=1.5cm]{galaxy}};
 
 
 
@@ -141,7 +231,7 @@
   \research{\cite{EMNLP2017}}
   \begin{center}
 \begin{tikzpicture}
-\node[]{\includegraphics[width=2cm]{galaxy}};
+\node[]{\includegraphics[width=1.5cm]{galaxy}};
 
 
 
@@ -322,7 +412,7 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 \begin{tikzpicture}
 
 
-\node(a){\includegraphics[width=2cm]{galaxy}};
+\node(a){\includegraphics[width=1.5cm]{galaxy}};
  \node [yshift=4cm, rectangle, thick,fill=blue!0,text width=5cm, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \includegraphics[width=10cm]{latexin}};
 
 \visible<2> {

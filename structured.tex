@@ -1,7 +1,7 @@
 
 
 
-\begin{frame}{Research Direction}
+\begin{frame}{Part 3: Structured Modeling}
   \begin{center}
     \scalebox{2}{
   \begin{tikzpicture}
@@ -22,12 +22,9 @@
   \end{center}
 \end{frame}
 
-\begin{frame}{Structured Modeling}
-  Compare to multiclass.
-\end{frame}
 
-\begin{frame}{Generation Setup (Reminder)}
-    \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}; \tikzmark{input}\alert<2>{x}, \tikzmark{nn}\alert<4>{\theta}) \]
+\begin{frame}{Machine Learning for Text Generation}
+    \[ {y^*_{1:T}} = \alert{\argmax_{y_{\tikzmark{opt}1:T}}} {f}(y_{1:T}; \tikzmark{input}{x}, \tikzmark{nn}{\alert{\theta}}) \]
 
 
   \begin{itemize}
@@ -52,8 +49,10 @@
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-7}
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-8}
   \end{center}
-  Treat as Multiclass classification:
-  \[ \text{NLL}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, \cvec; \theta) \]
+  \pause
+
+  Crucial: Same objective as \alert{multiclass classification}. 
+  \[ {\cal L}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, x; \theta) \]
 \end{frame}
 
 \begin{frame}{Deploying Seq2Seq}
@@ -67,24 +66,15 @@
   \includegraphics[width=7cm]{beam}
   \end{center}
 
-  Deploy as a structured model:
+  Requires  predicting best sequence
   \[ y^*_{1:T} = \argmax_{y_{1:T}} f(y_{1:T}; \theta) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, \cvec; \theta) \]
   % \pause
-  % % \begin{itemize}
-  % % \item Note: Completely intractable $O(\text{\#vocab} ^T)$
-  % % \end{itemize}
-\end{frame}
-(approximation)
 
-  \begin{itemize}
-  \item Note: Completely intractable $O(\text{\#vocab} ^T)$
-  \end{itemize}
-
-\begin{frame}
+  However: Completely intractable for RNNs $O(\text{\#vocab} ^T)$
 
 \end{frame}
 
-\begin{frame}[fragile]{Best Sequence Heuristic:  Beam Search}
+\begin{frame}[fragile]{Standard Heuristic Method:  Beam Search}
     \begin{center}
   \begin{tikzpicture}[transform canvas = {scale=0.8}]
     \tikzstyle{beam}=[draw, minimum height=0.6cm, anchor=base, text height=5, text depth=0, minimum width=1.5cm,thin, rounded corners, line width=0.03cm]
@@ -144,10 +134,10 @@
 
 \air
 
-\only<7->{
+\visible<7->{
    \begin{enumerate}
    \item Compute the score of every possible next word.
-     \[f(y_t, y_{1:t-1}^{(k)}) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, \cvec) + \log p(y^{(k)}_{1:t-1} \ |\  \cvec) \]
+     \[f(y_t, y_{1:t-1}^{(k)}) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x) \]
      \pause
    \item Prune to only the $K$ highest-scoring,
      \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]
@@ -238,29 +228,31 @@
 % \end{frame}
 
 
-\begin{frame}{Theoretical Issues: Discrete Time-Series Moels  }
+\begin{frame}{Theoretical Issues with RNN-based Models}
   \begin{enumerate}
-  \item Exposure Bias
-    \begin{itemize}
-    \item Training by conditioning on true $y_{1:t-1}$.
-    \end{itemize}
-    \air
-  \item Metric Bias
-    \begin{itemize}
-    \item Training with local NLL, evaluate with hamming-style losses.
-    \end{itemize}
-
-    \air
   \item Label Bias  %\cite{Lafferty2001}
     \begin{itemize}
-    \item Locally normalized discriminative models have known pathological issues.
+    \item Training is locally discriminative, but prediction is over entire sequences.
     \end{itemize}
+
+  \item Exposure Bias
+    \begin{itemize}
+    \item Training conditions on true history ($y_{1:t-1}$) but generates with predicted history.
+    \end{itemize}
+    \air
+    \pause
+  \item Metric Bias
+    \begin{itemize}
+    \item Training uses multiclass classification, but evaluation uses n-gram match.
+    \end{itemize}
+    \pause
+    \air
 
   \end{enumerate}
 \end{frame}
 
-\begin{frame}{Work}
-  Can we exploit discrete sequences to improve models for text generation?
+\begin{frame}{Research}
+  Can we better model discrete sequences for text generation?
 
 
   \air
@@ -268,9 +260,9 @@
   Applications:
 
   \begin{itemize}
-  \item (1) Sequence-to-Sequence as Beam Search Optimization for training.
+  \item (1) Improvements in training with less supervision.
     \air
-  \item (2) Sequence Knowledge Distillation for deployment.
+  \item (2) Effective methods for downscaling translation models.
     \air
   \end{itemize}
 \end{frame}
@@ -304,32 +296,64 @@
 %   % \end{itemize}
 % \end{frame}
 
-\begin{frame}{Beam Search Optimization}
+\begin{frame}{Sequence-to-Sequence Learning as Beam Search Optimization}
   \research{\citet{Wiseman2016a}}
 
-  Motivation: Can we fix target theoretical issues by unifying training
-and test objective?
+  Proposal: Directly modify the RNN training procedure to fix test biases. 
+  
+  \begin{enumerate}
+  \item Label Bias 
+    \air
+  \item Exposure Bias
+    \air
+  \item Metric Bias
+    \air
+
+  \end{enumerate}
+
+  % \begin{itemize}
+  % \item 
+  % \end{itemize}
+
 
 \end{frame}
 
-\begin{frame}{Change 1: Modify Scoring Function  }
-
+\begin{frame}{Modification 1: Global Scoring Function  }
+  
+  \textbf{Issue:} Label Bias  
+    \begin{itemize}
+    \item Training is locally discriminative, but prediction is over entire sequences.
+    \end{itemize}
 
   % \begin{center}
   %   % \structure{(Idea 1)} Replace local softmax with sequence scorer
   %   % \air
-  %   \includegraphics[width=0.6\textwidth]{rnnlm6}
+  %   
   % \end{center}
 
-  Same model, but replace
-  $  \log p(y_{t} | y^{(k)}_{1:t-1}, \cvec; \theta)$
-  with globally normalized
-  $f(y_t, y_{1:t-1}^{(k)}, \cvec; \theta)$
+    \air
+
+  \textbf{Proposed Fix:}
+
+  \begin{itemize}
+  \item Replace $ \log p(y_{t} | y^{(k)}_{1:t-1}, \cvec; \theta)$ with
+    a directly learned function $f(y_t, y_{1:t-1}^{(k)}, x; \theta)$
+  \end{itemize}
+  \air
+
+  \begin{center}
+    \includegraphics[width=0.5\textwidth, trim={0cm 18cm 0cm 0cm}, clip]{rnnlm6}
+  \end{center}
 \end{frame}
 
-\begin{frame}{Change 2: Run Beam Search During Training}
+\begin{frame}{Modification 2: Beam Search at Training}
 
+  \textbf{Issue:}  Exposure Bias
+    \begin{itemize}
+    \item Training conditions on true history ($y_{1:t-1}$) but generates with predicted history.
+    \end{itemize}
 
+   \textbf{Proposed Fix:} During training:
    \begin{enumerate}
    \item Compute the score of every possible next word.
 
@@ -360,27 +384,30 @@ and test objective?
 \end{frame}
 
 
-\begin{frame}{ Change 3: Replace train to enforce beam-search margin}
+\begin{frame}{Modification 3: Train with Margin}
 
-  New Global Objective:
-  \begin{itemize}
+  \textbf{Issue:} Metric Bias
+    \begin{itemize}
+    \item Training uses multiclass classification, but evaluation uses n-gram match.
+    \end{itemize}
 
-  \item Margin between ground truth seq $y^{(g)}$ and last seq on beam $y^{(K)}$
-  \end{itemize}
-\begin{align*}
- \mathcal{L}&(\theta) = \sum_{t} \Delta(y^{(g)}_{1:t}, y_{1:t}^{K}) \left[1 - f(y^{(g)}_t, y^{(g)}_{1:t-1}, \cvec) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, \cvec) \right]
-\end{align*}
 
-\begin{itemize}
-  \item Slack-rescaled, margin-based sequence criterion, at each time step.
-    \air
+    \textbf{Proposed Fix:} Use a structured SVM-style training loss:
+    \begin{itemize}
+    \item Margin between ground truth sequence $\hat{y}$ and worst predicted sequence $y^{(K)}$
+    \end{itemize}
+    \begin{align*}
+      \mathcal{L}&(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{K}) \left[1 - f(\hat{y}_t, y^{(g)}_{1:t-1}, \cvec) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, \cvec) \right]
+    \end{align*}
 
-\item When violation occurs, target replaces current beam (learning as search optimization \cite{daume05learning})
-\end{itemize}
+    \begin{itemize}
+    \item Slack-rescaled, margin-based sequence criterion, at each time step.
+    \item $\Delta$ is a task specific sequence cost, i.e. ngram-mismatch
+    \end{itemize}
 
-\end{frame}
+  \end{frame}
 
-\begin{frame}[fragile]{ Beam Search Optimization Training Example}
+\begin{frame}[fragile]{Beam Search Optimization Example}
   \begin{center}
     \begin{center}
 
@@ -389,6 +416,8 @@ and test objective?
     \air
     \air
     \air
+
+\
 
   \begin{tikzpicture}[transform canvas = {scale=0.8}]
   \tikzstyle{beam}=[draw, minimum height=0.6cm, anchor=base, text height=5, text depth=0, minimum width=1.5cm,thin, rounded corners, line width=0.03cm]
@@ -403,9 +432,9 @@ and test objective?
 
 
    \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
-    \node<1->[fill=yellow](G-1-1){\textcolor{blue}{a}}; & \node<2->[fill=yellow](G-1-2){red}; & \node<3->[fill=lightgray](G-1-3){\textcolor{blue}{dog}}; & \node<4->(G-1-4){smells}; & \node<5->[fill=lightgray](G-1-5){\textcolor{red}{home}};  & \node<6->[fill=lightgray](G-1-6){\textcolor{red}{today}}; \\
+    \node<1->[fill=yellow](G-1-1){\textcolor{black}{a}}; \node<4->[fill=yellow](G-1-1){\textcolor{black}{a}}; & \node<2->[fill=yellow](G-1-2){red}; \node<4->[fill=yellow](G-1-2){red}; & \node<3->[](G-1-3){\textcolor{black}{dog}}; \node<4->[fill=red!20](G-1-3){\textcolor{black}{dog}}; & \node<4->(G-1-4){smells}; & \node<5->[](G-1-5){\textcolor{red}{home}}; \node<6->[fill=red!20](G-1-5){\textcolor{red}{home}};  & \node<6->[fill=red!20](G-1-6){\textcolor{red}{today}}; \\
     \node<1->(G-2-1){the}; & \node<2->(G-2-2){dog}; & \node<3->[fill=yellow](G-2-3){dog}; & \node<4->(G-2-4){barks}; & \node<5->[fill=yellow](G-2-5){quickly}; & \node<6->(G-2-6){Friday}; \\
-    \node<1->(G-3-1){red}; & \node<2->[fill=lightgray](G-3-2){\textcolor{blue}{blue}}; & \node<3->(G-3-3){cat}; &  \node<4->[fill=lightgray](G-3-4){\textcolor{blue}{barks}}; & \node<5->(G-3-5){straight}; & \node<6->[](G-3-6){now}; \\
+    \node<1->(G-3-1){red}; & \node<2->[](G-3-2){\textcolor{black}{blue}}; \node<4->[fill=red!20](G-3-2){\textcolor{black}{blue}}; & \node<3->(G-3-3){cat}; &  \node<4->[fill=red!20](G-3-4){\textcolor{black}{barks}}; & \node<5->(G-3-5){straight}; & \node<6->[](G-3-6){now}; \\
     & & & \node<4->[fill=yellow](G-4-4){runs}; & & \node<6->[fill=yellow](G-4-6){today}; \\
     };
 
@@ -481,16 +510,19 @@ and test objective?
 % \end{align*}
 
   \begin{itemize}
-  \item Color \textcolor{yellow}{True}: target sequence $y^{(g)}$
-  \item Color \textcolor{gray}{Gray}: violating sequence $y^{(K)}$
+  \item Color \textcolor{orange}{True}: ground-truth sequence $\hat{y}$
+  \item Color \textcolor{red}{Red}: last sentence  $y^{(K)}$ upon violation
   \end{itemize}
+  Strategy: upon violation, restart from ground truth (learning as search optimization \cite{daume05learning})
 \end{frame}
 
-\begin{frame}[fragile]{Structured Backpropagation}
+\begin{frame}[fragile]{Parameter Updates: Structured Backpropagation}
   \begin{center}
 
   \air
   \air
+
+
 
   \begin{tikzpicture}[transform canvas = {scale=0.8}]
     \tikzstyle{beam}=[draw, minimum height=0.6cm, anchor=base, text height=5, text depth=0, minimum width=1.5cm,thin, rounded corners, line width=0.03cm]
@@ -548,6 +580,7 @@ and test objective?
 
        \end{scope}
 
+       
        \begin{scope}[yshift=-2.8cm]
 
       \matrix (G) [matrix of nodes,nodes={beam}, inner sep=1mm,row sep=0.06cm,column sep=0.8cm ] {
@@ -574,7 +607,7 @@ and test objective?
 
   \begin{itemize}
   \item Margin gradients are sparse, only violating sequences get updates.
-  \item Backprop as efficient as standard models.
+  \item Backprop as efficient as standard models, avoid exponential sum.
   \end{itemize}
 \end{frame}
 
@@ -585,27 +618,27 @@ and test objective?
 
 % \end{frame}
 
-\begin{frame}{Theoretical Issues Revisited}
-  \begin{itemize}
+% \begin{frame}{Theoretical Issues Revisited}
+%   \begin{itemize}
 
-  \item Exposure Bias
-    \begin{itemize}
-    \item Beam search at training
-    \end{itemize}
-    \air
-  \item Train/Test Loss Mismatch
-    \begin{itemize}
-    \item Slack-rescaled margin can capture correct loss.
-    \end{itemize}
+%   \item Exposure Bias
+%     \begin{itemize}
+%     \item Beam search at training
+%     \end{itemize}
+%     \air
+%   \item Train/Test Loss Mismatch
+%     \begin{itemize}
+%     \item Slack-rescaled margin can capture correct loss.
+%     \end{itemize}
 
-    \air
-  \item Label Bias  \cite{Lafferty2001}
-    \begin{itemize}
-    \item Sequence regression is not locally normalized
-    \end{itemize}
+%     \air
+%   \item Label Bias  \cite{Lafferty2001}
+%     \begin{itemize}
+%     \item Sequence regression is not locally normalized
+%     \end{itemize}
 
-  \end{itemize}
-\end{frame}
+%   \end{itemize}
+% \end{frame}
 
 
 % \begin{frame}{Experiments}
@@ -633,14 +666,14 @@ and test objective?
 % \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Results}
   \vspace{-0.2cm}
   \begin{table}
   \centering
     \footnotesize
   \begin{tabular}{lccc}
     \toprule
-    & $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\
+    Train Beam & $K$ = 1 & $K$ = 5 & $K$ = 10 \\
     \midrule
      & \multicolumn{3}{c}{Word Ordering (BLEU) } \\
     \midrule
@@ -658,22 +691,22 @@ and test objective?
 %   \centering
 %   \hspace*{-0.3cm}\begin{tabular}{lccc}
 %     \toprule
-    & \multicolumn{3}{c}{Dependency Parsing (UAS/LAS) } \\
-    % \midrule
-    seq2seq & \textbf{87.33/82.26} & 88.53/84.16 & 88.66/84.33\\
-    BSO & 86.91/82.11 & 91.00/\textbf{87.18} & 91.17/\textbf{87.41} \\
-    BSO-Con & 85.11/79.32 & \textbf{91.25}/86.92 & \textbf{91.57}/87.26 \\
+    % & \multicolumn{3}{c}{Dependency Parsing (UAS/LAS) } \\
+    % % \midrule
+    % seq2seq & \textbf{87.33/82.26} & 88.53/84.16 & 88.66/84.33\\
+    % BSO & 86.91/82.11 & 91.00/\textbf{87.18} & 91.17/\textbf{87.41} \\
+    % BSO-Con & 85.11/79.32 & \textbf{91.25}/86.92 & \textbf{91.57}/87.26 \\
     % \midrule
     % Andor & 93.17/91.18 & - & - \\
     % \bottomrule
 
-    \midrule
+    % \midrule
     \pause
     & \multicolumn{3}{c}{Machine Translation (BLEU) } \\
     % &  $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\
     % \midrule
     seq2seq & 22.53 & 24.03 & 23.87 \\
-    BSO, SB-$\Delta$, $K_t$=6 & \textbf{23.83} & \textbf{26.36} & \textbf{25.48} \\
+    BSO, SB-$\Delta$  & \textbf{23.83} & \textbf{26.36} & \textbf{25.48} \\
     % \midrule
     XENT & 17.74 & $\leq$ 20.5 & $\leq$ 20.5 \\
     DAD & 20.12 & $\leq$ 22.5 & $\leq$ 23.0 \\
@@ -729,47 +762,56 @@ and test objective?
 % \end{columns}
 % \end{frame}
 
-\begin{frame}
-  (Teacher-Student Diagram)
-\end{frame}
+% \begin{frame}
+%   (Teacher-Student Diagram)
+% \end{frame}
 
 \begin{frame}{Sequence Knowledge Distillation}
   \research{\cite{Kim2016a}}
+
+  Proposal: Shrink the size of text generation models. 
 
 % \begin{frame}
 %   \centerline{\structure{Related Work: Compressing Deep Models}}
 % \air
 
-  Goal: Compress text generation models.
+  Goal: Replicate knowledge distillation results from multiclass image regcognition.
 
 \begin{itemize}
-\item \textbf{Pruning}: Prune weights based on importance criterion
-\cite{LeCun1990,Han2016}
+% \item \textbf{Pruning}: Prune weights based on importance criterion
+% \cite{LeCun1990,Han2016}
 \item \textbf{Knowledge Distillation}: Train a \textit{student} model to learn
 from a \textit{teacher} model \cite{Bucila2006,Ba2014,Hinton2015}.
+
+\begin{center}
+  \includegraphics[width=8cm]{distill}
+\end{center}
 \end{itemize}
-\air
-Other methods:
-\begin{itemize}
-\item low-rank matrix factorization of weight matrices \cite{Denton2014}
-\item weight binarization \cite{Lin2016}
-\item weight sharing \cite{Chen2015}
-\end{itemize}
+
+
+
+% \air
+% Other methods:
+% \begin{itemize}
+% \item low-rank matrix factorization of weight matrices \cite{Denton2014}
+% \item weight binarization \cite{Lin2016}
+% \item weight sharing \cite{Chen2015}
+% \end{itemize}
 % \end{frame}
 
 
 
 \end{frame}
 
-\begin{frame}{Baseline Model}
+\begin{frame}{Baseline}
 
 \begin{columns}
 \begin{column}{7cm}
-Standard model minimize $\text{NLL}(\theta)$:
+Minimize :
 \air
-$$-\sum_t \log p(y_t=y^{(g)}_t \given y^{(g)}_{1:t-1}, \cvec ; \theta)$$
+$${\cal L}(\theta)-\sum_t \log p(y_t=\hat{y}_t \given \hat{y}_{1:t-1}, x ; \theta)$$
 
-where $y^{(g)}_t$ is the ground truth word at time $t$.
+where $\hat{y}_t$ is the ground truth word at time $t$.
 
 \air
 
@@ -800,18 +842,18 @@ Cross-entropy with ground truth.
 % \end{frame}
 
 
-\begin{frame}{Standard Method: Word-Level Knowledge Distillation}
+\begin{frame}{Multiclass Style: Word-Level Knowledge Distillation}
 
 \begin{columns}
 \begin{column}{7cm}
-Teacher network: $q(y_{t} | y_{1:t-1}, \cvec  ; \theta_T$)
+Teacher model: $q(y_{t} | y_{1:t-1}, x; \theta_T$)
 \air
 
-Minimize cross-entropy between teacher and student distribution  $\mathcal{L}_{\text{WORD-KD}}(\theta)$ \\
+Cross-entropy between teacher and student
 
 \begin{align*}
--\sum_t \sum_v &q(y_t=v \given y^{(g)}_{1: t-1}, \cvec ; \theta_T)\times \\
-& \log p(y_t =v \given y^{(g)}_{1: t-1}, \cvec ; \theta)
+\mathcal{L}_{\text{WORD-KD}}(\theta) = -\sum_t \sum_v &q(y_t=v \given \hat{y}_{1: t-1}, x ; \theta_T)\times \\
+& \log p(y_t =v \given \hat{y}_{1: t-1}, x ; \theta)
 \end{align*}
 \end{column}
 
@@ -845,41 +887,37 @@ Minimize cross-entropy between teacher and student distribution  $\mathcal{L}_{\
 \air
 \air
 
-Proposal: Replace multi-class with sequence distribution. Instead of word NLL,
+\textbf{Motivation:} Replace multiclass with sequence-level cross-entropy.
 
 \begin{align*}
--\sum_t \sum_v &q(y_t=v \given y^{(g)}_{1: t-1}, \cvec ; \theta_T)\times  \log p(y_t =v \given y^{(g)}_{1: t-1}, \cvec ; \theta)
+\mathcal{L}_{\text{WORD-KD}}(\theta) = -\sum_t \sum_v &q(y_t=v \given \hat{y}_{1: t-1}, x ; \theta_T)\times  \log p(y_t =v \given \hat{y}_{1: t-1}, \cvec ; \theta)
 \end{align*}
-
-% $$-\sum_t \log p(y_t=y_t \given y_{1:t-1}, \cvec ; \theta)$$
-
-Minimize cross-entropy between $q$ and $p$ implied sequence-distribution
-\[
- -\sum_{v_1} \ldots \sum_{v_T} q(y_{1:T}= v_{1:T}  | \cvec; \theta_T) \times \log p(y_{1:T}=v_{1:T} | \cvec ; \theta)
+\[ \Downarrow \] 
+\[ \mathcal{L}_{\text{SEQ-KD}}(\theta) = -\sum_{v_1} \ldots \sum_{v_T} q(y_{1:T}= v_{1:T}  | x; \theta_T) \times \log p(y_{1:T}=v_{1:T} | x ; \theta)
 \]
-\air
 
-However, as before this term is intractable.
-\air
-\air
+Mimic sequence output of teacher model. 
+\air 
+
+Note: bottom distribution is again intractable.
+
 
 \end{frame}
 
-\begin{frame}{A Simple Approximation}
+\begin{frame}{Sequence Heusritic Approximation}
 \air
 \air
 
 %\centerline{Sequence-Level Knowledge Distillation}
 \begin{columns}
 \begin{column}{6cm}
-Approximate $q(y_{1:T} \given \cvec )$ with mode
-$$q(y_{1:T} \given \cvec ) \approx \mathbf{1}\{\argmax_{y} q(y_{1:T} \given \cvec )\}$$
-\air
-Roughly obtained with  beam search
-$$ y^*_{1:T} \approx  \argmax_{y_{1:T}} q(y_{1:T} \given \cvec ) $$
-\\
-Empirically, point estimate captures
-significant mass
+Approximate $q(y_{1:T} \given x )$ with (beam search) mode sample
+$$q(y_{1:T} \given x ) \approx \mathbf{1}\{\argmax_{y} q(y_{1:T} \given x )\}$$
+% \air
+% $$ y^*_{1:T} \approx  \argmax_{y_{1:T}} q(y_{1:T} \given x ) $$
+% \\
+% Empirically, point estimate captures
+% significant mass
 
 \end{column}
 \begin{column}{8cm}
@@ -891,12 +929,15 @@ significant mass
 \begin{frame}{Sequence-Level Knowledge Distillation}
 
 \begin{columns}
-\begin{column}{5cm}
+\begin{column}{7cm}
 \begin{align*}
-\mathcal{L}_\text{SEQ-KD}(\theta) &= -\log p(y^*_{1:T} \given \cvec ; \theta)  \\
-& \hspace*{-1cm} \displaystyle \approx   -\sum_{v_{1:T}} q(y_{1:T}=v_{1:t}| \cvec; \theta_T) \log p(y_{1:T} | \cvec ; \theta)
+\mathcal{L}_\text{SEQ-KD}(\theta) &= -\log p(y^*_{1:T} \given x ; \theta)  \\
+& \hspace*{-1cm} \displaystyle \approx   -\sum_{v_{1:T}} q(y_{1:T}=v_{1:t}|x; \theta_T) \log p(y_{1:T} | x ; \theta)
 \end{align*}
-Simplest model: train the student model on $y^*$ with NLL
+\air
+
+Extension: $\mathcal{L}_\text{SEQ-INTER}(\theta)$ select sample based on ground truth $\hat{y}$ 
+as well.
 \end{column}
 \begin{column}{7cm}
 \includegraphics[trim={0.2cm 0.2cm 0.2cm 0.2cm}, clip, width=7cm]{seq-kd-2}
@@ -904,24 +945,29 @@ Simplest model: train the student model on $y^*$ with NLL
 \end{columns}
 \end{frame}
 
-\begin{frame}{Results: English $\rightarrow$ German}
+\begin{frame}{Results: WMT English $\rightarrow$ German Translation}
 \air
 \air
 \begin{table}
 \centering
 \begin{tabular}{lccccrr}
 \toprule
-Model &    BLEU$_{K=1}$   & $\Delta_{K=1}$ & BLEU$_{K=5}$ & $\Delta_{K=5}$ & PPL & $p(y^*)$ \\
+Model &    BLEU$_{K=1}$   & $\Delta_{K=1}$ & BLEU$_{K=5}$ & $\Delta_{K=5}$ \\%& PPL & $p(y^*)$ \\
 \midrule
 $4 \times 1000$ \\
-Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ &   $6.7$ &  $1.3\%$ \\
-\hspace{1mm} Seq-Inter    & $19.6$ & $+1.9$&  $19.8$& $+0.3$&   $10.4$ & $8.2\%$   \\
+Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ \\%&   $6.7$ &  $1.3\%$ \\
 \midrule
+\pause
 $2 \times 500$ \\
-Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ &  $8.2$ & $0.9\%$  \\
-\hspace{1mm} Word-KD  & $15.4$ & $+0.7$& $17.7$& $+0.1$&  $8.0$ & $1.0\%$  \\
-\hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$&  $22.7$ & $16.9\%$ \\
-\hspace{1mm} Seq-Inter  & $18.9$ & $+\mathbf{4.2}$&$19.3$ & $+\mathbf{1.7}$ &  $15.8$ & $7.6\%$  \\
+Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ \\%&  $8.2$ & $0.9\%$  \\
+\hspace{1mm} Word-KD  & $15.4$ & $+0.7$& $17.7$& $+0.1$\\%&  $8.0$ & $1.0\%$  \\
+\pause
+\hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$\\%&  $22.7$ & $16.9\%$ \\
+\hspace{1mm} Seq-Inter  & $18.9$ & $+\mathbf{4.2}$&$19.3$ & $+\mathbf{1.7}$ \\ %&  $15.8$ & $7.6\%$  \\
+\midrule
+\pause
+$4 \times 1000$ \\
+\hspace{1mm} Seq-Inter    & $19.6$ & $+1.9$&  $19.8$& $+0.3$\\ %&   $10.4$ & $8.2\%$   \\
 \bottomrule
 \end{tabular}
 
@@ -945,6 +991,6 @@ Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ &  $8.2$ & $0.9\%$  \\
   \end{center}
 \end{frame}
 
-\begin{frame}{WNMT }
-  (Competition for WNMT)
+\begin{frame}{WNMT Translation Scaling Shared Task 2018}
+  (Results)
 \end{frame}

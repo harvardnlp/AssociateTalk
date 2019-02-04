@@ -12,8 +12,12 @@
 
 % \end{frame}
 
-\begin{frame}
-  NLP
+\begin{frame}{Machine Learning for Natural Language}
+  What types of models get used for this equation? 
+
+
+  \[\argmax_{y_{1:T}} \alert{f}(y_{1:T}, x; \alert{\theta}) \]
+
 \end{frame}
 
 \begin{frame}{State-of-the-Art Natural Language Processing, circa 2009}
@@ -23,7 +27,7 @@
 
     \scalebox{0.8}{
   \begin{tikzpicture}[node distance=0.2cm]
-    \node(task)[minimum height=2em] {\textbf{Task}};
+    \node(task)[minimum height=2em] {\textbf{Task} $(x, y)$};
     \node(aa) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of task]{Syntax};
     \node(bb) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of aa]{Surface Structure};
     \node(cc) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of bb]{Translation};
@@ -33,7 +37,7 @@
 
 
     \visible<2>{
-    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class}};
+    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class} $f(\cdot; \theta)$};
     \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model]{Parsing};
     \node(b) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of a]{CRF Tagging};
     \node(c) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of b]{Alignment EM};
@@ -63,7 +67,7 @@
 \begin{center}
     \scalebox{0.8}{
   \begin{tikzpicture}[node distance=0.2cm]
-    \node(task)[minimum height=2em] {\textbf{Task}};
+    \node(task)[minimum height=2em] {\textbf{Task} $(x, y)$};
     \node(aa) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of task]{Syntax};
     \node(bb) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of aa]{Surface Structure};
     \node(cc) [draw, rounded corners, minimum width=12em,minimum height=3em, below= of bb]{Translation};
@@ -72,11 +76,11 @@
     \node     [below= of ee]{$\vdots$};
 
 
-   \visible<2>{
-    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class}};
+   \visible<2->{
+    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class} $f(\cdot; \theta)$};
     \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model, yshift=-2.5cm]{Neural Networks};
 
-    \node[below=of a]{\includegraphics[width=4cm]{rnnlm6}};
+    \node<3>[below=of a]{\includegraphics[width=4cm]{rnnlm6}};
 
     % \node[below  = of a, xshift=3cm]{\includegraphics[width=8cm]{nmt}} ;
 
@@ -125,18 +129,18 @@
     \scalebox{2}{
   \begin{tikzpicture}
 
-    \node<1> at (10mm, 15mm){\includegraphics[width=3cm]{rnnlm6}};
+    \node<1> at (10mm, 15mm){\includegraphics[width=3.4cm]{rnnlm6}};
 
     \node[draw,  thick, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
     \node[draw,  thick, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
     \node[draw,  thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
     \node<2>[draw,  fill=yellow, thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
-    \node<2>[scale=0.5, text width=35mm] at (10mm, 15mm) {\small \centering Translation, \\  Summary,  \\ Data-to-Text,  \\ Diagram-to-Text,  \\ $\vdots$};
+    \node<2>[scale=0.5, text width=50mm] at (12mm, 15mm) {\small \centering Translation, \\  Summary,  \\ Data-to-Text,  \\ Diagram-to-Text,  \\ $\vdots$};
 
     \node[draw, thick, rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
-    \node[draw, thick, rounded corners, scale=0.5] (dep) at (25mm, 0mm){Deployment};
+    \node[draw, thick, rounded corners, scale=0.5] (dep) at (25mm, 0mm){Scaling};
 
-    \node[draw,  thick, rounded corners,scale=0.5] (imp) at (0, 0) {Implementation};
+    \node[draw,  thick, rounded corners,scale=0.5] (imp) at (0, 0) {Open-Source};
 
     \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
 
@@ -209,7 +213,7 @@
       };
 }
 
-    \node[rounded corners, draw] (dep) at (25mm, 0mm){Deployment};
+    \node[rounded corners, draw] (dep) at (25mm, 0mm){Scaling};
 
 \visible<6,8>{
     \node at (35mm, -10mm) [text width=30mm] { \centering
@@ -229,9 +233,9 @@
       };
 
 
-    \node[rounded corners, draw] (imp) at (0, 0) {Implement};
+    \node[rounded corners, draw] (imp) at (0, 0) {Open-Source};
 \visible<7,8>{
-      \node at (-10mm, -10mm) [text width=30mm]{
+      \node at (-10mm, -10mm) [text width=30mm]{ \centering
         \baselineskip=-5pt \scriptsize
         \citet{DBLP:conf/acl/KleinKDSR17} \ \
         \citet{senellart2018opennmt} \ \
@@ -245,3 +249,13 @@
   \end{tikzpicture}
   \end{center}
 \end{frame}
+
+
+% \begin{frame}{Talk Outline}
+%   \begin{enumerate}
+%   \item Research Direction 1: Applications
+%   \item \alert{Research Direction 2: Analysis and Open-Source}
+%   \item Research Direction 3: Methods and Scaling
+%   \item Research Direction 4: Understanding
+%   \end{enumerate}
+% \end{frame}

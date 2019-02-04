@@ -2,14 +2,10 @@
 %%% TeX-master: "slides"
 %%% End:
 
-\begin{frame}
-
-\end{frame}
 
 
 
-
-\begin{frame}{Research Direction - Analysis and Implementation}
+\begin{frame}{Part 2: Deep Learning Internals}
   \begin{center}
     \scalebox{2}{
   \begin{tikzpicture}
@@ -17,7 +13,7 @@
     \node<1> at (10mm, 15mm){\includegraphics[width=3cm]{rnnlm6}};
     \node[draw,  fill=yellow, thick, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
     \node[draw,  thick, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
-    \node[draw,  thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
+    \node[draw,  thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};b
     \node[draw, thick, rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
     \node[draw, thick, rounded corners, scale=0.5] (dep) at (25mm, 0mm){Deployment};
 
@@ -32,8 +28,8 @@
 
 \end{frame}
 
-\begin{frame}{Generation Setup (Reminder)}
-    \[ {y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} {f}({y_{1:T}}; \tikzmark{input}{x}_{1:S}, \tikzmark{nn}{\theta}) \]
+\begin{frame}{Machine Learning for Text Generation}
+    \[ y^*_{1:T} = \argmax_{y_{\tikzmark{opt}1:T}} \alert{f}(y_{1:T}; \tikzmark{input}x, \tikzmark{nn}\alert{\theta}) \] 
 
 % \begin{tikzpicture}[
 %   remember picture,
@@ -43,60 +39,77 @@
 % \node (ptdexa) [below right =  of {pic cs:nn}] {Neural Network};
 % \node (ptdexb) [below = of {pic cs:opt}] {Optimization};
 % \node (ptdexc) [below = of {pic cs:input}] {Input};
-% \draw[->] (ptdex.north) -- ({pic cs:pd});
-% \draw[->] (ptdexa.north) -- ({pic cs:nn});
-% \draw[->] (ptdexb.north) -- ({pic cs:opt});
-% \draw[->] (ptdexc.north) -- ({pic cs:input});
+% \draw[->] (ptdex.north) -- ({pic cs:pd}); 
+% \draw[->] (ptdexa.north) -- ({pic cs:nn}); 
+% \draw[->] (ptdexb.north) -- ({pic cs:opt}); 
+% \draw[->] (ptdexc.north) -- ({pic cs:input}); 
 % \end{tikzpicture}
 
   \begin{itemize}
 
-  \item Input {$x_{1:S}$},  text sequence to talk about
-    \air
+  \item Input {$x_{1:S}$},  \textit{what to talk about}
+    \air 
 
   \item Output text {$y^*_{1:T}$}, \textit{how to say it}
     \air
 
-  \item Model {$f(.; \theta)$}, learned from data
+  \item Model \alert{$f(.; \theta)$}, learned from data
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Sequence-to-Sequence with Recurrent Neural Networks}
+\begin{frame}{Recurrent Neural Network 1}{ $f(y_{1:T}, x_{1:T}; \theta)$}
+
   \vspace{-0.25cm}
 
   \begin{center}
-    \multiinclude[format=png,start=1,graphics={height=0.85\textheight}]{nmt-noattn}
+    \multiinclude[format=png,start=1,graphics={height=0.85\textheight, trim=0.5cm 0.5cm 0.5cm 0.5cm, clip}]{nmt-noattn}
   \end{center}
 \end{frame}
 
 
-\begin{frame}{Sequence-to-Sequence Math}
+\begin{frame}{Recurrent Neural Network Math}
   \textcolor{blue}{Encoder}:
   \[{\mathbf{h}^{x}_s \gets \RNN(\mathbf{h}^{x}_{s-1}, x_s)} \]
 
+
   \textcolor{orange}{Context}:
   \[ {\mathbf{c}} = \mathbf{h}^{x}_S \]
+  \begin{center}
+    \includegraphics<1>[height=0.6\textheight, trim=0.5cm 0.5cm 0.5cm
+    0.5cm, clip]{nmt-noattn-2}
+  \end{center}
+  \pause
+  \vspace{-0.5cm}
 
   \textcolor{red}{Decoder}:
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
 
   Prediction:
-  \[ p(y_{t}\  |\  y_{1:t-1}, x) = \softmax( \mathbf{W} [\mathbf{h}_{t-1}, \mathbf{c}]) \]
+  \[ p(y_{t+1}\  |\  y_{1:t}, x) = \softmax( \mathbf{W} [\mathbf{h}_t; \mathbf{c}]) \]
 
-  \pause
+  \pause 
 
-  Generation:
-  \[ \argmax_{y_{1:T}} f(y_{1:T}; x, \theta) = \argmax_{y_{1:T}} \log \sum_{t=1}^T p(y_{t}\  |\  y_{1:t-1}, x) \]
+  Generation Score:
+  \[  f(y_{1:T}, x; \theta) =  \log \sum_{t=1}^T p(y_{t}\  |\  y_{1:t-1}, x) \] 
 
 \end{frame}
 
-\begin{frame}{Toy Example: Well-Balanced Parenthesis Language}
-  \begin{center}
-    \includegraphics[width=10cm]{parenlang}
-  \end{center}
+\begin{frame}{What can the decoder learn to say?}
+  \textcolor{red}{Decoder}:
+  \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
+  
+  \pause
 
-  (Much better description)
+  \air
 
+  \textbf{Toy Example}: 
+
+  Well-balanced parenthesis language with  random nesting-level indicators,
+  \begin{itemize}
+  \item Vocabulary: ( ) 0 1 2 3 4
+  \item Example String: 0 ( ( 2 ) ( ( ( 4 4 4 ) 3 ) $\ldots$
+  \end{itemize}
+  Proxy Question: What does $\mathbf{h}_t$ look like over time? 
 \end{frame}
 
 \begin{frame}{LSTMVis - Parenthesis Language}
@@ -109,9 +122,30 @@
 \end{frame}
 
 
-\begin{frame}
-  (Description of natural language task)
+\begin{frame}{What can the decoder learn to say?}
+  \textcolor{red}{Decoder}:
+  \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
+  
+  \pause
+
+  \air
+
+  \textbf{Harder Example}: 
+  Natural language outputs with complex syntax. 
+
+
+  % Proxy Question: What does $\mathbf{h}_t$ look like over time? 
 \end{frame}
+
+\begin{frame}{LSTMVis - Parenthesis Language}
+  \research{\citet{Strobelt2016} w/ IBM}
+  \vspace{-0.25cm}
+
+  \begin{center}
+    \movie[width=\textwidth, height=0.85\textheight, poster, showcontrols]{Temporary}{videos/lstmvis1.mp4}
+  \end{center}
+\end{frame}
+
 
 \begin{frame}{LSTMVis - Natural Language}
   \research{\citet{Strobelt2016} w/ IBM}
@@ -124,11 +158,12 @@
 \end{frame}
 
 
-\begin{frame}{Sequence-to-Sequence + Attention Model}
-  \vspace{-0.25cm}
+\begin{frame}{Recurrent Neural Network 2 - Seq2Seq + Attention}{ $f(y_{1:T}, x_{1:T}; \theta)$}
+  \vspace{-0.3cm}
 
   \begin{center}
-    \multiinclude[format=png,start=1,end=10,graphics={height=0.85\textheight}]{figs/nmt-attn}
+    \multiinclude[format=png,start=1,end=10,graphics={height=0.8\textheight, trim=0.5cm 0.5cm 0.5cm
+    0.5cm, clip}]{figs/nmt-attn}
   \end{center}
 \end{frame}
 
@@ -137,18 +172,46 @@
   \textcolor{blue}{Encoder}:
   \[{\mathbf{h}^{x}_s \gets \RNN(\mathbf{h}^{x}_{s-1}, x_s)} \]
 
-
-  \textcolor{orange}{Attention}
-  \[\alpha \gets  \softmax(   [\mathbf{h}^{x}_1 ; \ldots; \mathbf{h}^{x}_S]^\top \mathbf{h}_{t} ) \ \ \ \
+  
+  \textcolor{orange}{Attention (Dynamic Context)}
+  \[\alpha \gets  \softmax(   [\mathbf{h}^{x}_1 ; \ldots; \mathbf{h}^{x}_S]^\top \mathbf{h}_{t} ) \ \ \ \ 
   {\mathbf{c}} \gets \sum_{s =1}^S \alpha_s \mathbf{h}_s^{x}  \]
+
+\vspace{-0.3cm}
+
+  \begin{center}
+    \includegraphics<1>[height=0.4\textheight, trim=0.5cm 0.5cm 0.5cm
+    1.0cm, clip]{nmt-attn-5}
+  \end{center}
+  \pause
+  \vspace{-0.5cm}
+
 
   \textcolor{red}{Decoder}:
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
 
   Prediction:
-  \[ p(y_{t}\  |\  y_{1:t-1}, x) = \softmax( \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]) \]
+  \[ p(y_{t+1}\  |\  y_{1:t}, x) = \softmax( \mathbf{W} [\mathbf{h}_t; \mathbf{c}]) \]
 
 \end{frame}
+
+
+\begin{frame}{How does attention control what is said? }
+
+  \textcolor{orange}{Attention (Dynamic Context)}
+  \[\alpha \gets  \softmax(   [\mathbf{h}^{x}_1 ; \ldots; \mathbf{h}^{x}_S]^\top \mathbf{h}_{t} ) \ \ \ \ 
+  {\mathbf{c}} \gets \sum_{s =1}^S \alpha_s \mathbf{h}_s^{x}  \]
+  
+
+\begin{itemize}
+\item Can we use this to control the output of the system?
+  \air 
+
+\item Can we examine how errors enter into translation?
+
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}{Seq2SeqVis}
   \research{\citet{strobelt2019s} w/ IBM}
@@ -156,14 +219,12 @@
 
   \begin{center}
     \movie[width=\textwidth, height=0.85\textheight, poster, showcontrols]{Temporary}{videos/seq2seq.mp4}
-  \end{center}
-
-  (Talk about debuggign)
+  \end{center}  
 \end{frame}
 
 
 \begin{frame}
-
+  
   \begin{center}
     \includegraphics[width=\linewidth]{opennmt}
   \end{center}
@@ -177,19 +238,19 @@
 
   \begin{itemize}
   \item Collaborative open-source project started at Harvard, now self-sustaining.
-    \air
+    \air 
   \item Used in production by Systran, Ubiqus, Booking.com, and others.
     \air
   \item Over 100 developers in France, China, Japan, Portugal, and the US.
     \air
-  \item Designed to be research extensible to latest machine translation techniques.
+  \item Designed to be research extensible to latest machine translation techniques. 
     \air
 
   \item Pretrained models for translation as well as everything in this talk.
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{OpenNMT Workshop} {Paris 2018}
   \begin{center}
     \hspace*{-9cm}\includegraphics[height=0.5\textheight]{opennmtpanaram.jpg}
   \end{center}

@@ -1,7 +1,6 @@
 
-\section{Current and Future Work: Deep Latent Variable Modeling}
 
-\begin{frame}{Research Direction}
+\begin{frame}{Part 4: Deep Latent-Variable Mdoels}
 
    \begin{center}
   \begin{tikzpicture}
@@ -9,27 +8,27 @@
     \node[rounded corners, thick, fill=yellow,  draw] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
     \node[rounded corners, thick, draw] (app) at (25mm, 30mm) {Applications};
     \node[rounded corners, thick, fill=yellow, draw] (und) at (35mm, 15mm) {Understanding};
-    \node[rounded corners, thick, draw] (dep) at (25mm, 0mm){Deployment};
-    \node[rounded corners, thick, draw] (imp) at (0, 0) {Implement};
+    \node[rounded corners, thick, draw] (dep) at (25mm, 0mm){Scaling};
+    \node[rounded corners, thick, draw] (imp) at (0, 0) {Open-Source};
     \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
   \end{tikzpicture}
   \end{center}
 \end{frame}
 
-\begin{frame}{Method: Deep Latent-Variable Models}
+\begin{frame}{Deep Latent-Variable Models}
 
-  Goal: Expose specific choices as explicit \textit{discrete} latent variables.
+  Goal: Extent text generation to Expose specific choices as \textit{discrete} latent variables.
 
 
 \begin{align*}
-p(y, z \param \theta).
+p(y, z | x \param \theta).
 \end{align*}
 
 \pause
 \begin{itemize}
-    \item $y$ is our observed data
-    \item $z$ is a collection of problem-specific latent variables
-    \item $\theta$ are the deterministic, neural network parameters.
+    \item $y$ is our text output sequence
+    \item $z$ is a collection of latent variables
+    \item $\theta$ are the neural network parameters.
 \end{itemize}
 
 % \begin{itemize}
@@ -47,8 +46,8 @@ Generative process:
 \item Draw cluster $z \in \{1, \ldots, K\}$ from a Categorical.
 \item Draw words $y_{1:T}$ from RNNLM with parameters $\pi_z$.
 \end{enumerate}
-\[p(y, z \param \theta)
-       = \mu_{z} \times   \RNNLM(y_{1:T} \param \pi_z) \]
+\[p(y, z| x \param \theta)
+       = \mu_{z} \times   \RNNLM(y_{1:T} \param \pi_z) \]j
 % \[p(x, z \param \theta)
 %       = \mu_{z} \times  \prod_{t=1}^T \softmax(\RNN(\boldh_{t-1}, x_t\param \pi_z))\]
 \begin{center}
@@ -57,9 +56,9 @@ Generative process:
   %\tikz{
 % nodes
 \node (dots) {$\ldots$};%
- \node[obs, left=1cm of dots] (x1) {$y_1^{(n)}$};%
- \node[obs, right=1cm of dots] (xT) {$y_T^{(n)}$};%
- \node[latent, above=of dots] (z) {$z^{(n)}$}; %
+ \node[obs, left=1cm of dots] (x1) {$y_1$};%
+ \node[obs, right=1cm of dots] (xT) {$y_T$};%
+ \node[latent, above=of dots] (z) {$z$}; %
  \node[const, above=(0.5cm) of z] (mu) {$\mu$};
  \node[const, below left=0.3cm and 0.8cm of x1] (pi) {$\pi$};
 
@@ -118,26 +117,26 @@ Generative process:
 %                 \[ p(x^{(1:N)}, z^{(1:N)} \param \theta ) = \prod_{n=1}^N p(x^{(n)} \given z^{(n)}; \theta) p(z^{(n)};\theta). \]
 % \end{frame}
 
-\begin{frame}{Main Requirement: Posterior Inference}
-    For models $p(y, z \param \theta)$, we'll be interested in the \textit{posterior} over latent variables $z$:
+\begin{frame}{Posterior Inference}
+    We'll be interested in the \textit{posterior} over latent variables $z$:
 
     \begin{align*}
-        p(z \given y \param \theta) = \frac{\displaystyle p(y, z \param \theta)}{\displaystyle p(y \param \theta)} = \frac{\displaystyle p(y\given z \param  \theta) p(z \param  \theta)}{\displaystyle \sum_{z'} p(y \given z'\param  \theta) p(z'\param  \theta) }.
+        p(z \given y, x \param \theta) = \frac{\displaystyle p(y, z | x  \param \theta)}{\displaystyle p(y | x  \param \theta)} = \frac{\displaystyle p(y\given x, z \param  \theta) p(z | x  \param  \theta)}{\displaystyle \sum_{z'} p(y \given x, z'\param  \theta) p(z'| x\param  \theta) }.
     \end{align*}
 
     \air
 
     \pause
-    Why?
-    \begin{itemize}
-      \item Required for training
-      \item Latent $z$ gives separation of data.
+    % Why?
+    % \begin{itemize}
+    %   \item Required for training
+    %   \item Latent $z$ gives separation of data.
 
 % \item Intuition: if I know likely $z^{(n)}$ for $x^{(n)}$, I can learn by maximizing $p(x^{(n)} \given z^{(n)} \param \theta)$.
         % \begin{itemize}
         %     \item Intuition: if I know likely $z^{(n)}$ for $x^{(n)}$, I can learn by maximizing $p(x^{(n)} \given z^{(n)} \param \theta)$.
         % \end{itemize}
-    \end{itemize}
+    % \end{itemize}
 
     How?
 
@@ -149,8 +148,7 @@ Generative process:
 \end{frame}
 
 
-\begin{frame}{ In Applications: Copy-Attention
-      \small{(Gu et al, 2016) (Gulcehre et al, 2016)}}
+\begin{frame}{Application: Summary with Copy-Attention}{(Gu et al, 2016) (Gulcehre et al, 2016)}
 
 Let $z$ be a binary latent variable.
 \air
@@ -158,11 +156,10 @@ Let $z$ be a binary latent variable.
 \item If $z = 1$, let the model generate a new word.
 \item If $z = 0$, let the model copy a word from the source.
 \end{itemize}
+\air
 
 Inference:
 \begin{center}
-
-
 \includegraphics[width=15cm]{seeblog}
 
 \centerline{\small (See et al, 2017)}
@@ -171,42 +168,55 @@ Inference:
 
 
 \begin{frame}{ Latent Variable Models for Generation}
+  \textbf{Ongoing Work:} Can we develop other discrete latent-variable models for generation?
+  
+  \air 
 
-  \begin{itemize}
-  \item Can we develop other discrete latent-variable models for generation?
-    \air
-  \item Perhaps each important aspect of generation can be built-in directly.
-    \air
-  \item Goals:
+  \textbf{Goals:}
+
     \begin{itemize}
     \item Model Control
     \item Model Debugging
     \item Model Uncertainty
     \end{itemize}
-  \end{itemize}
 \end{frame}
 
 
 
-\begin{frame}{Approach 1: Learning Neural Templates}
+\begin{frame}{Example: Learning Neural Templates for Generation}
 
   \begin{center}
     \includegraphics[width=0.7\textwidth]{DecoderVis}
   \end{center}
 \end{frame}
 
-\begin{frame}{Standard Copy Generation Approach}
+\begin{frame}
+  \begin{figure}
+    \centering
+
+    \footnotesize
+\begin{tabular}{@{}ll@{}}
+\toprule
+\bf MR        & \begin{tabular}[c]{@{}l@{}}name{[}The Golden Palace{]},  eatType{[}coffee shop{]},  food{[}Fast food{]}, \\ priceRange{[}cheap{]},  customer rating{[}5 out of 5{]},  area{[}riverside{]}\end{tabular}         \\ \midrule
+\bf Reference & \begin{tabular}[c]{@{}l@{}}A coffee shop located on the riverside  called The Golden Palace,  \\ has a 5 out of 5 customer rating.  Its price range are fairly cheap  \\for its excellent Fast food.\end{tabular} \\ \bottomrule
+\end{tabular}
+  \end{figure}
+  
+\end{frame}
+
+\begin{frame}{Standard Approach}
+
 
 \textbf{Step 1: Encode the Source}
 \air
 
 \begin{small}
-Fitzbillies,ty[coffee shop],pr[$<$ \pounds 20],food[Chinese],cust[3/5],area[city centre]
+Fitzbillies,type[coffee shop],price[$<$ \pounds 20],food[Chinese],rate[3/5],area[city centre]
 \end{small}
 
 \vspace{0.3cm}
 
-\textbf{Step 2: Generate with Copy Decoder}
+\textbf{Step 2: Generate with RNN Decoder}
 
 \air
 
@@ -214,9 +224,24 @@ Fitzbillies,ty[coffee shop],pr[$<$ \pounds 20],food[Chinese],cust[3/5],area[city
 
 \end{frame}
 
+\begin{frame}{Issues}
+\begin{enumerate}
+\item Interpretable in its content selection?
+  \air
 
+  \textit{Decisions may come from anywhere in the source $x$.}
 
-\begin{frame}{(Neural) Template Generation Approach}
+  \air
+
+\item Controllable in terms of style and form?
+  \air
+
+  \textit{Rely on a learned system to determine content.}
+\end{enumerate}
+  
+\end{frame}
+
+\begin{frame}{Neural Template Generation Approach}
 
 \textbf{Step 1: Encode the Source}
 
@@ -259,33 +284,33 @@ $\|$ \underline{Fitzbillies} $\|$  \pause is a $\|$ \pause   \underline{coffee s
 \end{frame}
 
 
-\begin{frame}{Criteria}
+% \begin{frame}{Criteria}
 
-\begin{enumerate}
-\item Interpretable in its content selection.
-  \air
+% \begin{enumerate}
+% \item Interpretable in its content selection.
+%   \air
 
-  \textit{Decisions are localized to a segment of the template.}
+%   \textit{Decisions are localized to a segment of the template.}
 
-  \air
+%   \air
 
-\item Easily controllable in terms of style and form.
-  \air
+% \item Easily controllable in terms of style and form.
+%   \air
 
-  \textit{Alternative realizations through different templates.}
-\end{enumerate}
-
-
-\air
-
-\pause
+%   \textit{Alternative realizations through different templates.}
+% \end{enumerate}
 
 
+% \air
 
-\alert{However:} templates feel much less ``end-to-end''.
-How can we learn them from data?
+% \pause
 
-\end{frame}
+
+
+% \alert{However:} templates feel much less ``end-to-end''.
+% How can we learn them from data?
+
+% \end{frame}
 
 \begin{frame}{Technical Methodology:  Hidden Semi-Markov Model}
 
@@ -295,7 +320,7 @@ How can we learn them from data?
   \item HMM: discrete latent states with single emissions  (e.g. words).
     \air
 
-  \item HSMM: discrete states produce multiple emissions (e.g. phrases).
+  \item HSMM: discrete latent states produce multiple emissions (e.g. phrases).
     \air
 
   \item Parameterized with \textit{transition}, \textit{emission},
@@ -342,7 +367,7 @@ How can we learn them from data?
   \item Transition Distribution: NN between states.
 
     \air
-  \item Emission Distribution: Seq2Seq+Copy-Attention, one per state $k$.
+  \item Emission Distribution: Seq2Seq+Attention, one per state $k$.
 
 
   \end{itemize}
@@ -381,7 +406,7 @@ How can we learn them from data?
 
   \begin{itemize}
   \item Fit model by maximizing log-marginal likelihood on training data.
-    \[ \max_\theta \sum_{j} \ln \sum_z p(y^{(j)}, z \ |\ x^{(j)}; \theta)\]
+    \[ \max_\theta \sum_{j} \log \sum_z p(y^{(j)}, z \ |\ x^{(j)}; \theta)\]
     \air
   Details: Pre-score segmentations, HSMM forward algorithm for sum, backprop with autograd, all inference is exact.
     \air
@@ -417,21 +442,21 @@ $\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt
     \end{center}
 \end{frame}
 
-\begin{frame}{Experimental Setup}
+% \begin{frame}{Experimental Setup}
 
-  \begin{itemize}
-  \item Two datasets, E2E challenge and WikiBio
-    \air
-  \item Training with 35 and 65 state models, each 1x300 LSTMs.
-    \air
-  \item Extract 100 most common templates for each.
-    \air
-  \item Vocabulary limited to non-copy-able words.
-    \air
+%   \begin{itemize}
+%   \item Two datasets, E2E challenge and WikiBio
+%     \air
+%   \item Training with 35 and 65 state models, each 1x300 LSTMs.
+%     \air
+%   \item Extract 100 most common templates for each.
+%     \air
+%   \item Vocabulary limited to non-copy-able words.
+%     \air
 
-  \item Generation with beam search with a pre-selected template.
-  \end{itemize}
-\end{frame}
+%   \item Generation with beam search with a pre-selected template.
+%   \end{itemize}
+% \end{frame}
 
 
 
@@ -475,13 +500,13 @@ $\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt
 \toprule
  & BLEU & NIST \\
 \midrule
-Val & & &  \\
-\midrule
+% Val & & &  \\
+% \midrule
 
-Substitution  & 43.71 & 6.72 \\
-Neural Template & 66.06 & 7.93 \\
-Full Neural Model & 69.25 & 8.48 \\
-\midrule
+% Substitution  & 43.71 & 6.72 \\
+% Neural Template & 66.06 & 7.93 \\
+% Full Neural Model & 69.25 & 8.48 \\
+% \midrule
 Test  & & \\
 \midrule
 
@@ -490,14 +515,8 @@ Neural Template    & 56.72 & 7.63 \\
 Full Neural Model & 65.93 & 8.59 \\
 \bottomrule
 \end{tabular}
-% \caption{Comparison of the system of \citet{duvsek2016sequence}, which forms the baseline for the E2E challenge, a non-parametric, substitution-based baseline (see text), and our HSMM model on the validation and test portions of the E2E dataset. ``ROUGE'' is ROUGE-L. Models are evaluated using the official E2E NLG Challenge scoring scripts.}
-\label{tab:e2e}
-\end{table}
-
-\end{frame}
 
 
-\begin{frame}{WikiBio}
 \begin{table}[t!]
 \small
 \centering
@@ -514,9 +533,33 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
 \label{tab:wb}
 \end{table}
 
-\begin{itemize}
-\item Custom KN and NNLM Baselines from LeBret et al (2016)
-\end{itemize}k
+% \caption{Comparison of the system of \citet{duvsek2016sequence}, which forms the baseline for the E2E challenge, a non-parametric, substitution-based baseline (see text), and our HSMM model on the validation and test portions of the E2E dataset. ``ROUGE'' is ROUGE-L. Models are evaluated using the official E2E NLG Challenge scoring scripts.}
+\label{tab:e2e}
+\end{table}
+
+\end{frame}
+
+
+% \begin{frame}{WikiBio}
+% \begin{table}[t!]
+% \small
+% \centering
+% \begin{tabular}{@{}lccc@{}}
+% \toprule
+%  & BLEU & NIST & ROUGE-4\\
+% \midrule
+% Conditional KN-LM  & 19.8 & 5.19 & 10.7 \\
+% NNLM (field)  & 33.4 & 7.52 & 23.9 \\
+% NNLM (field \& word)  & 34.7 & 7.98 & 25.8 \\
+% Neural Template &  33.8 & 7.51 & 28.2 \\
+% \bottomrule
+% \end{tabular}
+% \label{tab:wb}
+% \end{table}
+
+% \begin{itemize}
+% \item Custom KN and NNLM Baselines from LeBret et al (2016)
+% \end{itemize}k
 
 \end{frame}
 
@@ -525,7 +568,7 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
 % \begin{frame}
 % \end{frame}
 
-\begin{frame}[fragile]{Interpretability}
+\begin{frame}[fragile]{Issue 1: Interpretability}
 
   \begin{center}
 
@@ -564,7 +607,7 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
 \end{frame}
 
 
-\begin{frame}{Controllability}
+\begin{frame}{Issue 2: Controllability}
 
   \begin{table}[t]
 \small
@@ -595,10 +638,6 @@ priceRange[cheap] custRating[5 out of 5], area[city centre], \\
 \label{tab:e2econtrol}
 \end{table}
 \end{frame}
-
-
-\section{Future}
-
 
 
 \begin{frame}{Future Work}
