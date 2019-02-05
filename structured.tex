@@ -1,26 +1,38 @@
+\begin{frame}{Talk Outline}
+  \begin{enumerate}
+  \item Background: Core Model and Implementation
+    \air
+  \item Work 1: Rethinking Model Training (\textit{Beam Search Optimization})
+    \air
 
+  \item Work 2: Rethinking  Generation  (\textit{Learning Neural Templates})
+    \air
 
-
-\begin{frame}{Part 3: Structured Modeling}
-  \begin{center}
-    \scalebox{2}{
-  \begin{tikzpicture}
-
-    \node<1> at (10mm, 15mm){\includegraphics[width=3cm]{rnnlm6}};
-    \node[draw,  thick, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
-    \node[draw,  fill=yellow, thick, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
-    \node[draw,  thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
-    \node[draw, thick, rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
-    \node[draw, fill=yellow, thick, rounded corners, scale=0.5] (dep) at (25mm, 0mm){Deployment};
-
-    \node[draw, thick, rounded corners,scale=0.5] (imp) at (0, 0) {Implementation};
-
-    \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
-
-  \end{tikzpicture}
-}
-  \end{center}
+  \item Future Directions
+  \end{enumerate}
 \end{frame}
+
+
+% \begin{frame}{Part 3: Structured Modeling}
+%   \begin{center}
+%     \scalebox{2}{
+%   \begin{tikzpicture}
+
+%     \node<1> at (10mm, 15mm){\includegraphics[width=3cm]{rnnlm6}};
+%     \node[draw,  thick, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
+%     \node[draw,  fill=yellow, thick, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
+%     \node[draw,  thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
+%     \node[draw, thick, rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
+%     \node[draw, fill=yellow, thick, rounded corners, scale=0.5] (dep) at (25mm, 0mm){Deployment};
+
+%     \node[draw, thick, rounded corners,scale=0.5] (imp) at (0, 0) {Implementation};
+
+%     \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
+
+%   \end{tikzpicture}
+% }
+%   \end{center}
+% \end{frame}
 
 
 \begin{frame}{Machine Learning for Text Generation}
@@ -40,22 +52,22 @@
 \end{frame}
 
 
-\begin{frame}{Training Seq2Seq}
+\begin{frame}{Training RNN}
   Parameters $\theta$ are trained to predict the next word \textit{given the true history.}
 
   \begin{center}
   \includegraphics[height=3.5cm, trim={12cm 3cm 7cm 0.5cm}, clip]{nmt-noattn-4}
   \includegraphics[height=3.5cm, trim={12cm 3cm 3cm 0.5cm}, clip]{nmt-noattn-6}
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-7}
-  \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-8}
+  % \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-8}
   \end{center}
   \pause
 
-  Crucial: Same objective as \alert{multiclass classification}. 
+  Objective is identical to \alert{multiclass classification}.
   \[ {\cal L}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, x; \theta) \]
 \end{frame}
 
-\begin{frame}{Deploying Seq2Seq}
+\begin{frame}{Generating with RNN}
   Parameters $\theta$ is deployed to predict a next word \textit{given the predicted history}.
 
 
@@ -70,7 +82,7 @@
   \[ y^*_{1:T} = \argmax_{y_{1:T}} f(y_{1:T}; \theta) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, \cvec; \theta) \]
   % \pause
 
-  However: Completely intractable for RNNs $O(\text{\#vocab} ^T)$
+  But, intractable to solve exactly $O(\text{\#vocab} ^T)$
 
 \end{frame}
 
@@ -299,10 +311,10 @@
 \begin{frame}{Sequence-to-Sequence Learning as Beam Search Optimization}
   \research{\citet{Wiseman2016a}}
 
-  Proposal: Directly modify the RNN training procedure to fix test biases. 
-  
+  Proposal: Directly modify the RNN training procedure to fix test biases.
+
   \begin{enumerate}
-  \item Label Bias 
+  \item Label Bias
     \air
   \item Exposure Bias
     \air
@@ -312,15 +324,15 @@
   \end{enumerate}
 
   % \begin{itemize}
-  % \item 
+  % \item
   % \end{itemize}
 
 
 \end{frame}
 
 \begin{frame}{Modification 1: Global Scoring Function  }
-  
-  \textbf{Issue:} Label Bias  
+
+  \textbf{Issue:} Label Bias
     \begin{itemize}
     \item Training is locally discriminative, but prediction is over entire sequences.
     \end{itemize}
@@ -328,7 +340,7 @@
   % \begin{center}
   %   % \structure{(Idea 1)} Replace local softmax with sequence scorer
   %   % \air
-  %   
+  %
   % \end{center}
 
     \air
@@ -580,7 +592,7 @@
 
        \end{scope}
 
-       
+
        \begin{scope}[yshift=-2.8cm]
 
       \matrix (G) [matrix of nodes,nodes={beam}, inner sep=1mm,row sep=0.06cm,column sep=0.8cm ] {
@@ -766,16 +778,14 @@
 %   (Teacher-Student Diagram)
 % \end{frame}
 
-\begin{frame}{Sequence Knowledge Distillation}
+\begin{frame}{Application}
   \research{\cite{Kim2016a}}
 
-  Proposal: Shrink the size of text generation models. 
+  Goal: Shrink the size of text generation models.
 
 % \begin{frame}
 %   \centerline{\structure{Related Work: Compressing Deep Models}}
 % \air
-
-  Goal: Replicate knowledge distillation results from multiclass image regcognition.
 
 \begin{itemize}
 % \item \textbf{Pruning}: Prune weights based on importance criterion
@@ -803,26 +813,26 @@ from a \textit{teacher} model \cite{Bucila2006,Ba2014,Hinton2015}.
 
 \end{frame}
 
-\begin{frame}{Baseline}
+% \begin{frame}{Baseline}
 
-\begin{columns}
-\begin{column}{7cm}
-Minimize :
-\air
-$${\cal L}(\theta)-\sum_t \log p(y_t=\hat{y}_t \given \hat{y}_{1:t-1}, x ; \theta)$$
+% \begin{columns}
+% \begin{column}{7cm}
+% Minimize :
+% \air
+% $${\cal L}(\theta)-\sum_t \log p(y_t=\hat{y}_t \given \hat{y}_{1:t-1}, x ; \theta)$$
 
-where $\hat{y}_t$ is the ground truth word at time $t$.
+% where $\hat{y}_t$ is the ground truth word at time $t$.
 
-\air
+% \air
 
-Cross-entropy with ground truth.
+% Cross-entropy with ground truth.
 
-\end{column}
-\begin{column}{8cm}
-\includegraphics[trim={0.5cm 0.5cm 0.5cm 0.5cm}, clip, width=6cm]{word-kd-0}
-\end{column}
-\end{columns}
-\end{frame}
+% \end{column}
+% \begin{column}{8cm}
+% \includegraphics[trim={0.5cm 0.5cm 0.5cm 0.5cm}, clip, width=6cm]{word-kd-0}
+% \end{column}
+% \end{columns}
+% \end{frame}
 
 % \begin{frame}
 % \centerline{\structure{Word-Level Knowledge Distillation}}
@@ -883,48 +893,48 @@ Cross-entropy between teacher and student
 % \end{columns}
 % \end{frame}
 
-\begin{frame}{Sequence-Level Knowledge Distillation}
-\air
-\air
-
-\textbf{Motivation:} Replace multiclass with sequence-level cross-entropy.
-
-\begin{align*}
-\mathcal{L}_{\text{WORD-KD}}(\theta) = -\sum_t \sum_v &q(y_t=v \given \hat{y}_{1: t-1}, x ; \theta_T)\times  \log p(y_t =v \given \hat{y}_{1: t-1}, \cvec ; \theta)
-\end{align*}
-\[ \Downarrow \] 
-\[ \mathcal{L}_{\text{SEQ-KD}}(\theta) = -\sum_{v_1} \ldots \sum_{v_T} q(y_{1:T}= v_{1:T}  | x; \theta_T) \times \log p(y_{1:T}=v_{1:T} | x ; \theta)
-\]
-
-Mimic sequence output of teacher model. 
-\air 
-
-Note: bottom distribution is again intractable.
-
-
-\end{frame}
-
-\begin{frame}{Sequence Heusritic Approximation}
-\air
-\air
-
-%\centerline{Sequence-Level Knowledge Distillation}
-\begin{columns}
-\begin{column}{6cm}
-Approximate $q(y_{1:T} \given x )$ with (beam search) mode sample
-$$q(y_{1:T} \given x ) \approx \mathbf{1}\{\argmax_{y} q(y_{1:T} \given x )\}$$
+% \begin{frame}{Sequence-Level Knowledge Distillation}
 % \air
-% $$ y^*_{1:T} \approx  \argmax_{y_{1:T}} q(y_{1:T} \given x ) $$
-% \\
-% Empirically, point estimate captures
-% significant mass
+% \air
 
-\end{column}
-\begin{column}{8cm}
-\includegraphics[trim={0.5cm 0.5cm 0.5cm 0.5cm}, clip, width=8cm]{seq-kd-1}
-\end{column}
-\end{columns}
-\end{frame}
+% \textbf{Motivation:} Replace multiclass with sequence-level cross-entropy.
+
+% \begin{align*}
+% \mathcal{L}_{\text{WORD-KD}}(\theta) = -\sum_t \sum_v &q(y_t=v \given \hat{y}_{1: t-1}, x ; \theta_T)\times  \log p(y_t =v \given \hat{y}_{1: t-1}, \cvec ; \theta)
+% \end{align*}
+% \[ \Downarrow \]
+% \[ \mathcal{L}_{\text{SEQ-KD}}(\theta) = -\sum_{v_1} \ldots \sum_{v_T} q(y_{1:T}= v_{1:T}  | x; \theta_T) \times \log p(y_{1:T}=v_{1:T} | x ; \theta)
+% \]
+
+% Mimic sequence output of teacher model.
+% \air
+
+% Note: bottom distribution is again intractable.
+
+
+% \end{frame}
+
+% \begin{frame}{Sequence Heuristic Approximation}
+% \air
+% \air
+
+% %\centerline{Sequence-Level Knowledge Distillation}
+% \begin{columns}
+% \begin{column}{6cm}
+% Approximate $q(y_{1:T} \given x )$ with (beam search) mode sample
+% $$q(y_{1:T} \given x ) \approx \mathbf{1}\{\argmax_{y} q(y_{1:T} \given x )\}$$
+% % \air
+% % $$ y^*_{1:T} \approx  \argmax_{y_{1:T}} q(y_{1:T} \given x ) $$
+% % \\
+% % Empirically, point estimate captures
+% % significant mass
+
+% \end{column}
+% \begin{column}{8cm}
+% \includegraphics[trim={0.5cm 0.5cm 0.5cm 0.5cm}, clip, width=8cm]{seq-kd-1}
+% \end{column}
+% \end{columns}
+% \end{frame}
 
 \begin{frame}{Sequence-Level Knowledge Distillation}
 
@@ -936,7 +946,7 @@ $$q(y_{1:T} \given x ) \approx \mathbf{1}\{\argmax_{y} q(y_{1:T} \given x )\}$$
 \end{align*}
 \air
 
-Extension: $\mathcal{L}_\text{SEQ-INTER}(\theta)$ select sample based on ground truth $\hat{y}$ 
+Extension: $\mathcal{L}_\text{SEQ-INTER}(\theta)$ select sample based on ground truth $\hat{y}$
 as well.
 \end{column}
 \begin{column}{7cm}
@@ -991,6 +1001,6 @@ $4 \times 1000$ \\
   \end{center}
 \end{frame}
 
-\begin{frame}{WNMT Translation Scaling Shared Task 2018}
-  (Results)
-\end{frame}
+% \begin{frame}{WNMT Translation Scaling Shared Task 2018}
+%   (Results)
+% \end{frame}
