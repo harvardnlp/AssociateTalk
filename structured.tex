@@ -65,12 +65,12 @@
   \end{center}
   \pause
 
-  Objective is identical to \alert{multiclass classification}.
+  Objective is identical to \textcolor{redpurple}{multiclass classification}.
   \[ {\cal L}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, x; \theta) \]
 \end{frame}
 
 \begin{frame}{Generating with RNN}
-  Parameters $\theta$ is deployed to predict a next word \textit{given the predicted history}.
+  Parameters $\theta$ are deployed to predict the next word \textit{given the predicted history}.
 
 
   \begin{center}
@@ -370,10 +370,10 @@
    \begin{enumerate}
    \item Compute the score of every possible next word.
 
-     \only<1>{\[f(y_t, y_{1:t-1}^{(k)}) \gets \alert{\log p(y_{t}\ |\ y^{(k)}_{1:t-1}, \cvec) + \log p(y^{(k)}_{1:t-1} \ |\  \cvec)} \]}
+     \only<1>{\[f(y_t, y_{1:t-1}^{(k)}) \gets \alert{\log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x)} \]}
 
    \only<2>{
-     \[f(y_t, y_{1:t-1}^{(k)})  \gets  \structure{f(y_t, y_{1:t-1}^{(k)}, \cvec; \theta)} \]}
+     \[f(y_t, y_{1:t-1}^{(k)})  \gets  \structure{f(y_t, y_{1:t-1}^{(k)}, x; \theta)} \]}
 
    \item Prune to only the $K$ highest-scoring,
      \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]
@@ -410,7 +410,7 @@
     \item Margin between ground truth sequence $\hat{y}$ and worst predicted sequence $y^{(K)}$
     \end{itemize}
     \begin{align*}
-      \mathcal{L}&(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{K}) \left[1 - f(\hat{y}_t, y^{(g)}_{1:t-1}, \cvec) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, \cvec) \right]
+      \mathcal{L}&(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{K}) \left[1 - f(\hat{y}_t, y^{(g)}_{1:t-1}, x) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, x) \right]
     \end{align*}
 
     \begin{itemize}
@@ -523,10 +523,10 @@
 % \end{align*}
 
   \begin{itemize}
-  \item Color \textcolor{orange}{True}: ground-truth sequence $\hat{y}$
-  \item Color \textcolor{red}{Red}: last sentence  $y^{(K)}$ upon violation
+  \item \textcolor{orange}{True}: ground-truth sequence $\hat{y}$
+  \item \textcolor{red}{Predicted}: lowest-scoring prefix  $y^{(K)}$
   \end{itemize}
-  Strategy: upon violation, restart from ground truth (learning as search optimization \cite{daume05learning})
+  Strategy: if true falls off beam, restart from ground truth (learning as search optimization \cite{daume05learning})
 \end{frame}
 
 \begin{frame}[fragile]{Parameter Updates: Structured Backpropagation}

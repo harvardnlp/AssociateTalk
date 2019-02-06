@@ -31,7 +31,7 @@
 
 \begin{frame}{Deep Latent-Variable Models}
 
-  Goal: Extent text generation to Expose specific choices as \textit{discrete} latent variables.
+  Goal: Expose specific choices as \textit{discrete} latent variables.
 
 
 \begin{align*}
@@ -58,7 +58,7 @@ p(y, z | x \param \theta).
 Generative process:
 \begin{enumerate}
 \item Draw cluster $z \in \{1, \ldots, K\}$ from a Categorical.
-\item Draw words $y_{1:T}$ from RNNLM with parameters $\pi_z$.
+\item Draw words $y_{1:T}$ from RNN with parameters $\pi_z$.
 \end{enumerate}
 \[p(y, z| x \param \theta)
        = \mu_{z} \times   \RNNLM(y_{1:T} \param \pi_z) \]j
@@ -162,13 +162,14 @@ Generative process:
 \end{frame}
 
 
-\begin{frame}{Application: Summary with Copy-Attention}{(Gu et al, 2016) (Gulcehre et al, 2016)}
+\begin{frame}{Application: Summary with Copy-Attention}
+%{(Gu et al, 2016) (Gulcehre et al, 2016)}
 
 Let $z$ be a binary latent variable.
 \air
 \begin{itemize}
-\item If $z = 1$, let the model generate a new word.
-\item If $z = 0$, let the model copy a word from the source.
+\item If $z = 0$, let the model generate a new word.
+\item If $z = 1$, let the model copy a word from the source.
 \end{itemize}
 \air
 
@@ -211,7 +212,7 @@ Inference:
     \footnotesize
 \begin{tabular}{@{}ll@{}}
 \toprule
-\bf MR        & \begin{tabular}[c]{@{}l@{}}name{[}The Golden Palace{]},  eatType{[}coffee shop{]},  food{[}Fast food{]}, \\ priceRange{[}cheap{]},  customer rating{[}5 out of 5{]},  area{[}riverside{]}\end{tabular}         \\ \midrule
+\bf Meaning Representation        & \begin{tabular}[c]{@{}l@{}}name{[}The Golden Palace{]},  eatType{[}coffee shop{]},  food{[}Fast food{]}, \\ priceRange{[}cheap{]},  customer rating{[}5 out of 5{]},  area{[}riverside{]}\end{tabular}         \\ \midrule
 \bf Reference & \begin{tabular}[c]{@{}l@{}}A coffee shop located on the riverside  called The Golden Palace,  \\ has a 5 out of 5 customer rating.  Its price range are fairly cheap  \\for its excellent Fast food.\end{tabular} \\ \bottomrule
 \end{tabular}
   \end{figure}

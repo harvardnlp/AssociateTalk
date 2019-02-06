@@ -25,7 +25,7 @@
       \node [rounded corners, above =(0.2cm) of a] {$x$};
 
 
-      \visible<2->{
+      \visible{
       \node(gal){\includegraphics[width=1.5cm]{phone}};
       \node [rounded corners, above =(0.2cm) of gal] {${\theta}$};
 \path[draw, ->] (a) --  (a -|  gal.west) ;
@@ -48,9 +48,57 @@ here describes the form and structure of the model g and its parameters theta.  
 \end{frame}
 
 
+
+
+% \begin{frame}{Part 1: Generating Text}
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \node[draw, fill=yellow, thick, rounded corners] (app) at (0mm,
+%       0mm) {Applications};
+%     \end{tikzpicture}
+%   \end{center}
+% \end{frame}
+
+
+\begin{frame}{Machine Learning for Text Generation: Translation}
+  \begin{center}
+    \begin{tikzpicture}
+
+      \node (gal) {\includegraphics[width=1.5cm]{phone}};
+      \node [rounded corners, above =(0.2cm) of gal] {$\theta$};
+
+      \node (a) [rectangle, yshift=1cm, xshift=-5cm, scale=0.8, draw,thick,fill=blue!0,text width=16em, rounded corners, inner sep =5pt, minimum height=1em] {
+        Yalitza Aparicio acababa de graduarse de una escuela para maestros y aun no tenia empleo cuando el proceso de busqueda de actrices para la ultima pelicula de Alfonso Cuaron llego a su natal Tlaxiaco, Oaxaca.
+};
+      \path[draw, ->] (a) --  (a -|  gal.west) ;
+
+
+      \node [rounded corners, above =(0.2cm) of a] {$x$};
+
+      \visible{
+        \node(b) [xshift=4.5cm, yshift=-1cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
+          Yalitza Aparicio had just finished her teaching degree and didn't yet have a job when the Mexican director Alfonso Cuaron held a casting call in her home of Tlaxiaco, Oaxaca, for the lead role in his semi-autobiographical drama, ``Roma.''
+          \par};
+
+        \node [rounded corners, above = (0.2cm) of b] {$y_{1:T}$};
+        \path[draw, <-] (b) --  (b -| gal.east) ;
+      }
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}{Translation Performance}
+
+  \begin{center}
+     \includegraphics[width=10cm]{wmt}
+  \end{center}
+\end{frame}
+
+
 \begin{frame}{Machine Learning for Text Generation}
 
-  \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{\theta}(\alert<3>{y_{1:T}}, \tikzmark{input}\alert<2>{x}; \tikzmark{nn}\alert<4>{\theta}) \]
+  \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}(\alert<3>{y_{1:T}}, \tikzmark{input}\alert<2>{x}; \tikzmark{nn}\alert<4>{\theta}) \]
 
 % \begin{tikzpicture}[
 %   remember picture,
@@ -79,70 +127,12 @@ here describes the form and structure of the model g and its parameters theta.  
 \end{frame}
 
 
-% \begin{frame}{Part 1: Generating Text}
-%   \begin{center}
-%     \begin{tikzpicture}
-%       \node[draw, fill=yellow, thick, rounded corners] (app) at (0mm,
-%       0mm) {Applications};
-%     \end{tikzpicture}
-%   \end{center}
-% \end{frame}
-
-
-\begin{frame}{Machine Translation}
-  \begin{center}
-    \begin{tikzpicture}
-
-      \node (gal) {\includegraphics[width=1.5cm]{phone}};
-      \node [rounded corners, above =(0.2cm) of gal] {$f$};
-
-      \node (a) [rectangle, yshift=1cm, xshift=-5cm, scale=0.8, draw,thick,fill=blue!0,text width=16em, rounded corners, inner sep =5pt, minimum height=1em] {
-        Yalitza Aparicio acababa de graduarse de una escuela para maestros y aun no tenia empleo cuando el proceso de busqueda de actrices para la ultima pelicula de Alfonso Cuaron llego a su natal Tlaxiaco, Oaxaca.
-};
-      \path[draw, ->] (a) --  (a -|  gal.west) ;
-
-
-      \node [rounded corners, above =(0.2cm) of a] {\alert<1>{$x$}};
-
-      \visible<2>{
-        \node(b) [xshift=4.5cm, yshift=-1cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
-          Yalitza Aparicio had just finished her teaching degree and didn't yet have a job when the Mexican director Alfonso Cuaron held a casting call in her home of Tlaxiaco, Oaxaca, for the lead role in his semi-autobiographical drama, ``Roma.''
-          \par};
-
-        \node [rounded corners, above = (0.2cm) of b] {\alert<2>{$y^*_{1:T}$}};
-        \path[draw, <-] (b) --  (b -| gal.east) ;
-      }
-    \end{tikzpicture}
-  \end{center}
-\end{frame}
-
-
-\begin{frame}{Translation Performance}
-
-
-\textbf{Evaluation Metric:}
-
-Target:\  \
-\texttt{[Yalitza Aparicio had] just [finished her] teaching [degree] .}
-\air
-
-Predict:
-\texttt{[Yalitza Aparicio had] recently [finished her] [degree]. }
-\pause
-
-\air
-\textbf{Deep Learning Performance:}
-  \begin{center}
-     \includegraphics[width=8cm]{wmt}
-  \end{center}
-\end{frame}
-
 \begin{frame}{Sentence Summarization }
   \begin{center}
     \begin{tikzpicture}
 
       \node (gal) {\includegraphics[width=1.5cm]{phone}};
-      \node [rounded corners, above =(0.2cm) of gal] {$f$};
+      \node [rounded corners, above =(0.2cm) of gal] {$\theta$};
 
 
       \node (a) [rectangle, yshift=1cm, xshift=-5cm, scale=0.8, draw,thick,fill=blue!0,text width=20em, rounded corners, inner sep =5pt, minimum height=1em] {
@@ -158,7 +148,7 @@ Predict:
           Cambodian government rejects opposition's call for talks abroad
           \par};
 
-        \node [rounded corners, above = (0.2cm) of b] {\alert<2>{$y_{1:T}$}};
+        \node [rounded corners, above = (0.2cm) of b] {$y_{1:T}$};
         \path[draw, <-] (b) --  (b -| gal.east) ;
       }
     \end{tikzpicture}
@@ -170,7 +160,7 @@ Predict:
   \research{\citet{Rush2015} w/ Facebook}
 
   \begin{center}
-    \includegraphics[width=7cm]{ap}
+    \includegraphics[trim={1cm 0cm 0cm 0cm}, clip, width=7cm]{ap}
   \end{center}
   \begin{itemize}
   \item Several million headlines paired with article leads.
@@ -181,9 +171,22 @@ Predict:
 
 
 \begin{frame}{Sentence Summarization}
+
+
+
+
   \begin{center}
-    \includegraphics[height=0.75\textheight]{Gigaword}
+    \includegraphics[height=0.6\textheight]{Gigaword}
   \end{center}
+
+Target:\  \
+\texttt{[Yalitza Aparicio had] just [finished her] teaching [degree] .}
+\air
+
+Predict:
+\texttt{[Yalitza Aparicio had] recently [finished her] [degree]. }
+
+
 \end{frame}
 
 % \begin{frame}{Document Summary}
