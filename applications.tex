@@ -25,7 +25,7 @@
       \node [rounded corners, above =(0.2cm) of a] {\alert{$x$}};
 
 
-      \visible<2->{
+      \visible{
       \node(gal){\includegraphics[width=1.5cm]{galaxy}};
       \node [rounded corners, above =(0.2cm) of gal] {\alert{${\theta}$}};
 \path[draw, ->] (a) --  (a -|  gal.west) ;
@@ -33,7 +33,7 @@
 
 
 
-\visible<3->{
+\visible{
 
   \node (b) [xshift=4.2cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em, text centered]{\baselineskip=50pt  \centering Moped};
   \node [rounded corners, above = (0.2cm) of b] {\alert{$y$}};
@@ -297,7 +297,7 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 
 % };
  % \node [xshift=-3.5cm, rectangle, draw,thick,fill=blue!0,text width=8em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta  ... \par};
-\visible<2>{\node(b) [xshift=4.5cm,scale=0.5,  rectangle, draw,thick,fill=blue!0,text width=26em, rounded corners, inner sep =10pt, minimum height=1em]{\baselineskip=100pt \large  The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta was in desperate need of a win and they were able to take care of a shorthanded Miami team here. Defense was key for the Hawks, as they held the Heat to 42 percent shooting and forced them to commit 16 turnovers. Atlanta also dominated in the paint, winning the rebounding battle, 47 - 34, and outscoring them in the paint 58 - 26. The Hawks shot 49 percent from the field and assisted on 27 of their 43 made baskets. This was a near wire-to-wire win for the Hawks, as Miami held just one lead in the first five minutes. Miami ( 7 - 15 ) are as beat-up as anyone right now and it's taking a toll on the heavily used starters. Hassan Whiteside really struggled in this game, as he amassed eight points, 12 rebounds and one blocks on 4 - of - 12 shooting ... \par};
+\visible{\node(b) [xshift=4.5cm,scale=0.5,  rectangle, draw,thick,fill=blue!0,text width=26em, rounded corners, inner sep =10pt, minimum height=1em]{\baselineskip=100pt \large  The Atlanta Hawks defeated the Miami Heat, 103 - 95, at Philips Arena on Wednesday. Atlanta was in desperate need of a win and they were able to take care of a shorthanded Miami team here. Defense was key for the Hawks, as they held the Heat to 42 percent shooting and forced them to commit 16 turnovers. Atlanta also dominated in the paint, winning the rebounding battle, 47 - 34, and outscoring them in the paint 58 - 26. The Hawks shot 49 percent from the field and assisted on 27 of their 43 made baskets. This was a near wire-to-wire win for the Hawks, as Miami held just one lead in the first five minutes. Miami ( 7 - 15 ) are as beat-up as anyone right now and it's taking a toll on the heavily used starters. Hassan Whiteside really struggled in this game, as he amassed eight points, 12 rebounds and one blocks on 4 - of - 12 shooting ... \par};
 
   \path[draw, <-] (b) --  (b -| gal.east);
 }
@@ -346,7 +346,7 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 \node(a){\includegraphics[width=1.5cm]{galaxy}};
  \node [yshift=4cm, rectangle, thick,fill=blue!0,text width=5cm, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \includegraphics[width=10cm]{latexin}};
 
-\visible<2> {
+\visible {
 \node (b)[xshift=6cm, rectangle, scale=0.6, draw,thick,fill=blue!0,text width=32em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
 \sTWO
 
@@ -357,12 +357,12 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
   \end{center}
 \end{frame}
 
-\begin{frame}{Im2Latex}
-\research{\cite{Deng2016} w/ Bloomberg}
-\begin{center}
-  \includegraphics[height =0.75\textheight]{imlatex}
-\end{center}
-\end{frame}
+% \begin{frame}{Im2Latex}
+% \research{\cite{Deng2016} w/ Bloomberg}
+% \begin{center}
+%   \includegraphics[height =0.75\textheight]{imlatex}
+% \end{center}
+% \end{frame}
 
 
 \begin{frame}{Im2Latex}
