@@ -1,6 +1,16 @@
 
 \begin{frame}{Talk Outline}
-  \begin{enumerate}
+  \begin{center}
+    \textbf{Goal} 
+
+
+    Learn How to Say It
+  \end{center}
+  \pause
+  \air
+
+  
+  \begin{itemize}
   \item Background: Core Model and Implementation
     \air
   \item Work 1: Rethinking Model Training (\textit{Beam Search Optimization})
@@ -10,28 +20,9 @@
     \air
 
   \item Future Directions
-  \end{enumerate}
+  \end{itemize}
 \end{frame}
 
-
-% \begin{frame}
-
-%   % Application pictures
-% \end{frame}
-
-% \begin{frame}{Text Generation}
-
-%   \[ \argmax_{y_{1:T}} f(y_{1:T} ; x, \theta)\]
-
-% \end{frame}
-
-% \begin{frame}{Machine Learning for Natural Language}
-%   What types of models get used for this equation?
-
-
-%   \[\argmax_{y_{1:T}} \alert{f}(y_{1:T}, x; \alert{\theta}) \]
-
-% \end{frame}
 
 \begin{frame}{State-of-the-Art Natural Language Processing, circa 2009}
 
@@ -49,7 +40,7 @@
     \node     [below= of ee]{$\vdots$};
 
 
-    \visible<2>{
+    \visible{
     \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class} $f(\cdot; \theta)$};
     \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model]{Parsing};
     \node(b) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of a]{CRF Tagging};
@@ -89,7 +80,7 @@
     \node     [below= of ee]{$\vdots$};
 
 
-   \visible<2->{
+   \visible{
     \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class} $f(\cdot; \theta)$};
     \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model, yshift=-2.5cm]{Neural Networks};
 
@@ -116,6 +107,27 @@
 
 \end{center}
 \end{frame}
+
+
+% \begin{frame}
+
+%   % Application pictures
+% \end{frame}
+
+% \begin{frame}{Text Generation}
+
+%   \[ \argmax_{y_{1:T}} f(y_{1:T} ; x, \theta)\]
+
+% \end{frame}
+
+% \begin{frame}{Machine Learning for Natural Language}
+%   What types of models get used for this equation?
+
+
+%   \[\argmax_{y_{1:T}} \alert{f}(y_{1:T}, x; \alert{\theta}) \]
+
+% \end{frame}
+
 
 % \begin{frame}
 %   \begin{center}

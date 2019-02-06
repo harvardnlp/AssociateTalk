@@ -1,4 +1,6 @@
 \begin{frame}{Talk Outline}
+  \research{\citet{Wiseman2016a}}
+
   \begin{enumerate}
   \item Background: Core Model and Implementation
     \air
@@ -240,12 +242,14 @@
 % \end{frame}
 
 
-\begin{frame}{Theoretical Issues with RNN-based Models}
+\begin{frame}{Theoretical Issues with Multiclass Training}
   \begin{enumerate}
   \item Label Bias  %\cite{Lafferty2001}
     \begin{itemize}
     \item Training is locally discriminative, but prediction is over entire sequences.
     \end{itemize}
+    \air
+    \pause
 
   \item Exposure Bias
     \begin{itemize}
@@ -253,21 +257,29 @@
     \end{itemize}
     \air
     \pause
+
   \item Metric Bias
     \begin{itemize}
     \item Training uses multiclass classification, but evaluation uses n-gram match.
     \end{itemize}
-    \pause
     \air
 
   \end{enumerate}
 \end{frame}
 
-\begin{frame}{Research}
+\begin{frame}{Sequence-to-Sequence Learning as Beam Search Optimization}
   Can we better model discrete sequences for text generation?
 
-
   \air
+  \begin{enumerate}
+  \item Label Bias
+    \air
+  \item Exposure Bias
+    \air
+  \item Metric Bias
+    \air
+
+  \end{enumerate}
 
   Applications:
 
@@ -308,27 +320,16 @@
 %   % \end{itemize}
 % \end{frame}
 
-\begin{frame}{Sequence-to-Sequence Learning as Beam Search Optimization}
-  \research{\citet{Wiseman2016a}}
-
-  Proposal: Directly modify the RNN training procedure to fix test biases.
-
-  \begin{enumerate}
-  \item Label Bias
-    \air
-  \item Exposure Bias
-    \air
-  \item Metric Bias
-    \air
-
-  \end{enumerate}
-
-  % \begin{itemize}
-  % \item
-  % \end{itemize}
+% \begin{frame}{Sequence-to-Sequence Learning as Beam Search Optimization}
 
 
-\end{frame}
+%   Proposal: Directly modify the RNN training procedure to fix test biases.
+
+
+%   % \begin{itemize}
+%   % \item
+%   % \end{itemize}
+% \end{frame}
 
 \begin{frame}{Modification 1: Global Scoring Function  }
 
