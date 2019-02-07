@@ -517,34 +517,32 @@ Let $z$ be a binary latent variable.
 %\end{frame}
 
 \begin{frame}{Neural Template Generation Approach}
-
   \vspace{-1cm}
-
   \begin{center}
     \begin{tikzpicture}
 
       \node (gal) {\includegraphics[width=1.5cm]{phone}};
       \node [rounded corners, above =(0.2cm) of gal] {$\theta$ (HSMM)};
-
-
       \node (a) [rectangle, yshift=1cm, xshift=-5cm, scale=0.7, draw,thick,fill=blue!0,text width=11em, rounded corners, inner sep =5pt, minimum height=1em] {
         \small
-\cetnering
-\begin{tabular}[]{lc}
-\textbf{Fitzbillies} & \\
-\toprule
-type & [coffee shop] \\
-price & $<$ \pounds 20 \\
-food & Chinese \\
-rating  & 3/5 \\
-area & city centre] \\
-\bottomrule
-\end{tabular}};
+        \begin{tabular}[]{lc}
+          \textbf{Fitzbillies} & \\
+          \toprule
+          type & [coffee shop] \\
+          price & $<$ \pounds 20 \\
+          food & Chinese \\
+          rating  & 3/5 \\
+          area & city centre] \\
+          \bottomrule
+        \end{tabular}};
+
+
+
       % \path<2>[draw, ->] (a) --  (a -|  gal.west) ;
 
 
       \node [rounded corners, above =(0.2cm) of a] {\alert<1>{$x$}};
-      \path[draw, ->] (a) --  (gal.west) ;
+      \path[draw, ->] (a) --  (gal.west);
       \visible<2->{
         \node(b) [xshift=-5cm, yshift=-2.5cm, rectangle, scale=0.7, draw,thick,fill=blue!0,text width=18em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
 $\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt}{1pt}}\\ \dots}
@@ -558,16 +556,14 @@ $\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt
 \ \textcolor{gray}{|} \  $ $ \text{\rule{15pt}{1pt} out of \rule{15pt}{1pt}} \ \textcolor{gray}{|} \  .$
           \par};
 
-        \node [rounded corners, above = (0.1cm) of b] {\centering $z_{1:T}$ };
-        \path[draw, ->] (b) --  (gal.west) ;
+        \node [rounded corners, above = (0.1cm) of b] {$z_{1:T}$};
+        \path[draw, ->] (b) --  (gal.west);
       }
 
       \visible<3->{
-        \node(c) [xshift=4.5cm, rectangle, scale=0.75, draw,thick,fill=blue!0,text width=20em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small$\|$ \pause \pause \underline{Fitzbillies} $\|$  \pause is a $\|$ \pause   \underline{coffee shop} $\|$ \pause  providing $\|$  \underline{Chinese} $\|$ food $\|$ in the $\|$  moderate $\|$ price range $\|$ . $\|$ It is  $\|$ located in the $\|$ \underline{city centre} $\|$ . $\|$ Its customer rating is $\|$ \underline{3} out of \underline{5} $\|$ .
-          \par
-      };
-      \node [rounded corners, above = (0.1cm) of c] {\centering $y_{1:T}$ };
-      \path[draw, ->] (gal.east) -- (c)   ;
+        \node(c) [xshift=4.5cm, rectangle, scale=0.75, draw,thick,fill=blue!0,text width=20em, rounded corners, inner sep =5pt, minimum height=1em] {\baselineskip=50pt \small $\|$  \underline{Fitzbillies} $\|$   is a $\|$    \underline{coffee shop} $\|$   providing $\|$  \underline{Chinese} $\|$ food $\|$ in the $\|$  moderate $\|$ price range $\|$ . $\|$ It is  $\|$ located in the $\|$ \underline{city centre} $\|$ . $\|$ Its customer rating is $\|$ \underline{3} out of \underline{5} $\|$ . \par };
+      \node [rounded corners, above = (0.1cm) of c] { $y_{1:T}$};
+      \path[draw, ->] (gal.east) -- (c);
     }
 
 
