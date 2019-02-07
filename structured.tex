@@ -4,7 +4,7 @@
   \begin{enumerate}
   \item Background: Core Model and Implementation
     \air
-  \item Work 1: Rethinking Model Training (\textit{Beam Search Optimization})
+  \item \textbf{Work 1}: Rethinking Model Training (\textit{Beam Search Optimization})
     \air
 
   \item Work 2: Rethinking  Generation  (\textit{Learning Neural Templates})
@@ -38,23 +38,24 @@
 
 
 \begin{frame}{Machine Learning for Text Generation}
-    \[ {y^*_{1:T}} = \alert{\argmax_{y_{\tikzmark{opt}1:T}}} {f}(y_{1:T}; \tikzmark{input}{x}, \tikzmark{nn}{\alert{\theta}}) \]
+    \[ {y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} {f}(y_{1:T}, \tikzmark{input}{x}; \tikzmark{nn}{\alert{\theta}}) \]
 
 
   \begin{itemize}
 
-  \item Input {$x_{1:S}$},  \textit{what to talk about}
+  \item Input {$x$},  \textit{what to talk about}
     \air
 
   \item Output text {$y^*_{1:T}$}, \textit{how to say it}
     \air
 
-  \item Model {$f(.; \theta)$}, learned from data
+  \item Scoring model {$f(.; \theta)$}, learned from data
   \end{itemize}
+
 \end{frame}
 
 
-\begin{frame}{Training RNN}
+\begin{frame}{Training Encoder-Decoder}
   Parameters $\theta$ are trained to predict the next word \textit{given the true history.}
 
   \begin{center}
@@ -69,8 +70,8 @@
   \[ {\cal L}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, x; \theta) \]
 \end{frame}
 
-\begin{frame}{Generating with RNN}
-  Parameters $\theta$ are deployed to predict the next word \textit{given the predicted history}.
+\begin{frame}{Generating with Encoder-Decoder}
+  Parameters $\theta$ are deployed to predict the next word \textit{given a hypothesized history}.
 
 
   \begin{center}
@@ -81,10 +82,10 @@
   \end{center}
 
   Requires  predicting best sequence
-  \[ y^*_{1:T} = \argmax_{y_{1:T}} f(y_{1:T}; \theta) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, \cvec; \theta) \]
+  \[ y^*_{1:T} = \argmax_{y_{1:T}} f(y_{1:T}; \theta) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, x; \theta) \]
   % \pause
 
-  But, intractable to solve exactly $O(\text{\#vocab} ^T)$
+  Intractable to solve exactly $O(\text{\#vocab} ^T)$
 
 \end{frame}
 
@@ -242,21 +243,23 @@
 % \end{frame}
 
 
-\begin{frame}{Theoretical Issues with Multiclass Training}
+\begin{frame}{Theoretical Issues with Multiclass Training for Generation}
   \begin{enumerate}
-  \item Label Bias  %\cite{Lafferty2001}
+
+  \item Exposure Bias
     \begin{itemize}
-    \item Training is locally discriminative, but prediction is over entire sequences.
+    \item Training conditions on true history ($y_{1:t-1}$) but generation uses predicted history.
     \end{itemize}
     \air
     \pause
 
-  \item Exposure Bias
+  \item Label Bias  %\cite{Lafferty2001}
     \begin{itemize}
-    \item Training conditions on true history ($y_{1:t-1}$) but generates with predicted history.
+    \item Training is locally multiclass, but score is over entire sequences.
     \end{itemize}
     \air
     \pause
+
 
   \item Metric Bias
     \begin{itemize}
@@ -267,28 +270,31 @@
   \end{enumerate}
 \end{frame}
 
-\begin{frame}{Sequence-to-Sequence Learning as Beam Search Optimization}
-  Can we better model discrete sequences for text generation?
-
+\begin{frame}{Beam Search Optimization}
+  Can we fix these issues for text generation?  
   \air
+
+  \textbf{Strategy:} Modify training to target each issue.
+  
   \begin{enumerate}
-  \item Label Bias
-    \air
   \item Exposure Bias
     \air
+  \item Label Bias
+    \air
+
   \item Metric Bias
     \air
 
   \end{enumerate}
 
-  Applications:
+  \textbf{Applications:}
 
-  \begin{itemize}
-  \item (1) Improvements in training with less supervision.
+  \begin{enumerate}
+  \item Improvements in training with less supervision.
     \air
-  \item (2) Effective methods for downscaling translation models.
+  \item  Effective methods for downscaling translation models.
     \air
-  \end{itemize}
+  \end{enumerate}
 \end{frame}
 
 
@@ -331,49 +337,23 @@
 %   % \end{itemize}
 % \end{frame}
 
-\begin{frame}{Modification 1: Global Scoring Function  }
-
-  \textbf{Issue:} Label Bias
-    \begin{itemize}
-    \item Training is locally discriminative, but prediction is over entire sequences.
-    \end{itemize}
-
-  % \begin{center}
-  %   % \structure{(Idea 1)} Replace local softmax with sequence scorer
-  %   % \air
-  %
-  % \end{center}
-
-    \air
-
-  \textbf{Proposed Fix:}
-
-  \begin{itemize}
-  \item Replace $ \log p(y_{t} | y^{(k)}_{1:t-1}, \cvec; \theta)$ with
-    a directly learned function $f(y_t, y_{1:t-1}^{(k)}, x; \theta)$
-  \end{itemize}
-  \air
-
-  \begin{center}
-    \includegraphics[width=0.5\textwidth, trim={0cm 18cm 0cm 0cm}, clip]{rnnlm6}
-  \end{center}
-\end{frame}
-
-\begin{frame}{Modification 2: Beam Search at Training}
+\begin{frame}{Modification 1: Beam Search at Training}
 
   \textbf{Issue:}  Exposure Bias
     \begin{itemize}
     \item Training conditions on true history ($y_{1:t-1}$) but generates with predicted history.
     \end{itemize}
+    \air 
+    \pause 
 
-   \textbf{Proposed Fix:} During training:
+   \textbf{Proposed Fix:} During training, run until \textit{loss occurs}.
    \begin{enumerate}
    \item Compute the score of every possible next word.
 
-     \only<1>{\[f(y_t, y_{1:t-1}^{(k)}) \gets \alert{\log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x)} \]}
+     \[f(y_t, y_{1:t-1}^{(k)}) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x) \]
 
-   \only<2>{
-     \[f(y_t, y_{1:t-1}^{(k)})  \gets  \structure{f(y_t, y_{1:t-1}^{(k)}, x; \theta)} \]}
+   % \only<2>{
+   %   \[f(y_t, y_{1:t-1}^{(k)})  \gets  \structure{f(y_t, y_{1:t-1}^{(k)}, x; \theta)} \]}
 
    \item Prune to only the $K$ highest-scoring,
      \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]
@@ -393,11 +373,40 @@
   %    \[\wvec_{1:t}^{(1:K)} \gets K\argmax_{\wvec_{1:t}} s(\wvec_t, \wvec_{1:t-1}^{(k)})\]
   %  \end{enumerate}
   % \end{enumerate}
+\end{frame}
 
+\begin{frame}{Modification 2: Global Scoring Function  }
+
+  \textbf{Issue:} Label Bias
+    \begin{itemize}
+    \item Training is locally discriminative, but prediction is over entire sequences.
+    \end{itemize}
+    \pause
+
+  % \begin{center}
+  %   % \structure{(Idea 1)} Replace local softmax with sequence scorer
+  %   % \air
+  %
+  % \end{center}
+
+    \air
+
+  \textbf{Proposed Fix:}
+
+  \begin{itemize}
+  \item Replace $ \log p(y_{t} | y^{(k)}_{1:t-1}, x; \theta)$ with
+    a directly learned function $f(y_t, y_{1:t-1}^{(k)}, x; \theta)$
+  \end{itemize}
+  \air
+
+  \begin{center}
+    \includegraphics[width=0.5\textwidth, trim={0cm 18cm 0cm 0cm}, clip]{rnnlm6}
+  \end{center}
 \end{frame}
 
 
-\begin{frame}{Modification 3: Train with Margin}
+
+\begin{frame}{Modification 3.1: Train with Margin}
 
   \textbf{Issue:} Metric Bias
     \begin{itemize}
@@ -410,7 +419,7 @@
     \item Margin between ground truth sequence $\hat{y}$ and worst predicted sequence $y^{(K)}$
     \end{itemize}
     \begin{align*}
-      \mathcal{L}&(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{K}) \left[1 - f(\hat{y}_t, y^{(g)}_{1:t-1}, x) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, x) \right]
+      \mathcal{L}&(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{K}) \left[1 - f(\hat{y}_t, \hat{y}_{1:t-1}, x) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, x) \right]
     \end{align*}
 
     \begin{itemize}
@@ -419,6 +428,12 @@
     \end{itemize}
 
   \end{frame}
+
+\begin{frame}{Modification 3.2: Train with Constraints}
+\end{frame}
+
+
+
 
 \begin{frame}[fragile]{Beam Search Optimization Example}
   \begin{center}
@@ -679,7 +694,7 @@
 % \end{frame}
 
 
-\begin{frame}{Results}
+\begin{frame}{Main Results}
   \vspace{-0.2cm}
   \begin{table}
   \centering
@@ -779,7 +794,7 @@
 %   (Teacher-Student Diagram)
 % \end{frame}
 
-\begin{frame}{Application}
+\begin{frame}{Application: Model Compression}
   \research{\cite{Kim2016a}}
 
   Goal: Shrink the size of text generation models.

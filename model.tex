@@ -57,7 +57,7 @@
 %   \end{itemize}
 % \end{frame}
 
-\begin{frame}{Recurrent Neural Network}{ $f(y_{1:T}, x_{1:S}; \theta)$}
+\begin{frame}{Encoder-Decoder}{ $f(y_{1:T}, x_{1:S}; \theta)$}
 
   \vspace{-0.25cm}
 
@@ -67,7 +67,7 @@
 \end{frame}
 
 
-\begin{frame}{Recurrent Neural Network Math}
+\begin{frame}{Encoder-Decoder}
   \textcolor{blue}{Encoder}:
   \[{\mathbf{h}^{x}_s \gets \RNN(\mathbf{h}^{x}_{s-1}, x_s)} \]
 
@@ -84,13 +84,13 @@
   \textcolor{red}{Decoder}:
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
 
-  Prediction:
+  Next Word Probability:
   \[ p(y_{t}\  |\  y_{1:t-1}, x) = \softmax( \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]) \]
 
   \pause
 
   Generation Score:
-  \[  f(y_{1:T}, x; \theta) =  \log \sum_{t=1}^T p(y_{t}\  |\  y_{1:t-1}, x) \]
+  \[  f(y_{1:T}, x; \theta) =   \sum_{t=1}^T \log p(y_{t}\  |\  y_{1:t-1}, x) \]
 
 \end{frame}
 
@@ -99,7 +99,9 @@
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
 
   \air
-
+ \air
+ \air
+ 
   \textbf{Example} (Dyck-1 Language):
 
   Well-balanced parenthesis language with  random nesting-level indicators,
@@ -156,37 +158,43 @@
 \end{frame}
 
 
-\begin{frame}{Harvard NLP Deep Learning Research}{}
-  % Picture
-  % \research{\cite{Deng2016}}
-
+\begin{frame}
   \begin{center}
-    \scalebox{2}{
-  \begin{tikzpicture}
-
-    \node<1> at (10mm, 15mm){\includegraphics[width=3.4cm]{rnnlm6}};
-
-    \node[draw,  thick, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
-    \node[draw,  thick, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
-    \node[draw,  thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
-    % \node<2>[draw,  fill=yellow, thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
-    % \node<2>[scale=0.5, text width=50mm] at (12mm, 15mm) {\small \centering Translation, \\  Summary,  \\ Data-to-Text,  \\ Diagram-to-Text,  \\ $\vdots$};
-
-    \node[draw, thick, rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
-    \node[draw, thick, rounded corners, scale=0.5] (dep) at (25mm, 0mm){Scaling};
-
-    \node[draw,  thick, rounded corners,scale=0.5] (imp) at (0, 0) {Open-Source};
-
-    \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
-
-  \end{tikzpicture}
-}
+    \includegraphics[width=\linewidth]{opennmt}
   \end{center}
-
 \end{frame}
 
+% \begin{frame}{Harvard NLP Deep Learning Research}{}
+%   % Picture
+%   % \research{\cite{Deng2016}}
 
-\begin{frame}{Selected Harvard NLP Deep Learning Research}{}
+%   \begin{center}
+%     \scalebox{2}{
+%   \begin{tikzpicture}
+
+%     \node<1> at (10mm, 15mm){\includegraphics[width=3.4cm]{rnnlm6}};
+
+%     \node[draw,  thick, rounded corners, scale=0.5] (ana) at (-15mm, 15mm) {Analysis};
+%     \node[draw,  thick, rounded corners,scale=0.5] (meth) at (0mm, 30mm) {\ Methods\phantom{p}};
+%     \node[draw,  thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
+%     % \node<2>[draw,  fill=yellow, thick, rounded corners,scale=0.5] (app) at (25mm, 30mm) {Applications};
+%     % \node<2>[scale=0.5, text width=50mm] at (12mm, 15mm) {\small \centering Translation, \\  Summary,  \\ Data-to-Text,  \\ Diagram-to-Text,  \\ $\vdots$};
+
+%     \node[draw, thick, rounded corners, scale=0.5] (und) at (35mm, 15mm) {Understanding};
+%     \node[draw, thick, rounded corners, scale=0.5] (dep) at (25mm, 0mm){Scaling};
+
+%     \node[draw,  thick, rounded corners,scale=0.5] (imp) at (0, 0) {Open-Source};
+
+%     \draw (ana) -- (meth) --(app) -- (und) -- (dep) -- (imp) -- (ana);
+
+%   \end{tikzpicture}
+% }
+%   \end{center}
+
+% \end{frame}
+
+
+\begin{frame}{Research Overview}{}
   % Pictured
 
   \vspace{-1cm}
@@ -219,7 +227,7 @@
       \baselineskip=-5pt \scriptsize
       \citet{Kim2016} \ \
       \textcolor{redpurple}{\cite{DBLP:journals/corr/KimDHR17}}\ \
-      \cite{EMNLP2017}
+      \textbf{\cite{EMNLP2017}}
       \par
       };
     }
@@ -241,7 +249,7 @@
 \visible{
     \node at (65mm, 15mm) [text width=30mm]{ \centering
       \baselineskip=-5pt \scriptsize
-      \citet{wiseman2018learning}
+      \textbf{\citet{wiseman2018learning}}
       \textcolor{redpurple}{\citet{deng2018latent}}\ \ \
       \textcolor{redpurple}{\citet{DBLP:journals/corr/abs-1802-02550}}
       \par
