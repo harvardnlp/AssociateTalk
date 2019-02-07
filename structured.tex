@@ -37,7 +37,9 @@
 % \end{frame}
 
 
-\begin{frame}{Machine Learning for Text Generation}
+\begin{frame}{Beam Search Optimization}
+  Research Goal: Can we learn parameters $\theta$ to target text generation problems?
+
     \[ {y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} {f}(y_{1:T}, \tikzmark{input}{x}; \tikzmark{nn}{\alert{\theta}}) \]
 
 
@@ -102,7 +104,7 @@
    \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
     \node<1->(G-1-1){a}; & \node<2->(G-1-2){red}; & \node<3->(G-1-3){dog}; & \node<4->(G-1-4){smells}; & \node<5->(G-1-5){home};  & \node<6->(G-1-6){today}; \\
     \node<1->(G-2-1){the}; & \node<2->(G-2-2){dog}; & \node<3->(G-2-3){dog}; & \node<4->(G-2-4){barks}; & \node<5->(G-2-5){quickly}; & \node<6->(G-2-6){Friday}; \\
-    \node<1->(G-3-1){red}; & \node<2->(G-3-2){blue}; & \node<3->(G-3-3){cat}; &  \node<4->(G-3-4){barks}; & \node<5->(G-3-5){straight}; & \node<6->(G-3-6){now}; \\    };
+    \node<1->(G-3-1){red}; & \node<2->(G-3-2){blue}; & \node<3->(G-3-3){cat}; &  \node<4->(G-3-4){walks}; & \node<5->(G-3-5){straight}; & \node<6->(G-3-6){now}; \\    };
 
     \only<2->{
       \draw[->] (G-1-1.east) -> (G-1-2.west);
@@ -248,7 +250,7 @@
 
   \item Exposure Bias
     \begin{itemize}
-    \item Training conditions on true history ($y_{1:t-1}$) but generation uses predicted history.
+    \item Training conditions on true history, but generation uses predicted history.
     \end{itemize}
     \air
     \pause
@@ -271,21 +273,15 @@
 \end{frame}
 
 \begin{frame}{Beam Search Optimization}
-  Can we fix these issues for text generation?  
-  \air
 
   \textbf{Strategy:} Modify training to target each issue.
-  
-  \begin{enumerate}
-  \item Exposure Bias
-    \air
-  \item Label Bias
-    \air
 
-  \item Metric Bias
-    \air
+  \begin{itemize}
+  \item Exposure Bias, Label Bias, Metric Bias
 
-  \end{enumerate}
+  \end{itemize}
+\air
+\air
 
   \textbf{Applications:}
 
@@ -339,25 +335,32 @@
 
 \begin{frame}{Modification 1: Beam Search at Training}
 
-  \textbf{Issue:}  Exposure Bias
+  \textbf{Goal:}  Fix Exposure Bias
     \begin{itemize}
-    \item Training conditions on true history ($y_{1:t-1}$) but generates with predicted history.
+    \item Train taking prediction into account.
     \end{itemize}
-    \air 
-    \pause 
+    \air
+    \pause
 
-   \textbf{Proposed Fix:} During training, run until \textit{loss occurs}.
-   \begin{enumerate}
-   \item Compute the score of every possible next word.
+   \textbf{Proposed Fix:}
 
-     \[f(y_t, y_{1:t-1}^{(k)}) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x) \]
+   \begin{itemize}
+   \item Run our beam search procedure during training (structured prediction)
+     \air
 
-   % \only<2>{
-   %   \[f(y_t, y_{1:t-1}^{(k)})  \gets  \structure{f(y_t, y_{1:t-1}^{(k)}, x; \theta)} \]}
+   \item Update parameters only when true sequence becomes impossible to recover.
+   \end{itemize}
+   % \begin{enumerate}
+   % \item Compute the score of every possible next word.
 
-   \item Prune to only the $K$ highest-scoring,
-     \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]
-   \end{enumerate}
+   %   \[f(y_t, y_{1:t-1}^{(k)}) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x) \]
+
+   % % \only<2>{
+   % %   \[f(y_t, y_{1:t-1}^{(k)})  \gets  \structure{f(y_t, y_{1:t-1}^{(k)}, x; \theta)} \]}
+
+   % \item Prune to only the $K$ highest-scoring,
+   %   \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]
+   % \end{enumerate}
   % \begin{enumerate}
   % % \item Start with $K$ partial starting hypotheses $\wvec^{(1:K)}$
   % % \item For timesteps $t$ from  $1$ to $T$:
@@ -376,10 +379,9 @@
 \end{frame}
 
 \begin{frame}{Modification 2: Global Scoring Function  }
-
-  \textbf{Issue:} Label Bias
+  \textbf{Goal:}  Fix Label Bias
     \begin{itemize}
-    \item Training is locally discriminative, but prediction is over entire sequences.
+    \item Use a direct global scoring function.
     \end{itemize}
     \pause
 
@@ -394,8 +396,8 @@
   \textbf{Proposed Fix:}
 
   \begin{itemize}
-  \item Replace $ \log p(y_{t} | y^{(k)}_{1:t-1}, x; \theta)$ with
-    a directly learned function $f(y_t, y_{1:t-1}^{(k)}, x; \theta)$
+  \item Replace $ \log p(y_{t} | y_{1:t-1}, x; \theta)$ with
+    a directly learned function $f(y_{1:t}, x; \theta)$
   \end{itemize}
   \air
 
@@ -406,20 +408,21 @@
 
 
 
-\begin{frame}{Modification 3.1: Train with Margin}
+\begin{frame}{Modification 3: Train with Margin}
 
-  \textbf{Issue:} Metric Bias
+  \textbf{Goal:} Fix Metric Bias
     \begin{itemize}
-    \item Training uses multiclass classification, but evaluation uses n-gram match.
+    \item Incorporate a problem specific cost, e.g. ngrams
     \end{itemize}
-
+\air
+\pause
 
     \textbf{Proposed Fix:} Use a structured SVM-style training loss:
     \begin{itemize}
     \item Margin between ground truth sequence $\hat{y}$ and worst predicted sequence $y^{(K)}$
     \end{itemize}
     \begin{align*}
-      \mathcal{L}&(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{K}) \left[1 - f(\hat{y}_t, \hat{y}_{1:t-1}, x) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, x) \right]
+      \mathcal{L}&(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{(K)}) \left[1 - f(\hat{y}_t, \hat{y}_{1:t-1}, x) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, x) \right]
     \end{align*}
 
     \begin{itemize}
@@ -429,13 +432,15 @@
 
   \end{frame}
 
-\begin{frame}{Modification 3.2: Train with Constraints}
+\begin{frame}{Extension: Train with Constraints}
+  (Constraints)
+
 \end{frame}
 
 
 
 
-\begin{frame}[fragile]{Beam Search Optimization Example}
+\begin{frame}[fragile]{Beam Search Optimization: Training Example}
   \begin{center}
     \begin{center}
 
@@ -460,9 +465,9 @@
 
 
    \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
-    \node<1->[fill=yellow](G-1-1){\textcolor{black}{a}}; \node<4->[fill=yellow](G-1-1){\textcolor{black}{a}}; & \node<2->[fill=yellow](G-1-2){red}; \node<4->[fill=yellow](G-1-2){red}; & \node<3->[](G-1-3){\textcolor{black}{dog}}; \node<4->[fill=red!20](G-1-3){\textcolor{black}{dog}}; & \node<4->(G-1-4){smells}; & \node<5->[](G-1-5){\textcolor{red}{home}}; \node<6->[fill=red!20](G-1-5){\textcolor{red}{home}};  & \node<6->[fill=red!20](G-1-6){\textcolor{red}{today}}; \\
+    \node<1->[fill=yellow](G-1-1){\textcolor{black}{a}}; \node<4->[fill=yellow](G-1-1){\textcolor{black}{a}}; & \node<2->[fill=yellow](G-1-2){red}; \node<4->[fill=yellow](G-1-2){red}; & \node<3->[](G-1-3){\textcolor{black}{dog}}; \node<4->[fill=red!20](G-1-3){\textcolor{black}{dog}}; & \node<4->(G-1-4){smells}; & \node<5->[](G-1-5){{home}}; \node<6->[fill=red!20](G-1-5){{home}};  & \node<6->[](G-1-6){{today}}; \\
     \node<1->(G-2-1){the}; & \node<2->(G-2-2){dog}; & \node<3->[fill=yellow](G-2-3){dog}; & \node<4->(G-2-4){barks}; & \node<5->[fill=yellow](G-2-5){quickly}; & \node<6->(G-2-6){Friday}; \\
-    \node<1->(G-3-1){red}; & \node<2->[](G-3-2){\textcolor{black}{blue}}; \node<4->[fill=red!20](G-3-2){\textcolor{black}{blue}}; & \node<3->(G-3-3){cat}; &  \node<4->[fill=red!20](G-3-4){\textcolor{black}{barks}}; & \node<5->(G-3-5){straight}; & \node<6->[](G-3-6){now}; \\
+    \node<1->(G-3-1){red}; & \node<2->[](G-3-2){\textcolor{black}{blue}}; \node<4->[fill=red!20](G-3-2){\textcolor{black}{blue}}; & \node<3->(G-3-3){cat}; &  \node<4->[fill=red!20](G-3-4){\textcolor{black}{barks}}; & \node<5->(G-3-5){straight}; & \node<6->[fill=red!20](G-3-6){now}; \\
     & & & \node<4->[fill=yellow](G-4-4){runs}; & & \node<6->[fill=yellow](G-4-6){today}; \\
     };
 
@@ -530,7 +535,7 @@
     % \end{scope}
 \end{tikzpicture}
   \end{center}
-
+  \air
   \air
   \air
 % \begin{align*}
@@ -539,9 +544,9 @@
 
   \begin{itemize}
   \item \textcolor{orange}{True}: ground-truth sequence $\hat{y}$
-  \item \textcolor{red}{Predicted}: lowest-scoring prefix  $y^{(K)}$
+  \item<4> \textcolor{red}{Predicted}: lowest-scoring prefix  $y^{(K)}$
   \end{itemize}
-  Strategy: if true falls off beam, restart from ground truth (learning as search optimization \cite{daume05learning})
+  % Strategy: if true falls off beam, restart from ground truth (learning as search optimization \cite{daume05learning})
 \end{frame}
 
 \begin{frame}[fragile]{Parameter Updates: Structured Backpropagation}
@@ -634,8 +639,8 @@
   \vspace{1cm}
 
   \begin{itemize}
-  \item Margin gradients are sparse, only violating sequences get updates.
-  \item Backprop as efficient as standard models, avoid exponential sum.
+  \item Margin gradients are sparse, only grey sequences get updates.
+  \item Backprop as efficient as standard models.
   \end{itemize}
 \end{frame}
 
@@ -705,9 +710,9 @@
     \midrule
      & \multicolumn{3}{c}{Word Ordering (BLEU) } \\
     \midrule
-    seq2seq & 25.2 & 29.8 & 31.0 \\
-    BSO     & 28.0 & 33.2 & 34.3 \\
-    BSO-Con & \textbf{28.6} & \textbf{34.3} & \textbf{34.5} \\
+    Encoder-Decoder & 25.2 & 29.8 & 31.0 \\
+    Beam Search Optimization     & 28.0 & 33.2 & 34.3 \\
+    Beam Search Optimization-Constraints & \textbf{28.6} & \textbf{34.3} & \textbf{34.5} \\
     \midrule
     \pause
 %   \end{tabular}
@@ -733,8 +738,8 @@
     & \multicolumn{3}{c}{Machine Translation (BLEU) } \\
     % &  $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\
     % \midrule
-    seq2seq & 22.53 & 24.03 & 23.87 \\
-    BSO, SB-$\Delta$  & \textbf{23.83} & \textbf{26.36} & \textbf{25.48} \\
+    Encoder-Decoder & 22.53 & 24.03 & 23.87 \\
+    Beam-Search Optimization, $\Delta$  & \textbf{23.83} & \textbf{26.36} & \textbf{25.48} \\
     % \midrule
     XENT & 17.74 & $\leq$ 20.5 & $\leq$ 20.5 \\
     DAD & 20.12 & $\leq$ 22.5 & $\leq$ 23.0 \\
@@ -797,7 +802,7 @@
 \begin{frame}{Application: Model Compression}
   \research{\cite{Kim2016a}}
 
-  Goal: Shrink the size of text generation models.
+  \textbf{Goal:} Shrink the size of text generation models.
 
 % \begin{frame}
 %   \centerline{\structure{Related Work: Compressing Deep Models}}
@@ -806,8 +811,8 @@
 \begin{itemize}
 % \item \textbf{Pruning}: Prune weights based on importance criterion
 % \cite{LeCun1990,Han2016}
-\item \textbf{Knowledge Distillation}: Train a \textit{student} model to learn
-from a \textit{teacher} model \cite{Bucila2006,Ba2014,Hinton2015}.
+\item Knowledge Distillation: Train a \textit{student} model to learn
+from a \textit{teacher} model. %\cite{Bucila2006,Ba2014,Hinton2015}.
 
 \begin{center}
   \includegraphics[width=8cm]{distill}
@@ -870,25 +875,29 @@ from a \textit{teacher} model \cite{Bucila2006,Ba2014,Hinton2015}.
 
 \begin{frame}{Multiclass Style: Word-Level Knowledge Distillation}
 
-\begin{columns}
-\begin{column}{7cm}
-Teacher model: $q(y_{t} | y_{1:t-1}, x; \theta_T$)
-\air
+  \begin{center}
+    \includegraphics[trim={0.2cm 0.2cm 0.2cm 3cm}, clip,
+    width=7cm]{word-kd-2}
+  \end{center}
+% \begin{columns}
+% \begin{column}{7cm}
+% Teacher model: $q(y_{t} | y_{1:t-1}, x; \theta_T$)
+% \air
 
-Cross-entropy between teacher and student
+% Cross-entropy between teacher and student
 
-\begin{align*}
-\mathcal{L}_{\text{WORD-KD}}(\theta) = -\sum_t \sum_v &q(y_t=v \given \hat{y}_{1: t-1}, x ; \theta_T)\times \\
-& \log p(y_t =v \given \hat{y}_{1: t-1}, x ; \theta)
-\end{align*}
-\end{column}
+% \begin{align*}
+% \mathcal{L}_{\text{WORD-KD}}(\theta) = -\sum_t \sum_v &q(y_t=v \given \hat{y}_{1: t-1}, x ; \theta_T)\times \\
+% & \log p(y_t =v \given \hat{y}_{1: t-1}, x ; \theta)
+% \end{align*}
+% \end{column}
 
-\begin{column}{7cm}
-\centering
+% \begin{column}{7cm}
+% \centering
 
-\includegraphics[trim={0.2cm 0.2cm 0.2cm 3cm}, clip, width=7cm]{word-kd-2}
-\end{column}
-\end{columns}
+
+% \end{column}
+% \end{columns}
 \end{frame}
 
 % \begin{frame}
@@ -954,21 +963,24 @@ Cross-entropy between teacher and student
 
 \begin{frame}{Sequence-Level Knowledge Distillation}
 
-\begin{columns}
-\begin{column}{7cm}
-\begin{align*}
-\mathcal{L}_\text{SEQ-KD}(\theta) &= -\log p(y^*_{1:T} \given x ; \theta)  \\
-& \hspace*{-1cm} \displaystyle \approx   -\sum_{v_{1:T}} q(y_{1:T}=v_{1:t}|x; \theta_T) \log p(y_{1:T} | x ; \theta)
-\end{align*}
-\air
+% \begin{columns}
+% \begin{column}{7cm}
+% \begin{align*}
+% \mathcal{L}_\text{SEQ-KD}(\theta) &= -\log p(y^*_{1:T} \given x ; \theta)  \\
+% & \hspace*{-1cm} \displaystyle \approx   -\sum_{v_{1:T}} q(y_{1:T}=v_{1:t}|x; \theta_T) \log p(y_{1:T} | x ; \theta)
+% \end{align*}
+% \air
 
-Extension: $\mathcal{L}_\text{SEQ-INTER}(\theta)$ select sample based on ground truth $\hat{y}$
-as well.
-\end{column}
-\begin{column}{7cm}
-\includegraphics[trim={0.2cm 0.2cm 0.2cm 0.2cm}, clip, width=7cm]{seq-kd-2}
-\end{column}
-\end{columns}
+% Extension: $\mathcal{L}_\text{SEQ-INTER}(\theta)$ select sample based on ground truth $\hat{y}$
+% as well.
+% \end{column}
+% \begin{column}{7cm}
+  \begin{center}
+    \includegraphics[trim={0.2cm 0.2cm 0.2cm 0.2cm}, clip,
+    width=7cm]{seq-kd-2}
+  \end{center}
+% \end{column}
+% \end{columns}
 \end{frame}
 
 \begin{frame}{Results: WMT English $\rightarrow$ German Translation}
@@ -987,13 +999,12 @@ Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ \\%&   $6.7$ &  $1.3\%$ \\
 $2 \times 500$ \\
 Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ \\%&  $8.2$ & $0.9\%$  \\
 \hspace{1mm} Word-KD  & $15.4$ & $+0.7$& $17.7$& $+0.1$\\%&  $8.0$ & $1.0\%$  \\
-\pause
-\hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$\\%&  $22.7$ & $16.9\%$ \\
-\hspace{1mm} Seq-Inter  & $18.9$ & $+\mathbf{4.2}$&$19.3$ & $+\mathbf{1.7}$ \\ %&  $15.8$ & $7.6\%$  \\
-\midrule
-\pause
-$4 \times 1000$ \\
-\hspace{1mm} Seq-Inter    & $19.6$ & $+1.9$&  $19.8$& $+0.3$\\ %&   $10.4$ & $8.2\%$   \\
+% \hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$\\%&  $22.7$ & $                                                                              16.9\%$ \\
+\hspace{1mm} Seq-KD  & $18.9$ & $+\mathbf{4.2}$&$19.3$ & $+\mathbf{1.7}$ \\ %&  $15.8$ & $7.6\%$  \\
+% \midrule
+% \pause
+% $4 \times 1000$ \\
+% \hspace{1mm} Seq-Inter    & $19.6$ & $+1.9$&  $19.8$& $+0.3$\\ %&   $10.4$ & $8.2\%$   \\
 \bottomrule
 \end{tabular}
 
@@ -1002,12 +1013,12 @@ $4 \times 1000$ \\
 \air
 \end{frame}
 
-\begin{frame}{Combining Knowledge Distillation and Pruning}
-\air
-\air
-\centering
-\includegraphics[width=0.8\textwidth]{modelsize}
-\end{frame}
+% \begin{frame}{Combining Knowledge Distillation and Pruning}
+% \air
+% \air
+% \centering
+% \includegraphics[width=0.8\textwidth]{modelsize}
+% \end{frame}
 
 
 \begin{frame}{Application}
