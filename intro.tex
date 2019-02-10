@@ -19,7 +19,7 @@
   \item Work 2: Rethinking  Generation  (\textit{Learning Neural Templates})
     \air
 
-  \item Future Directions
+  \item Future Challenges 
   \end{itemize}
 \end{frame}
 
@@ -84,7 +84,8 @@
     \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class} $f(\cdot; \theta)$};
     \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model, yshift=-2.5cm]{Neural Networks};
 
-    \node<3>[below=of a]{\includegraphics[width=4cm]{rnnlm6}};
+    \node<3>(rnn)[below=of a]{\includegraphics[width=4cm]{rnnlm6}};
+    \node<3>[right=of rnn, text width=5em]{Encoder-\\ Decoder};
 
     % \node[below  = of a, xshift=3cm]{\includegraphics[width=8cm]{nmt}} ;
 

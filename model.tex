@@ -57,7 +57,7 @@
 %   \end{itemize}
 % \end{frame}
 
-\begin{frame}{Encoder-Decoder}{ $f(y_{1:T}, x_{1:S}; \theta)$}
+\begin{frame}{Encoder-Decoder}{\large $f_{\theta}(y_{1:T}, x_{1:S})$}
 
   \vspace{-0.25cm}
 
@@ -69,7 +69,7 @@
 
 \begin{frame}{Encoder-Decoder}
   \textcolor{blue}{Encoder}:
-  \[{\mathbf{h}^{x}_s \gets \RNN(\mathbf{h}^{x}_{s-1}, x_s)} \]
+  \[{\mathbf{h}^{x}_s \gets \RNN(\mathbf{h}^{x}_{s-1}, x_s; \theta)} \]
 
 
   \textcolor{orange}{Context}:
@@ -82,7 +82,7 @@
   \vspace{-0.5cm}
 
   \textcolor{red}{Decoder}:
-  \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
+  \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t; \theta)} \]
 
   Next Word Probability:
   \[ p(y_{t}\  |\  y_{1:t-1}, x) = \softmax( \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]) \]
@@ -90,24 +90,21 @@
   \pause
 
   Generation Score:
-  \[  f(y_{1:T}, x; \theta) =   \sum_{t=1}^T \log p(y_{t}\  |\  y_{1:t-1}, x) \]
+  \[  f_{\theta}(y_{1:T}, x) =   \sum_{t=1}^T \log p(y_{t}\  |\  y_{1:t-1}, x; \theta) \]
 
 \end{frame}
 
-\begin{frame}{Decoder Example}
+\begin{frame}{Scoring Model Example }
   \textcolor{red}{Decoder}:
-  \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t)} \]
+  \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t; \theta)} \]
 
   \air
- \air
- \air
  
-  \textbf{Example} (Dyck-1 Language):
-
-  Well-balanced parenthesis language with  random nesting-level indicators,
+  \textbf{Language} : Well-balanced parentheses (Dyck-1 Language) with  nesting-levels,
   \begin{itemize}
   \item Vocabulary: ( ) 0 1 2 3 4
-  \item Example String: 0 ( ( 2 ) ( ( ( 4 4 4 ) 3 ) $\ldots$
+  \item Example Good String: 0 ( ( 2 ) ( ( ( 4 4 4 ) 3 ) $\ldots$
+  \item Example Bad String: 0 ) ( 3 ) ) ( (   $\ldots$
   \end{itemize}
   % Proxy Question: What does $\mathbf{h}_t$ look like over time?
 \end{frame}

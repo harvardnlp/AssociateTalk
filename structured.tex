@@ -1,5 +1,4 @@
 \begin{frame}{Talk Outline}
-  \research{\citet{Wiseman2016a}}
 
   \begin{enumerate}
   \item Background: Core Model and Implementation
@@ -40,7 +39,7 @@
 \begin{frame}{Beam Search Optimization}
   Research Goal: Can we learn parameters $\theta$ to target text generation problems?
 
-    \[ {y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} {f}(y_{1:T}, \tikzmark{input}{x}; \tikzmark{nn}{\alert{\theta}}) \]
+    \[ {y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} {f_{\theta}}(y_{1:T}, \tikzmark{input}{x}) \]
 
 
   \begin{itemize}
@@ -51,14 +50,14 @@
   \item Output text {$y^*_{1:T}$}, \textit{how to say it}
     \air
 
-  \item Scoring model {$f(.; \theta)$}, learned from data
+  \item Scoring model {$f_\theta$}
   \end{itemize}
 
 \end{frame}
 
 
 \begin{frame}{Training Encoder-Decoder}
-  Parameters $\theta$ are trained to predict the next word \textit{given the true history.}
+  Parameters $\theta$ are trained to score the next word given the \textit{true} history, $\hat{y}_{1:t-1}$
 
   \begin{center}
   \includegraphics[height=3.5cm, trim={12cm 3cm 7cm 0.5cm}, clip]{nmt-noattn-4}
@@ -68,12 +67,12 @@
   \end{center}
   \pause
 
-  Objective is identical to \textcolor{redpurple}{multiclass classification}.
-  \[ {\cal L}(\theta) = -\sum_{t} \log p(y_t |  y_{1:t-1}, x; \theta) \]
+  Training loss is identical to \textcolor{redpurple}{multiclass classification} 
+  \[ {\cal L}(\theta) = -\sum_{t} \log p(y_t |  \hat{y}_{1:t-1}, x; \theta) \]
 \end{frame}
 
 \begin{frame}{Generating with Encoder-Decoder}
-  Parameters $\theta$ are deployed to predict the next word \textit{given a hypothesized history}.
+  Parameters $\theta$ are used to score the next word given \textit{any} history, $y_{1:t-1}$.
 
 
   \begin{center}
@@ -83,15 +82,18 @@
   \includegraphics[width=7cm]{beam}
   \end{center}
 
-  Requires  predicting best sequence
-  \[ y^*_{1:T} = \argmax_{y_{1:T}} f(y_{1:T}; \theta) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, x; \theta) \]
+  Generation aims to maximize over all sequences,
+  \[ y^*_{1:T} =d \argmax_{y_{1:T}} f_{\theta}(y_{1:T}, x) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, x; \theta) \]
   % \pause
-
-  Intractable to solve exactly $O(\text{\#vocab} ^T)$
+  % Intractable to solve exactly $O(\text{\#vocab} ^T)$
 
 \end{frame}
 
 \begin{frame}[fragile]{Standard Heuristic Method:  Beam Search}
+  {$ y^*_{1:T} \approx \argmax_{y_{1:T}} f_{\theta}(y_{1:T}, x)$ }
+
+  \air 
+
     \begin{center}
   \begin{tikzpicture}[transform canvas = {scale=0.8}]
     \tikzstyle{beam}=[draw, minimum height=0.6cm, anchor=base, text height=5, text depth=0, minimum width=1.5cm,thin, rounded corners, line width=0.03cm]
@@ -139,8 +141,10 @@
     \draw[->] (G-3-4.east) -> (G-3-5.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-5.south east);
 }
-         \node[left=0.2cm of G]{K = 3};
-         \node[below=0.1cm of G]{T};
+         \node[yshift=0.7cm, left=0.2cm of G]{k = 1};
+         \node[left=0.2cm of G]{k = 2};
+         \node[yshift=-0.7cm, left=0.2cm of G]{k = 3};
+         \node[below=0.1cm of G]{t};
 
 \end{scope}
 \end{tikzpicture}
@@ -153,11 +157,11 @@
 
 \visible<7->{
    \begin{enumerate}
-   \item Compute the score of every possible next word.
-     \[f(y_t, y_{1:t-1}^{(k)}) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x) \]
+   \item Compute the score of every hypothesis $k$ and possible next word $y_t$, 
+     \[f_{\theta}(\langle y_t, y_{1:t-1}^{(k)}\rangle, x) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x) \]
      \pause
-   \item Prune to only the $K$ highest-scoring,
-     \[y_{1:t}^{(1:K)} \gets K\argmax_{y_{1:t}} f(y_t, y_{1:t-1}^{(k)})\]
+   \item Prune to only the $K$ highest-scoring of ($K \times \text{vocab}$) choices, 
+     \[y_{1:t}^{(1:K)} \gets K\argmax_{y_t, k} f_{\theta}(\langle y_t, y_{1:t}^{(k)} \rangle, x)\]
    \end{enumerate}
 }
 
@@ -192,7 +196,7 @@
 
 %    \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
 %     \node<1->(G-1-1){a}; & \node<2->(G-1-2){red}; & \node<3->(G-1-3){dog}; & \node<4->(G-1-4){smells}; & \node<5->(G-1-5){home};  & \node<6->(G-1-6){today}; \\
-%     \node<1->(G-2-1){the}; & \node<2->(G-2-2){dog}; & \node<3->(G-2-3){dog}; & \node<4->(G-2-4){barks}; & \node<5->(G-2-5){quickly}; & \node<6->(G-2-6){Friday}; \\
+%     \node<1->(G-2-1){the}; & \node<2->(G-2-2){dog}; & \nodek<3->(G-2-3){dog}; & \node<4->(G-2-4){barks}; & \node<5->(G-2-5){quickly}; & \node<6->(G-2-6){Friday}; \\
 %     \node<1->(G-3-1){red}; & \node<2->(G-3-2){blue}; & \node<3->(G-3-3){cat}; &  \node<4->(G-3-4){runs}; & \node<5->(G-3-5){straight}; & \node<6->(G-3-6){now}; \\    };
 
 %     \only<2->{
@@ -245,9 +249,14 @@
 % \end{frame}
 
 
-\begin{frame}{Theoretical Issues with Multiclass Training for Generation}
-  \begin{enumerate}
+\begin{frame}{Core Issue}
 
+  \begin{center}
+    Multiclass Training $\Rightarrow$ Structured Generation ?
+  \end{center}
+
+  \pause
+  \begin{enumerate}
   \item Exposure Bias
     \begin{itemize}
     \item Training conditions on true history, but generation uses predicted history.
@@ -272,26 +281,26 @@
   \end{enumerate}
 \end{frame}
 
-\begin{frame}{Beam Search Optimization}
+% \begin{frame}{Beam Search Optimization}
 
-  \textbf{Strategy:} Modify training to target each issue.
+%   \textbf{Strategy:} Modify training to target each issue.
 
-  \begin{itemize}
-  \item Exposure Bias, Label Bias, Metric Bias
+%   \begin{itemize}
+%   \item Exposure Bias, Label Bias, Metric Bias
 
-  \end{itemize}
-\air
-\air
+%   \end{itemize}
+% \air
+% \air
 
-  \textbf{Applications:}
+%   \textbf{Applications:}
 
-  \begin{enumerate}
-  \item Improvements in training with less supervision.
-    \air
-  \item  Effective methods for downscaling translation models.
-    \air
-  \end{enumerate}
-\end{frame}
+%   \begin{enumerate}
+%   \item Improvements in training with less supervision.
+%     \air
+%   \item  Effective methods for downscaling translation models.
+%     \air
+%   \end{enumerate}
+% \end{frame}
 
 
 % \begin{frame}{\structure{Related Work:} Modify training data}
@@ -335,20 +344,21 @@
 
 \begin{frame}{Modification 1: Beam Search at Training}
 
-  \textbf{Goal:}  Fix Exposure Bias
+  \textbf{Fix:} Exposure Bias
     \begin{itemize}
-    \item Train taking prediction into account.
+    \item Take prediction algorithm into account during training.
     \end{itemize}
     \air
     \pause
 
-   \textbf{Proposed Fix:}
-
+   \begin{center}
+     \includegraphics[width=8cm, clip, trim={0cm 3cm 0cm 1cm}]{out-4}
+   \end{center}
    \begin{itemize}
-   \item Run our beam search procedure during training (structured prediction)
+   \item Run our beam search procedure during training (structured training)
      \air
 
-   \item Update parameters only when true sequence becomes impossible to recover.
+   \item Loss tied to  mistakes, e.g. true sequence $\hat{y}_{1:t}$ is \textit{violated} by $y^{(K)}_{1:t}$ worst beam 
    \end{itemize}
    % \begin{enumerate}
    % \item Compute the score of every possible next word.
@@ -379,9 +389,9 @@
 \end{frame}
 
 \begin{frame}{Modification 2: Global Scoring Function  }
-  \textbf{Goal:}  Fix Label Bias
+  \textbf{Fix:}  Label Bias
     \begin{itemize}
-    \item Use a direct global scoring function.
+    \item Use a global sequence scoring function.
     \end{itemize}
     \pause
 
@@ -393,47 +403,73 @@
 
     \air
 
-  \textbf{Proposed Fix:}
+  % \textbf{Proposed Fix:}
+  \begin{center}
+    $f(y_{1:t}, x; \theta)= \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]$
+
+    \includegraphics[width=0.5\textwidth, trim={0cm 18cm 0cm 0cm}, clip]{rnnlm6}
+  \end{center}
+
 
   \begin{itemize}
-  \item Replace $ \log p(y_{t} | y_{1:t-1}, x; \theta)$ with
-    a directly learned function $f(y_{1:t}, x; \theta)$
+  \item Replace local $ \log p(y_{t} | y_{1:t-1}, x; \theta)$ with
+    a global scoring model $f_{\theta}(y_{1:t}, x)$.
   \end{itemize}
   \air
 
-  \begin{center}
-    \includegraphics[width=0.5\textwidth, trim={0cm 18cm 0cm 0cm}, clip]{rnnlm6}
-  \end{center}
+
+  
 \end{frame}
 
 
 
 \begin{frame}{Modification 3: Train with Margin}
+  
+  \textbf{Fix:} Metric Bias
+  \begin{itemize}
+  \item Incorporate a metric specific $\Delta$ term, e.g. n-gram mismatch
+  \end{itemize}
+  \air
+  \pause
+  
+  \[ \mathcal{L}(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{(K)}) \left[1 - f( \hat{y}_{1:t}, x; \theta) +  f(y_{1:t}^{(K)}, x;\theta) \right] \]
+  
+  \begin{itemize}
+  \item Loss if true sequence $\hat{y}_{1:t}$ falls within a margin of worst beam sequence $y^{(K)}_{1:t}$
+  \item Slack-rescaled margin takes problem-specific $\Delta$ into account
+  \end{itemize}
+  
+\end{frame}
 
-  \textbf{Goal:} Fix Metric Bias
-    \begin{itemize}
-    \item Incorporate a problem specific cost, e.g. ngrams
-    \end{itemize}
-\air
-\pause
+\begin{myverbbox}{\sTW}
+ { \cal K } ^ { L } ( \sigma = 2 ) = \left( \begin{array}
+{ c c } { - \frac { d ^ { 2 } } { d x ^ { 2 } } + 4 - \frac
+ { 3 } { \operatorname { c o s h } ^ { 2 } x } } \& { \frac
+ { 3 } { d x ^ { 2 } } }  { \frac { 3 } { \operatorname
+ { c o s h } ^ { 2 } x } } \& { - \frac { d ^ { 2 } }
+{ d x ^ { 2 } } + 4 - \frac { 3 } { \operatorname { c o s h }
+^ { 2 } x } }  \end{array} \right) \qquad
+\end{myverbbox}
 
-    \textbf{Proposed Fix:} Use a structured SVM-style training loss:
-    \begin{itemize}
-    \item Margin between ground truth sequence $\hat{y}$ and worst predicted sequence $y^{(K)}$
-    \end{itemize}
-    \begin{align*}
-      \mathcal{L}&(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{(K)}) \left[1 - f(\hat{y}_t, \hat{y}_{1:t-1}, x) +  f(y_t^{(K)}, y_{1:t-1}^{(K)}, x) \right]
-    \end{align*}
+\begin{frame}{Extension: Training with Hard Constraints}
+  
 
-    \begin{itemize}
-    \item Slack-rescaled, margin-based sequence criterion, at each time step.
-    \item $\Delta$ is a task specific sequence cost, i.e. ngram-mismatch
-    \end{itemize}
+  \textbf{Bonus:} Hard Constraints
 
-  \end{frame}
+  \begin{itemize}
+  \item Beam Search Optimization allows users to enforce hard constraints at training. 
+  \end{itemize}
 
-\begin{frame}{Extension: Train with Constraints}
-  (Constraints)
+  \textbf{Example:} Code generation with a known grammar,
+    \begin{center}
+      \begin{tikzpicture}
+        \node (b)[xshift=6cm, rectangle, scale=0.6,
+        draw,thick,fill=blue!0,text width=32em, rounded corners, inner
+        sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
+          \sTW };
+
+    \end{tikzpicture}
+  \end{center}
 
 \end{frame}
 
@@ -543,8 +579,8 @@
 % \end{align*}
 
   \begin{itemize}
-  \item \textcolor{orange}{True}: ground-truth sequence $\hat{y}$
-  \item<4> \textcolor{red}{Predicted}: lowest-scoring prefix  $y^{(K)}$
+  \item \textcolor{orange}{True}: ground-truth sequence $\hat{y}_{1:t}$
+  \item<4-> \textcolor{red}{Predicted}: lowest-scoring violating sequence  $y_{1:t}^{(K)}$
   \end{itemize}
   % Strategy: if true falls off beam, restart from ground truth (learning as search optimization \cite{daume05learning})
 \end{frame}
@@ -638,10 +674,10 @@
   \vspace{2cm}
   \vspace{1cm}
 
-  \begin{itemize}
-  \item Margin gradients are sparse, only grey sequences get updates.
-  \item Backprop as efficient as standard models.
-  \end{itemize}
+  % \begin{itemize}
+  % \item Margin gradients are sparse, only grey sequences get updates.
+  % \item Backprop as efficient as standard models.
+  % \end{itemize}
 \end{frame}
 
 % \begin{frame}
@@ -723,27 +759,27 @@
 % \begin{table}
 %   \centering
 %   \hspace*{-0.3cm}\begin{tabular}{lccc}
-%     \toprule
-    % & \multicolumn{3}{c}{Dependency Parsing (UAS/LAS) } \\
-    % % \midrule
-    % seq2seq & \textbf{87.33/82.26} & 88.53/84.16 & 88.66/84.33\\
-    % BSO & 86.91/82.11 & 91.00/\textbf{87.18} & 91.17/\textbf{87.41} \\
-    % BSO-Con & 85.11/79.32 & \textbf{91.25}/86.92 & \textbf{91.57}/87.26 \\
+    % \toprule
+    & \multicolumn{3}{c}{Dependency Parsing (UAS) } \\
+    \midrule
+    Encoder-Decode & \textbf{87.33} & 88.53 & 88.66\\
+    Beam Search Optimization & 86.91 & 91.00 & 91.17 \\
+    Beam Search Optimization-Constraints & 85.11 & \textbf{91.25} & \textbf{91.57} \\
     % \midrule
     % Andor & 93.17/91.18 & - & - \\
     % \bottomrule
 
-    % \midrule
+    \midrule
     \pause
     & \multicolumn{3}{c}{Machine Translation (BLEU) } \\
     % &  $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\
-    % \midrule
+    \midrule
     Encoder-Decoder & 22.53 & 24.03 & 23.87 \\
     Beam-Search Optimization, $\Delta$  & \textbf{23.83} & \textbf{26.36} & \textbf{25.48} \\
     % \midrule
-    XENT & 17.74 & $\leq$ 20.5 & $\leq$ 20.5 \\
-    DAD & 20.12 & $\leq$ 22.5 & $\leq$ 23.0 \\
-    MIXER & 20.73 & - & $\leq$ 22.0 \\
+    % XENT & 17.74 & $\leq$ 20.5 & $\leq$ 20.5 \\
+    % DAD & 20.12 & $\leq$ 22.5 & $\leq$ 23.0 \\
+    % MIXER & 20.73 & - & $\leq$ 22.0 \\
     \bottomrule
   \end{tabular}
   \label{tab:mtfinal}
@@ -815,7 +851,7 @@
 from a \textit{teacher} model. %\cite{Bucila2006,Ba2014,Hinton2015}.
 
 \begin{center}
-  \includegraphics[width=8cm]{distill}
+  \includegraphics[width=10cm]{distill}
 \end{center}
 \end{itemize}
 
@@ -873,7 +909,7 @@ from a \textit{teacher} model. %\cite{Bucila2006,Ba2014,Hinton2015}.
 % \end{frame}
 
 
-\begin{frame}{Multiclass Style: Word-Level Knowledge Distillation}
+\begin{frame}{Word-Level Knowledge Distillation (Multiclass)}
 
   \begin{center}
     \includegraphics[trim={0.2cm 0.2cm 0.2cm 3cm}, clip,
@@ -997,9 +1033,11 @@ Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ \\%&   $6.7$ &  $1.3\%$ \\
 \midrule
 \pause
 $2 \times 500$ \\
+\pause
 Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ \\%&  $8.2$ & $0.9\%$  \\
 \hspace{1mm} Word-KD  & $15.4$ & $+0.7$& $17.7$& $+0.1$\\%&  $8.0$ & $1.0\%$  \\
-% \hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$\\%&  $22.7$ & $                                                                              16.9\%$ \\
+\pause
+% \hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$\\%&  $22.7$ & $                     \pause                                                         16.9\%$ \\
 \hspace{1mm} Seq-KD  & $18.9$ & $+\mathbf{4.2}$&$19.3$ & $+\mathbf{1.7}$ \\ %&  $15.8$ & $7.6\%$  \\
 % \midrule
 % \pause
