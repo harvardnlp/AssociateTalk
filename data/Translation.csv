@@ -18,9 +18,4 @@
 20,ByteNet,23.75,Neural Machine Translation in Linear Time,2016
 21,Denoising autoencoders (non-autoregressive),21.54,Deterministic Non-Autoregressive Neural Sequence Modeling by Iterative Refinement,2018
 22,Deep-Att,20.7,Deep Recurrent Models with Fast-Forward Connections for Neural Machine Translation,2016
-23,PBMT,20.7,,
-24,PBSMT + NMT,20.23,Phrase-Based & Neural Unsupervised Machine Translation,2018
-25,NAT +FT + NPD,19.17,Non-Autoregressive Neural Machine Translation,2017
-26,Seq-KD + Seq-Inter + Word-KD,18.5,Sequence-Level Knowledge Distillation,2016
-27,Unsupervised PBSMT,17.94,Phrase-Based & Neural Unsupervised Machine Translation,2018
-28,NSE-NSE,17.9,Neural Semantic Encoders,2016
+23,PBMT,20.7,2015,
