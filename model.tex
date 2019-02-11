@@ -84,12 +84,8 @@
   \textcolor{red}{Decoder}:
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t; \theta)} \]
 
-  Next Word Probability:
+  Scoring function:
   \[ p(y_{t}\  |\  y_{1:t-1}, x) = \softmax( \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]) \]
-
-  \pause
-
-  Generation Score:
   \[  f_{\theta}(y_{1:T}, x) =   \sum_{t=1}^T \log p(y_{t}\  |\  y_{1:t-1}, x; \theta) \]
 
 \end{frame}

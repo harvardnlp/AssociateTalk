@@ -68,7 +68,7 @@ here describes the form and structure of the model g and its parameters theta.  
       \node [rounded corners, above =(0.2cm) of gal] {$f_{\theta}$};
 
       \node (a) [rectangle, yshift=1cm, xshift=-5cm, scale=0.8, draw,thick,fill=blue!0,text width=16em, rounded corners, inner sep =5pt, minimum height=1em] {
-          Yalitza Aparicio had just finished her teaching degree and didn't yet have a job when the Mexican director Alfonso Cuaron held a casting call in her home of Tlaxiaco, Oaxaca, for the lead role in his semi-autobiographical drama, ``Roma.''
+        Yalitza Aparicio acababa de graduarse de una escuela para maestros y aun no tenia empleo cuando el proceso de busqueda de actrices para la ultima pelicula de Alfonso Cuaron llego a su natal Tlaxiaco, Oaxaca.
 };
       \path[draw, ->] (a) --  (a -|  gal.west) ;
 
@@ -77,7 +77,8 @@ here describes the form and structure of the model g and its parameters theta.  
 
       \visible{
         \node(b) [xshift=4.5cm, yshift=-1cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
-        Yalitza Aparicio acababa de graduarse de una escuela para maestros y aun no tenia empleo cuando el proceso de busqueda de actrices para la ultima pelicula de Alfonso Cuaron llego a su natal Tlaxiaco, Oaxaca.
+          Yalitza Aparicio had just finished her teaching degree and didn't yet have a job when the Mexican director Alfonso Cuaron held a casting call in her home of Tlaxiaco, Oaxaca, for the lead role in his semi-autobiographical drama, ``Roma.''
+
           \par};
 
         \node [rounded corners, above = (0.2cm) of b] {$y_{1:T}$};
@@ -87,13 +88,6 @@ here describes the form and structure of the model g and its parameters theta.  
   \end{center}
 \end{frame}
 
-
-\begin{frame}{Translation Performance}
-
-  \begin{center}
-     \includegraphics[width=10cm]{wmt}
-  \end{center}
-\end{frame}
 
 
 \begin{frame}{Machine Learning for Text Generation}
@@ -122,7 +116,7 @@ here describes the form and structure of the model g and its parameters theta.  
   \item Possible output text \alert<3>{$y_{1:T}$}, \textit{how to say it}
     \air
     \pause
-  \item Scoring Model \alert<4>{$f_{\theta}$}, with parameters $\theta$ learned from data
+  \item Scoring function \alert<4>{$f_{\theta}$}, with parameters $\theta$ learned from data
   \end{itemize}
 
 \end{frame}
@@ -151,15 +145,21 @@ here describes the form and structure of the model g and its parameters theta.  
   \textbf{Evaluation:}
 
   \begin{itemize}
-  \item Target $\hat{y}$: \texttt{[Yalitza Aparicio had] just
+  \item Truth: \texttt{[Yalitza Aparicio had] just
       [finished her] teaching [degree]}
 
     \air  
-  \item Predict $y^*$: \texttt{[Yalitza Aparicio had] recently [finished
+  \item Prediction: \texttt{[Yalitza Aparicio had] recently [finished
       her] [degree]} 
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Translation Performance}
+
+  \begin{center}
+     \includegraphics[width=10cm]{wmt}
+  \end{center}
+\end{frame}
 
 \begin{frame}{Sentence Summarization }
   \begin{center}
@@ -397,4 +397,10 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
     \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Temporary}{videos/latex.mp4}
   \end{center}
 
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{Mathpix}
+  \end{center}
 \end{frame}

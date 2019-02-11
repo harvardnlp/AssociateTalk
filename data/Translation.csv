@@ -1,0 +1,26 @@
+3,DynamicConv,29.7,Pay Less Attention with Lightweight and Dynamic Convolutions,2019
+4,Transformer Big,29.3,Scaling Neural Machine Translation,2018
+5,Evolved Transformer Big,29.3,The Evolved Transformer,2019
+6,Transformer (big) + Relative Position Representations,29.2,Self-Attention with Relative Position Representations,2018
+7,Transformer Big with FRAGE,29.11,FRAGE: Frequency-Agnostic Word Representation,2018
+8,Weighted Transformer (large),28.9,Weighted Transformer Network for Machine Translation,2017
+9,LightConv,28.9,Pay Less Attention with Lightweight and Dynamic Convolutions,2019
+10,universal transformer base,28.9,Universal Transformers,2018
+11,Evolved Transformer Base,28.4,The Evolved Transformer,2019
+12,Transformer Big,28.4,Attention Is All You Need,2017
+13,Transformer + SRU,28.4,Simple Recurrent Units for Highly Parallelizable Recurrence,2017
+14,Transformer Base,27.3,Attention Is All You Need,2017
+15,ConvS2S (ensemble),26.4,Convolutional Sequence to Sequence Learning,2017
+16,GNMT+RL,26.3,Google's Neural Machine Translation System: Bridging the Gap between Human and Machine Translation,2016
+17,SliceNet,26.1,Depthwise Separable Convolutions for Neural Machine Translation,2017
+18,MoE,26.03,Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer,2017
+19,ConvS2S,25.16,Convolutional Sequence to Sequence Learning,2017
+20,ByteNet,23.75,Neural Machine Translation in Linear Time,2016
+21,Denoising autoencoders (non-autoregressive),21.54,Deterministic Non-Autoregressive Neural Sequence Modeling by Iterative Refinement,2018
+22,Deep-Att,20.7,Deep Recurrent Models with Fast-Forward Connections for Neural Machine Translation,2016
+23,PBMT,20.7,,
+24,PBSMT + NMT,20.23,Phrase-Based & Neural Unsupervised Machine Translation,2018
+25,NAT +FT + NPD,19.17,Non-Autoregressive Neural Machine Translation,2017
+26,Seq-KD + Seq-Inter + Word-KD,18.5,Sequence-Level Knowledge Distillation,2016
+27,Unsupervised PBSMT,17.94,Phrase-Based & Neural Unsupervised Machine Translation,2018
+28,NSE-NSE,17.9,Neural Semantic Encoders,2016

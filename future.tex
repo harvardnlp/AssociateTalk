@@ -1,16 +1,16 @@
 
-\begin{frame}{Talk Outline}
-  \begin{enumerate}
+\begin{frame}{ Outline}
+  \begin{itemize}
   \item Background: Core Model and Implementation
     \air
-  \item Work 1: Rethinking Model Training (\textit{Beam Search Optimization})
+  \item Work 1: Rethinking Model Training 
     \air
 
-  \item \textbf{Work 2:} Rethinking  Generation  (\textit{Learning Neural Templates})
+  \item \textbf{Work 2: Rethinking  Generation  (\textit{Learning Neural Templates})}
     \air
 
-  \item Future Directions
-  \end{enumerate}
+  \item Challenges: Text Generation and Deep Learning
+  \end{itemize}
 \end{frame}
 
 
@@ -38,7 +38,7 @@
     \begin{tikzpicture}
 
       \node (gal) {\includegraphics[width=1.5cm]{phone}};
-      \node [rounded corners, above =(0.2cm) of gal] {$\theta$ (HSMM)};
+      \node [rounded corners, above =(0.2cm) of gal] {$f_\theta$};
       \node (a) [rectangle, yshift=1cm, xshift=-5cm, scale=0.7, draw,thick,fill=blue!0,text width=11em, rounded corners, inner sep =5pt, minimum height=1em] {
         \small
         \begin{tabular}[]{lc}
@@ -251,7 +251,7 @@ p(y, z\ |\ x \param \theta)
 
 \end{frame}
 
-\begin{frame}{Preliminary Example 1: Mixture of Decoders }
+\begin{frame}{Preliminary Model 1: Sentence Clusters }
 
 Generative process:
 \begin{enumerate}
@@ -366,7 +366,7 @@ Generative process:
 % \end{frame}
 
 
-\begin{frame}{Preliminary Example 2: Neural Copy Models}
+\begin{frame}{Preliminary Model 2: Neural Copy Models}
 %{(Gu et al, 2016) (Gulcehre et al, 2016)}
 
 Generative process:
@@ -395,7 +395,7 @@ Example:
 \end{frame}
 
 
-\begin{frame}{Base Model:  Hidden Semi-Markov Model}
+\begin{frame}{Classical Model:  Hidden Semi-Markov Model}
 
   \air
   \begin{itemize}

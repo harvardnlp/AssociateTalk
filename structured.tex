@@ -1,16 +1,16 @@
-\begin{frame}{Talk Outline}
+\begin{frame}{Outline}
 
-  \begin{enumerate}
-  \item Background: Core Model and Implementation
+  \begin{itemize}
+  \item Model: Structure and Implementation
     \air
-  \item \textbf{Work 1}: Rethinking Model Training (\textit{Beam Search Optimization})
-    \air
-
-  \item Work 2: Rethinking  Generation  (\textit{Learning Neural Templates})
+  \item \textbf{Work 1: Rethinking Training (\textit{Beam Search Optimization})}
     \air
 
-  \item Future Directions
-  \end{enumerate}
+  \item Work 2: Rethinking Generation
+    \air
+
+  \item Challenges: Text Generation and Deep Learning
+  \end{itemize}
 \end{frame}
 
 
@@ -37,26 +37,34 @@
 
 
 \begin{frame}{Beam Search Optimization}
-  Research Goal: Can we learn parameters $\theta$ to target text generation problems?
+  \begin{center}
+    Can we learn parameters $\theta$ to better target text generation
+    applications?
+  \end{center}
 
-    \[ {y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} {f_{\theta}}(y_{1:T}, \tikzmark{input}{x}) \]
+    Training Setup: 
+    \begin{itemize}
+    \item $(x, \hat{y}_{1:T})$ - input, output sentence pair
+    \item $\cal L(\theta)$ - loss function 
+    \item $f_{\theta}$ - learned scoring function
+    \end{itemize}
+    
 
+  % \begin{itemize}
 
-  \begin{itemize}
+  % \item Input {$x$},  \textit{what to talk about}
+  %   \air
 
-  \item Input {$x$},  \textit{what to talk about}
-    \air
+  % \item Output text {$y^*_{1:T}$}, \textit{how to say it}
+  %   \air
 
-  \item Output text {$y^*_{1:T}$}, \textit{how to say it}
-    \air
-
-  \item Scoring model {$f_\theta$}
-  \end{itemize}
+  % \item Scoring function {$f_\theta$}
+  % \end{itemize}
 
 \end{frame}
 
 
-\begin{frame}{Training Encoder-Decoder}
+\begin{frame}{Baseline: Training Encoder-Decoder}
   Parameters $\theta$ are trained to score the next word given the \textit{true} history, $\hat{y}_{1:t-1}$
 
   \begin{center}
@@ -65,10 +73,9 @@
   \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-7}
   % \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-8}
   \end{center}
-  \pause
 
-  Training loss is identical to \textcolor{redpurple}{multiclass classification} 
-  \[ {\cal L}(\theta) = -\sum_{t} \log p(y_t |  \hat{y}_{1:t-1}, x; \theta) \]
+  Training loss is identical to \textcolor{redpurple}{multiclass classification}, 
+  \[ {\cal L}(\theta) = -\sum_{t} \log p(\hat{y}_t\ |\  \hat{y}_{1:t-1}, x; \theta) \]
 \end{frame}
 
 \begin{frame}{Generating with Encoder-Decoder}
@@ -83,7 +90,7 @@
   \end{center}
 
   Generation aims to maximize over all sequences,
-  \[ y^*_{1:T} =d \argmax_{y_{1:T}} f_{\theta}(y_{1:T}, x) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, x; \theta) \]
+  \[ y^*_{1:T} =\argmax_{y_{1:T}} f_{\theta}(y_{1:T}, x) = \argmax_{y_{1:T}} \sum_{t} \log p(y_{t} | y_{1:t-1}, x; \theta) \]
   % \pause
   % Intractable to solve exactly $O(\text{\#vocab} ^T)$
 
@@ -249,7 +256,7 @@
 % \end{frame}
 
 
-\begin{frame}{Core Issue}
+\begin{frame}{Core Issues}
 
   \begin{center}
     Multiclass Training $\Rightarrow$ Structured Generation ?
@@ -276,9 +283,9 @@
     \begin{itemize}
     \item Training uses multiclass classification, but evaluation uses n-gram match.
     \end{itemize}
-    \air
-
   \end{enumerate}
+  \pause
+  \textbf{Strategy:} Modify training to fix these issues. 
 \end{frame}
 
 % \begin{frame}{Beam Search Optimization}
@@ -405,7 +412,7 @@
 
   % \textbf{Proposed Fix:}
   \begin{center}
-    $f(y_{1:t}, x; \theta)= \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]$
+    $f_{\theta}(y_{1:t}, x)= \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]$
 
     \includegraphics[width=0.5\textwidth, trim={0cm 18cm 0cm 0cm}, clip]{rnnlm6}
   \end{center}
@@ -427,15 +434,15 @@
   
   \textbf{Fix:} Metric Bias
   \begin{itemize}
-  \item Incorporate a metric specific $\Delta$ term, e.g. n-gram mismatch
+  \item Incorporate a metric specific term, e.g. n-gram mismatch
   \end{itemize}
   \air
   \pause
   
-  \[ \mathcal{L}(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{(K)}) \left[1 - f( \hat{y}_{1:t}, x; \theta) +  f(y_{1:t}^{(K)}, x;\theta) \right] \]
+  \[ \mathcal{L}(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{(K)}) \left[1 - f_{\theta}( \hat{y}_{1:t}, x) +  f_{\theta}(y_{1:t}^{(K)}, x) \right] \]
   
   \begin{itemize}
-  \item Loss if true sequence $\hat{y}_{1:t}$ falls within a margin of worst beam sequence $y^{(K)}_{1:t}$
+  \item Positive if true sequence $\hat{y}_{1:t}$ within margin of worst beam sequence $y^{(K)}_{1:t}$
   \item Slack-rescaled margin takes problem-specific $\Delta$ into account
   \end{itemize}
   
@@ -1033,7 +1040,6 @@ Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ \\%&   $6.7$ &  $1.3\%$ \\
 \midrule
 \pause
 $2 \times 500$ \\
-\pause
 Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ \\%&  $8.2$ & $0.9\%$  \\
 \hspace{1mm} Word-KD  & $15.4$ & $+0.7$& $17.7$& $+0.1$\\%&  $8.0$ & $1.0\%$  \\
 \pause

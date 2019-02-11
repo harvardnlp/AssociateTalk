@@ -1,5 +1,5 @@
 
-\begin{frame}{Talk Outline}
+\begin{frame}{Outline}
   \begin{center}
     \textbf{Goal}
 
@@ -11,15 +11,15 @@
 
 
   \begin{itemize}
-  \item Background: Core Model and Implementation
+  \item \textbf{Model: Structure and Implementation}
     \air
-  \item Work 1: Rethinking Model Training (\textit{Beam Search Optimization})
-    \air
-
-  \item Work 2: Rethinking  Generation  (\textit{Learning Neural Templates})
+  \item Work 1: Rethinking  Training
     \air
 
-  \item Future Challenges 
+  \item Work 2: Rethinking  Generation
+    \air
+
+  \item Challenges: Text Generation and Deep Learning
   \end{itemize}
 \end{frame}
 
@@ -41,7 +41,7 @@
 
 
     \visible{
-    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class} $f(\cdot; \theta)$};
+    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class} $f_{\theta}$};
     \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model]{Parsing};
     \node(b) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of a]{CRF Tagging};
     \node(c) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of b]{Alignment EM};
@@ -81,7 +81,7 @@
 
 
    \visible{
-    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class} $f(\cdot; \theta)$};
+    \node(model) [minimum height=2em, right= of task, xshift=5cm]{\textbf{Model Class} $f_{\theta}$};
     \node(a) [draw, rounded corners, minimum width=10em, minimum height=3em, below= of model, yshift=-2.5cm]{Neural Networks};
 
     \node<3>(rnn)[below=of a]{\includegraphics[width=4cm]{rnnlm6}};
