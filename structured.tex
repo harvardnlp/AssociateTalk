@@ -11,6 +11,13 @@
 
   \item Challenges: Text Generation and Deep Learning
   \end{itemize}
+
+  \begin{center}
+    Can we learn parameters $\theta$ to better target text generation
+    applications?
+  \end{center}
+
+
 \end{frame}
 
 
@@ -36,36 +43,32 @@
 % \end{frame}
 
 
-\begin{frame}{Beam Search Optimization}
-  \begin{center}
-    Can we learn parameters $\theta$ to better target text generation
-    applications?
-  \end{center}
+% \begin{frame}{Beam Search Optimization}
 
-    Training Setup: 
-    \begin{itemize}
-    \item $(x, \hat{y}_{1:T})$ - input, output sentence pair
-    \item $\cal L(\theta)$ - loss function 
-    \item $f_{\theta}$ - learned scoring function
-    \end{itemize}
+%     % Training Setup: 
+%     % \begin{itemize}
+%     % \item $(x, \hat{y}_{1:T})$ - input, output sentence pair
+%     % \item $\cal L(\theta)$ - loss function 
+%     % \item $f_{\theta}$ - learned scoring function
+%     % \end{itemize}
     
 
-  % \begin{itemize}
+%   % \begin{itemize}
 
-  % \item Input {$x$},  \textit{what to talk about}
-  %   \air
+%   % \item Input {$x$},  \textit{what to talk about}
+%   %   \air
 
-  % \item Output text {$y^*_{1:T}$}, \textit{how to say it}
-  %   \air
+%   % \item Output text {$y^*_{1:T}$}, \textit{how to say it}
+%   %   \air
 
-  % \item Scoring function {$f_\theta$}
-  % \end{itemize}
+%   % \item Scoring function {$f_\theta$}
+%   % \end{itemize}
 
-\end{frame}
+% \end{frame}
 
 
 \begin{frame}{Baseline: Training Encoder-Decoder}
-  Parameters $\theta$ are trained to score the next word given the \textit{true} history, $\hat{y}_{1:t-1}$
+  Parameters $\theta$ are trained to score the next word given the \textit{true} history, ($\hat{y}_{1:t-1}$)
 
   \begin{center}
   \includegraphics[height=3.5cm, trim={12cm 3cm 7cm 0.5cm}, clip]{nmt-noattn-4}
@@ -79,7 +82,7 @@
 \end{frame}
 
 \begin{frame}{Generating with Encoder-Decoder}
-  Parameters $\theta$ are used to score the next word given \textit{any} history, $y_{1:t-1}$.
+  Parameters $\theta$ are used to score the next word given \textit{any} history, ($y_{1:t-1}$)
 
 
   \begin{center}
@@ -148,9 +151,10 @@
     \draw[->] (G-3-4.east) -> (G-3-5.west);
     \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-5.south east);
 }
-         \node[yshift=0.7cm, left=0.2cm of G]{k = 1};
-         \node[left=0.2cm of G]{k = 2};
-         \node[yshift=-0.7cm, left=0.2cm of G]{k = 3};
+         \node[yshift=0.7cm, left=0.2cm of G]{$y^{(1)}$};
+         \node(q)[left=0.2cm of G]{$y^{(2)}$};
+         \node[left=0.2cm of q]{$k$};
+         \node[yshift=-0.7cm, left=0.2cm of G]{$y^{(3)}$};
          \node[below=0.1cm of G]{t};
 
 \end{scope}
@@ -164,10 +168,10 @@
 
 \visible<7->{
    \begin{enumerate}
-   \item Compute the score of every hypothesis $k$ and possible next word $y_t$, 
+   \item For each $k$ in beam, example all possible next words $y_t$, 
      \[f_{\theta}(\langle y_t, y_{1:t-1}^{(k)}\rangle, x) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x) \]
      \pause
-   \item Prune to only the $K$ highest-scoring of ($K \times \text{vocab}$) choices, 
+   \item Prune ($K \times \text{vocab}$) expansions to top $K$, 
      \[y_{1:t}^{(1:K)} \gets K\argmax_{y_t, k} f_{\theta}(\langle y_t, y_{1:t}^{(k)} \rangle, x)\]
    \end{enumerate}
 }
@@ -256,7 +260,7 @@
 % \end{frame}
 
 
-\begin{frame}{Core Issues}
+\begin{frame}{Generation Training Issues}
 
   \begin{center}
     Multiclass Training $\Rightarrow$ Structured Generation ?
@@ -273,7 +277,7 @@
 
   \item Label Bias  %\cite{Lafferty2001}
     \begin{itemize}
-    \item Training is locally multiclass, but score is over entire sequences.
+    \item Score is locally multiclass, but  want to compare entire sequences.
     \end{itemize}
     \air
     \pause
@@ -281,11 +285,13 @@
 
   \item Metric Bias
     \begin{itemize}
-    \item Training uses multiclass classification, but evaluation uses n-gram match.
+    \item Training error is class accuracy, but evaluation uses n-gram match.
     \end{itemize}
   \end{enumerate}
   \pause
-  \textbf{Strategy:} Modify training to fix these issues. 
+  \begin{center}
+    \textbf{Strategy:} Modify model and training to target these issues.
+  \end{center}
 \end{frame}
 
 % \begin{frame}{Beam Search Optimization}
@@ -365,7 +371,7 @@
    \item Run our beam search procedure during training (structured training)
      \air
 
-   \item Loss tied to  mistakes, e.g. true sequence $\hat{y}_{1:t}$ is \textit{violated} by $y^{(K)}_{1:t}$ worst beam 
+   \item Loss tied to  mistakes, e.g. compare true sequence \textcolor{gold}{$\hat{y}_{1:t}$}  to \textcolor{red}{$y^{(K)}_{1:t}$ } worst in beam 
    \end{itemize}
    % \begin{enumerate}
    % \item Compute the score of every possible next word.
@@ -439,11 +445,11 @@
   \air
   \pause
   
-  \[ \mathcal{L}(\theta) = \sum_{t} \Delta(\hat{y}_{1:t}, y_{1:t}^{(K)}) \left[1 - f_{\theta}( \hat{y}_{1:t}, x) +  f_{\theta}(y_{1:t}^{(K)}, x) \right] \]
+  \[ \mathcal{L}(\theta) = \sum_{t} \Delta(\textcolor{gold}{\hat{y}_{1:t}}, \textcolor{red}{y_{1:t}^{(K)}}) \left[1 - f_{\theta}( \textcolor{gold}{\hat{y}_{1:t}}, x) +  f_{\theta}(\textcolor{red}{y_{1:t}^{(K)}}, x) \right] \]
   
   \begin{itemize}
-  \item Positive if true sequence $\hat{y}_{1:t}$ within margin of worst beam sequence $y^{(K)}_{1:t}$
-  \item Slack-rescaled margin takes problem-specific $\Delta$ into account
+  \item Positive if true sequence $\textcolor{gold}{\hat{y}_{1:t}}$ within margin of worst beam sequence $\textcolor{red}{y^{(K)}_{1:t}}$.
+  \item Slack-rescaled margin takes problem-specific $\Delta$ into account.
   \end{itemize}
   
 \end{frame}
@@ -460,14 +466,10 @@
 
 \begin{frame}{Extension: Training with Hard Constraints}
   
-
-  \textbf{Bonus:} Hard Constraints
-
-  \begin{itemize}
-  \item Beam Search Optimization allows users to enforce hard constraints at training. 
-  \end{itemize}
+  Beam Search Optimization supports hard constraints at training. 
 
   \textbf{Example:} Code generation with a known grammar,
+  \air
     \begin{center}
       \begin{tikzpicture}
         \node (b)[xshift=6cm, rectangle, scale=0.6,
@@ -586,7 +588,7 @@
 % \end{align*}
 
   \begin{itemize}
-  \item \textcolor{orange}{True}: ground-truth sequence $\hat{y}_{1:t}$
+  \item \textcolor{gold}{True}: ground-truth sequence $\hat{y}_{1:t}$
   \item<4-> \textcolor{red}{Predicted}: lowest-scoring violating sequence  $y_{1:t}^{(K)}$
   \end{itemize}
   % Strategy: if true falls off beam, restart from ground truth (learning as search optimization \cite{daume05learning})
@@ -742,7 +744,7 @@
 % \end{frame}
 
 
-\begin{frame}{Main Results}
+\begin{frame}{Results}
   \vspace{-0.2cm}
   \begin{table}
   \centering
@@ -757,7 +759,7 @@
     Beam Search Optimization     & 28.0 & 33.2 & 34.3 \\
     Beam Search Optimization-Constraints & \textbf{28.6} & \textbf{34.3} & \textbf{34.5} \\
     \midrule
-    \pause
+
 %   \end{tabular}
 %   \label{tab:wo}
 % \end{table}
@@ -777,7 +779,7 @@
     % \bottomrule
 
     \midrule
-    \pause
+
     & \multicolumn{3}{c}{Machine Translation (BLEU) } \\
     % &  $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\
     \midrule
@@ -844,23 +846,12 @@
 
 \begin{frame}{Application: Model Compression}
   \research{\cite{Kim2016a}}
-
-  \textbf{Goal:} Shrink the size of text generation models.
-
-% \begin{frame}
-%   \centerline{\structure{Related Work: Compressing Deep Models}}
-% \air
-
-\begin{itemize}
-% \item \textbf{Pruning}: Prune weights based on importance criterion
-% \cite{LeCun1990,Han2016}
-\item Knowledge Distillation: Train a \textit{student} model to learn
+ Knowledge Distillation: Train a \textit{student} model to learn
 from a \textit{teacher} model. %\cite{Bucila2006,Ba2014,Hinton2015}.
 
 \begin{center}
   \includegraphics[width=10cm]{distill}
 \end{center}
-\end{itemize}
 
 
 
@@ -916,7 +907,7 @@ from a \textit{teacher} model. %\cite{Bucila2006,Ba2014,Hinton2015}.
 % \end{frame}
 
 
-\begin{frame}{Word-Level Knowledge Distillation (Multiclass)}
+\begin{frame}{Baseline: Word-Level Knowledge Distillation (Multiclass)}
 
   \begin{center}
     \includegraphics[trim={0.2cm 0.2cm 0.2cm 3cm}, clip,
@@ -1065,10 +1056,10 @@ Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ \\%&  $8.2$ & $0.9\%$  \\
 % \end{frame}
 
 
-\begin{frame}{Application}
+\begin{frame}{Scaling Translation Models}
 
   \begin{center}
-    \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Temporary}{videos/translate.mp4}
+    \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Scaling Video}{videos/translate.mp4}
   \end{center}
 \end{frame}
 

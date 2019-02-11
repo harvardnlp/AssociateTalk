@@ -84,7 +84,7 @@
   \textcolor{red}{Decoder}:
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t; \theta)} \]
 
-  Scoring function:
+  \textbf{Scoring function:}
   \[ p(y_{t}\  |\  y_{1:t-1}, x) = \softmax( \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]) \]
   \[  f_{\theta}(y_{1:T}, x) =   \sum_{t=1}^T \log p(y_{t}\  |\  y_{1:t-1}, x; \theta) \]
 
@@ -99,10 +99,14 @@
   \textbf{Language} : Well-balanced parentheses (Dyck-1 Language) with  nesting-levels,
   \begin{itemize}
   \item Vocabulary: ( ) 0 1 2 3 4
-  \item Example Good String: 0 ( ( 2 ) ( ( ( 4 4 4 ) 3 ) $\ldots$
-  \item Example Bad String: 0 ) ( 3 ) ) ( (   $\ldots$
   \end{itemize}
-  % Proxy Question: What does $\mathbf{h}_t$ look like over time?
+
+
+  \[\structure{f(\text{``0 ( ( 2 ) ( ( ( 4 4 4 ) 3 ) $\ldots$''}, x)}\] 
+  \[>\]
+  \[f(\text{``0 ) ( 3 ) ) ( ( ) 2 ( ) ) 2''$\dots$}, x) \]
+
+
 \end{frame}
 
 \begin{frame}{LSTMVis - Parenthesis Language}
@@ -110,7 +114,7 @@
   \vspace{-0.25cm}
 
   \begin{center}
-    \movie[width=\textwidth, height=0.85\textheight, poster, showcontrols]{Temporary}{videos/lstmvis1.mp4}
+    \movie[width=\textwidth, height=0.85\textheight, poster, showcontrols]{LSTMVis}{videos/lstmvis1.mp4}
   \end{center}
 \end{frame}
 
@@ -130,23 +134,22 @@
 %   % Proxy Question: What does $\mathbf{h}_t$ look like over time?
 % \end{frame}
 
-\begin{frame}{LSTMVis - Parenthesis Language}
-  \research{\citet{Strobelt2016} w/ IBM}
-  \vspace{-0.25cm}
+% \begin{frame}{LSTMVis - Parenthesis Language}
+%   \research{\citet{Strobelt2016} w/ IBM}
+%   \vspace{-0.25cm}
 
-  \begin{center}
-    \movie[width=\textwidth, height=0.85\textheight, poster, showcontrols]{Temporary}{videos/lstmvis1.mp4}
-  \end{center}
-\end{frame}
+%   \begin{center}
+%     \movie[width=\textwidth, height=0.85\textheight, poster, showcontrols]{LSTMVis}{videos/lstmvis1.mp4}
+%   \end{center}
+% \end{frame}
 
 
 \begin{frame}{LSTMVis - Natural Language}
   \research{\citet{Strobelt2016} w/ IBM}
   \vspace{-0.25cm}
 
-
   \begin{center}
-    \movie[width=\textwidth, height=0.85\textheight, poster, showcontrols]{Temporary}{videos/lstmvis2.mp4}
+    \movie[width=\textwidth, height=0.85\textheight, poster, showcontrols]{LSTMVis}{videos/lstmvis2.mp4}
   \end{center}
 \end{frame}
 
@@ -220,7 +223,7 @@
       \baselineskip=-5pt \scriptsize
       \citet{Kim2016} \ \
       \textcolor{redpurple}{\cite{DBLP:journals/corr/KimDHR17}}\ \
-      \textbf{\cite{EMNLP2017}}
+      \cite{EMNLP2017}
       \par
       };
     }
@@ -237,12 +240,12 @@
       };
 }
 
-    \node[rounded corners, draw] (und) at (35mm, 15mm) {Understanding};
+    \node[rounded corners, draw] (und) at (35mm, 15mm) {\ Models\phantom{p}};
 
 \visible{
     \node at (65mm, 15mm) [text width=30mm]{ \centering
       \baselineskip=-5pt \scriptsize
-      \textbf{\citet{wiseman2018learning}}
+      \citet{wiseman2018learning}
       \textcolor{redpurple}{\citet{deng2018latent}}\ \ \
       \textcolor{redpurple}{\citet{DBLP:journals/corr/abs-1802-02550}}
       \par

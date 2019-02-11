@@ -11,6 +11,12 @@
 
   \item Challenges: Text Generation and Deep Learning
   \end{itemize}
+
+  \begin{center}
+    Can we learn interpretable and controllable target text generation models?
+  \end{center}
+
+
 \end{frame}
 
 
@@ -108,7 +114,7 @@
       \node [rounded corners, left =(0.2cm) of a] {{$x$}};
 
       \visible<4 - >{
-        \node(b) [xshift=-5cm, yshift=-1.5cm, rectangle, scale=0.7, draw,thick,fill=blue!0,text width=20em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
+        \node(b) [xshift=-4.5cm, yshift=-1.5cm, rectangle, scale=0.7, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
  \rule{15pt}{1pt} (born \rule{15pt}{1pt}) was a
 \rule{15pt}{1pt} \rule{15pt}{1pt} , who
 lived in the \rule{15pt}{1pt} . He was
@@ -123,7 +129,7 @@ known for contributions to \rule{15pt}{1pt} .
       \visible<2>{
         \node(b) [xshift=4.5cm, yshift=-0cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
           Frederick Parker-Rhodes
-(21 November 1914 – 2
+(21 November 1914 - 2
 March 1987) was an
 English linguist, plant
 pathologist, computer
@@ -138,7 +144,7 @@ mystic, and mycologist.
       \visible<3>{
         \node(b) [xshift=4.5cm, yshift=-0cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
           Frederick Parker-Rhodes (21 November
-1914 \– 2 March 1987) was an English
+1914 - 2 March 1987) was an English
 mycology and \alert{plant pathology,
 mathematics at the University of UK}.
           \par};
@@ -149,8 +155,7 @@ mathematics at the University of UK}.
 
       \visible<5>{
         \node(b) [xshift=4.5cm, yshift=-0cm, rectangle, scale=0.8, draw,thick,fill=blue!0,text width=12em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \small
-          \underline{Frederick Parker-Rhodes} (born \underline{21 November
-1914}) was a \underline{English
+          \underline{Frederick Parker-Rhodes} (born \underline{21 November 1914}) was a \underline{English
 mycologist} who
 lived in the \underline{UK}. He was
 known for contributions to \underline{plant pathology}.
@@ -209,7 +214,7 @@ Guarantees about the quality, in particular,
 \air
 
 
-\begin{enumerate}
+\begin{itemize}
 \item Interpretable in its factual content.
   \air
 
@@ -221,10 +226,10 @@ Guarantees about the quality, in particular,
 
 
 
-\end{enumerate}
+\end{itemize}
 
 \begin{center}
-  Goal: Can we achieve this with a deep-learning based system?
+  Can we achieve these criteria with a deep learning system?
 \end{center}
 \end{frame}
 
@@ -1104,5 +1109,7 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
 
 
 \begin{frame}
+  \url{http://lstm.seas.harvard.edu/client/lstmvis.html?project=00parens&source=states::states2&activation=0.3&cw=30&meta=..&pos=165}
+  \url{http://lstm.seas.harvard.edu/client/lstmvis.html?project=05childbook&source=states::states1&activation=0.3&cw=30&meta=..&pos=100&wordBrush=..20,23&wordBrushZero=..1,0&sc=..55,59,159,167,174,179}
 
 \end{frame}
