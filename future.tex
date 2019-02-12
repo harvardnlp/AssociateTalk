@@ -3,7 +3,7 @@
   \begin{itemize}
   \item Background: Core Model and Implementation
     \air
-  \item Work 1: Rethinking Model Training 
+  \item Work 1: Rethinking Model Training
     \air
 
   \item \textbf{Work 2: Rethinking  Generation  (\textit{Learning Neural Templates})}
@@ -38,7 +38,7 @@
 % \end{frame}
 
 
-\begin{frame}{Talk about Data}
+\begin{frame}{Talk about Data (E2EGen)}
   \vspace{-1cm}
   \begin{center}
     \begin{tikzpicture}
@@ -50,11 +50,11 @@
         \begin{tabular}[]{lc}
           \textbf{Fitzbillies} & \\
           \toprule
-          type & [coffee shop] \\
+          type & coffee shop \\
           price & $<$ \pounds 20 \\
           food & Chinese \\
           rating  & 3/5 \\
-          area & city centre] \\
+          area & city centre \\
           \bottomrule
         \end{tabular}};
 
@@ -94,7 +94,7 @@
 \end{frame}
 
 
-\begin{frame}{Talking About Data}
+\begin{frame}{Talking About Data (WikiBio)}
   \begin{center}
     \mair
     \mair
@@ -371,7 +371,7 @@ Generative process:
 % \end{frame}
 
 
-\begin{frame}{Preliminary Model 2: Deep Copy Models}
+\begin{frame}{Preliminary Model 2: Copy Model}
 %{(Gu et al, 2016) (Gulcehre et al, 2016)}
 
 Generative process:
@@ -380,7 +380,7 @@ Generative process:
 \item Draw words $y_t$ wherre
 \begin{itemize}
 \item If $z = 0$, generate a new word from the decoder.
-  \air 
+  \air
 \item If $z = 1$, copy a word from the source data.
 \end{itemize}
 
@@ -392,7 +392,7 @@ Generative process:
 Example:
 \begin{center}
 \underline{Frederick Parker-Rhodes} (born \underline{21 November
-1914}) was a English \underline{linguist} $\ldots$ 
+1914}) was a English \underline{linguist} $\ldots$
 
 
 % \centerline{\small (See et al, 2017)}
@@ -492,14 +492,14 @@ Example:
 
   Fit model by minimizing  negative log-marginal likelihood on training data.
     \[ {\cal L}(\theta) =  - \log \sum_{z_{1:T}} p(\hat{y}_{1:T}, z_{1:T} \ |\ x; \theta)\]
-   
-  
+
+
     \begin{itemize}
     \item Requires summing over all clusters and segmentation.
     \item Approach: backprop through HSMM dynamic programming algorithm, exact gradient.
     \item Gives a new definition for $f_\theta(y_{1:T}, x)$
     \end{itemize}
-    
+
     However, this model alone does not give templates.
     \air
 \end{frame}
@@ -536,17 +536,17 @@ Example:
   \end{figure}
     \[ z_{1:T}^* = \argmax_{z_{1:T}} p(y_{1:T}, z_{1:T} \ |\ x; \theta)\]
 
-    The Wrestlers is a coffee shop that serves English $\ldots$  
+    The Wrestlers is a coffee shop that serves English $\ldots$
     \begin{center}
       $\Downarrow z^*$
     \end{center}
-    \colorbox{green}{\phantom{g}The Wrestlers\phantom{g}} \colorbox{red}{\phantom{g}is a\phantom{g}} \colorbox{skyblue}{\phantom{g}coffee shop\phantom{g}} \colorbox{redpurple}{\phantom{g}that serves\phantom{g}} \colorbox{bluegreen}{\phantom{g}English\phantom{g}} $\ldots$  
- 
+    \colorbox{green}{\phantom{g}The Wrestlers\phantom{g}} \colorbox{red}{\phantom{g}is a\phantom{g}} \colorbox{skyblue}{\phantom{g}coffee shop\phantom{g}} \colorbox{redpurple}{\phantom{g}that serves\phantom{g}} \colorbox{bluegreen}{\phantom{g}English\phantom{g}} $\ldots$
+
 \end{frame}
 
 
 \begin{frame}{Example Templates: Wikipedia}
-  
+
   Sentences grouped by the same $z_{1:T}^*$ and their splits.
 
   \begin{center}
@@ -922,65 +922,27 @@ priceRange[cheap] custRating[5 out of 5], area[city centre], \\
 \begin{table}[t!]
 \small
 \centering
-\begin{tabular}{@{}lccc@{\hspace{2.5mm}}c@{\hspace{2.5mm}}c@{}}
-\toprule
- & BLEU & NIST \\
-\midrule
-% Val & & &  \\
-% \midrule
+\textbf{E2E}
 
-% Substitution  & 43.71 & 6.72 \\
-% Neural Template & 66.06 & 7.93 \\
-% Full Neural Model & 69.25 & 8.48 \\
-% \midrule
-Test  & & \\
-\midrule
+\air
 
-Substitution & 43.78 & 6.88 \\
-Neural Template    & 56.72 & 7.63 \\
-Full Neural Model & 65.93 & 8.59 \\
-\bottomrule
-\end{tabular}
-\begin{table}[t!]
-\small
-\centering
-\begin{tabular}{@{}lccc@{}}
-\toprule
- & BLEU & NIST & ROUGE-4\\
-\midrule
-Conditional KN-LM  & 19.8 & 5.19 & 10.7 \\
-NNLM (field)  & 33.4 & 7.52 & 23.9 \\
-NNLM (field \& word)  & 34.7 & 7.98 & 25.8 \\
-Neural Template &  33.8 & 7.51 & 28.2 \\
-\bottomrule
-\end{tabular}
-\label{tab:wb}
-\end{table}
+\includegraphics[width=10cm]{crop1}
+\air
 
+\textbf{WikiBio}
+\air
+
+\includegraphics[width=8cm]{crop2}
 % \caption{Comparison of the system of \citet{duvsek2016sequence}, which forms the baseline for the E2E challenge, a non-parametric, substitution-based baseline (see text), and our HSMM model on the validation and test portions of the E2E dataset. ``ROUGE'' is ROUGE-L. Models are evaluated using the official E2E NLG Challenge scoring scripts.}
 \label{tab:e2e}
 \end{table}
 \end{frame}
 
-\begin{frame}{Controllable Interactive Deep Learning Systems}
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{DecoderVis}
-  \end{center}
-\end{frame}
 
 
-\begin{frame}{Another Application: Understanding Model Selection}
-  \begin{center}
-    \includegraphics[width=0.8\textwidth]{AttentionVIS}
-  \end{center}
-\end{frame}
+\begin{frame}{Outline}
 
-
-
-
-\begin{frame}{Talk Outline}
-
-  \begin{enumerate}
+  \begin{itemize}
   \item Background: Core Model and Implementation
     \air
   \item Work 1: Rethinking Model Training (\textit{Beam Search Optimization})
@@ -989,7 +951,7 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
   \item Work 2: Rethinking  Generation  (\textit{Learning Neural Templates})
     \air
   \item \textbf{Challenges: Text Generation and Deep Learning}
-  \end{enumerate}
+  \end{itemize}
 \end{frame}
 
 
@@ -1018,23 +980,38 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
 %   \end{center}
 % \end{frame}
 
-\begin{frame}{Long-Form Generation with Explicit Reasoning}
+\begin{frame}{1) Long-Form Generation with Explicit Reasoning}
   \begin{center}
     \includegraphics[width=0.85\linewidth]{basketball}
   \end{center}
-  \begin{enumerate}
-  \item Discourse-aware structure in generation  
-  \item Explicit Linking and coreference 
-  \item Aggregation of factual information before generation
-  \end{enumerate}
+  % \begin{enumerate}
+  % \item Discourse-aware structure in generation
+  % \item Explicit Linking and coreference
+  % \item Aggregation of factual information before generation
+  % \end{enumerate}
+\end{frame}
+
+\begin{frame}{2) Controllable Interactive ML Systems}
+  \research{w/ IBM}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{DecoderVis}
+  \end{center}
 \end{frame}
 
 
-\begin{frame}{Probabilistic Programming}
-\research{Preprint w/ Uber}
+\begin{frame}{2) Controllable Interactive ML Systems}
+
+  \research{w/ IBM}
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{AttentionVIS}
+  \end{center}
+\end{frame}
+
+\begin{frame}{3) Prob. Programming \& Deep Learning}
+\research{w/ Uber}
 
 \begin{center}
-\includegraphics[width=1.5cm]{pyro}
+\includegraphics[width=3cm]{pyro} \hspace{2cm} \includegraphics[width=5cm]{pyro2}
 
 \air
   \begin{tikzpicture}
@@ -1068,16 +1045,13 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
 \end{center}
 \end{frame}
 
-\begin{frame}{Hardware Co-Design for Generation and Understanding}
-\research{Preprint}
+\begin{frame}{4) Hardware Co-Design}
+\research{w/ ARM}
 \begin{center}
-  \includegraphics[height=0.8\textheight]{testchip}
+  \includegraphics[height=0.6\textheight]{testchip}
 \end{center}
 \end{frame}
 
-\begin{frame}{Challenges in Discrete Deep Learning}
-  
-\end{frame}
 
 
 % \begin{frame}{Learning Neural Reasoning-Based Models}
@@ -1087,8 +1061,12 @@ Neural Template &  33.8 & 7.51 & 28.2 \\
 % \end{frame}
 
 
-\begin{frame}
-  Thanks
+\begin{frame}{Harvard NLP}
+  \begin{center}
+  \includegraphics[width=6cm]{Members}
+
+  \includegraphics[width=2cm]{Members2}
+  \end{center}
 \end{frame}
 
 

@@ -45,13 +45,13 @@
 
 % \begin{frame}{Beam Search Optimization}
 
-%     % Training Setup: 
+%     % Training Setup:
 %     % \begin{itemize}
 %     % \item $(x, \hat{y}_{1:T})$ - input, output sentence pair
-%     % \item $\cal L(\theta)$ - loss function 
+%     % \item $\cal L(\theta)$ - loss function
 %     % \item $f_{\theta}$ - learned scoring function
 %     % \end{itemize}
-    
+
 
 %   % \begin{itemize}
 
@@ -77,7 +77,7 @@
   % \includegraphics[height=3.5cm, trim={12cm 3cm 0.5cm 0.5cm}, clip]{nmt-noattn-8}
   \end{center}
 
-  Training loss is identical to \textcolor{redpurple}{multiclass classification}, 
+  Training loss is identical to \textcolor{redpurple}{multiclass classification},
   \[ {\cal L}(\theta) = -\sum_{t} \log p(\hat{y}_t\ |\  \hat{y}_{1:t-1}, x; \theta) \]
 \end{frame}
 
@@ -102,7 +102,7 @@
 \begin{frame}[fragile]{Standard Heuristic Method:  Beam Search}
   {$ y^*_{1:T} \approx \argmax_{y_{1:T}} f_{\theta}(y_{1:T}, x)$ }
 
-  \air 
+  \air
 
     \begin{center}
   \begin{tikzpicture}[transform canvas = {scale=0.8}]
@@ -168,10 +168,10 @@
 
 \visible<7->{
    \begin{enumerate}
-   \item For each $k$ in beam, example all possible next words $y_t$, 
+   \item For each $k$ in beam, example all possible next words $y_t$,
      \[f_{\theta}(\langle y_t, y_{1:t-1}^{(k)}\rangle, x) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x) \]
      \pause
-   \item Prune ($K \times \text{vocab}$) expansions to top $K$, 
+   \item Prune ($K \times \text{vocab}$) expansions to top $K$,
      \[y_{1:t}^{(1:K)} \gets K\argmax_{y_t, k} f_{\theta}(\langle y_t, y_{1:t}^{(k)} \rangle, x)\]
    \end{enumerate}
 }
@@ -260,7 +260,7 @@
 % \end{frame}
 
 
-\begin{frame}{Generation Training Issues}
+\begin{frame}{Known Issues}
 
   \begin{center}
     Multiclass Training $\Rightarrow$ Structured Generation ?
@@ -371,7 +371,7 @@
    \item Run our beam search procedure during training (structured training)
      \air
 
-   \item Loss tied to  mistakes, e.g. compare true sequence \textcolor{gold}{$\hat{y}_{1:t}$}  to \textcolor{red}{$y^{(K)}_{1:t}$ } worst in beam 
+   \item Loss tied to  mistakes, e.g. compare true sequence \textcolor{gold}{$\hat{y}_{1:t}$}  to \textcolor{red}{$y^{(K)}_{1:t}$ } worst in beam
    \end{itemize}
    % \begin{enumerate}
    % \item Compute the score of every possible next word.
@@ -431,27 +431,27 @@
   \air
 
 
-  
+
 \end{frame}
 
 
 
 \begin{frame}{Modification 3: Train with Margin}
-  
+
   \textbf{Fix:} Metric Bias
   \begin{itemize}
   \item Incorporate a metric specific term, e.g. n-gram mismatch
   \end{itemize}
   \air
   \pause
-  
+
   \[ \mathcal{L}(\theta) = \sum_{t} \Delta(\textcolor{gold}{\hat{y}_{1:t}}, \textcolor{red}{y_{1:t}^{(K)}}) \left[1 - f_{\theta}( \textcolor{gold}{\hat{y}_{1:t}}, x) +  f_{\theta}(\textcolor{red}{y_{1:t}^{(K)}}, x) \right] \]
-  
+
   \begin{itemize}
   \item Positive if true sequence $\textcolor{gold}{\hat{y}_{1:t}}$ within margin of worst beam sequence $\textcolor{red}{y^{(K)}_{1:t}}$.
   \item Slack-rescaled margin takes problem-specific $\Delta$ into account.
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{myverbbox}{\sTW}
@@ -465,8 +465,8 @@
 \end{myverbbox}
 
 \begin{frame}{Extension: Training with Hard Constraints}
-  
-  Beam Search Optimization supports hard constraints at training. 
+
+  Beam Search Optimization supports hard constraints at training.
 
   \textbf{Example:} Code generation with a known grammar,
   \air
@@ -749,15 +749,15 @@
   \begin{table}
   \centering
     \footnotesize
-  \begin{tabular}{lccc}
+  \begin{tabular}{lcc}
     \toprule
-    Train Beam & $K$ = 1 & $K$ = 5 & $K$ = 10 \\
+    Train Beam & $K$ = 5 & $K$ = 10 \\
     \midrule
-     & \multicolumn{3}{c}{Word Ordering (BLEU) } \\
+     & \multicolumn{2}{c}{Word Ordering (BLEU) } \\
     \midrule
-    Encoder-Decoder & 25.2 & 29.8 & 31.0 \\
-    Beam Search Optimization     & 28.0 & 33.2 & 34.3 \\
-    Beam Search Optimization-Constraints & \textbf{28.6} & \textbf{34.3} & \textbf{34.5} \\
+    Encoder-Decoder & 29.8 & 31.0 \\
+    Beam Search Optimization     & 33.2 & 34.3 \\
+    Beam Search Optimization-Constraints &  \textbf{34.3} & \textbf{34.5} \\
     \midrule
 
 %   \end{tabular}
@@ -769,22 +769,22 @@
 %   \centering
 %   \hspace*{-0.3cm}\begin{tabular}{lccc}
     % \toprule
-    & \multicolumn{3}{c}{Dependency Parsing (UAS) } \\
-    \midrule
-    Encoder-Decode & \textbf{87.33} & 88.53 & 88.66\\
-    Beam Search Optimization & 86.91 & 91.00 & 91.17 \\
-    Beam Search Optimization-Constraints & 85.11 & \textbf{91.25} & \textbf{91.57} \\
+    % & \multicolumn{3}{c}{Dependency Parsing (UAS) } \\
+    % \midrule
+    % Encoder-Decode & \textbf{87.33} & 88.53 & 88.66\\
+    % Beam Search Optimization & 86.91 & 91.00 & 91.17 \\
+    % Beam Search Optimization-Constraints & 85.11 & \textbf{91.25} & \textbf{91.57} \\
     % \midrule
     % Andor & 93.17/91.18 & - & - \\
     % \bottomrule
 
     \midrule
 
-    & \multicolumn{3}{c}{Machine Translation (BLEU) } \\
+    & \multicolumn{2}{c}{IWSLT Machine Translation (BLEU) } \\
     % &  $K_e$ = 1 & $K_e$ = 5 & $K_e$ = 10 \\
     \midrule
-    Encoder-Decoder & 22.53 & 24.03 & 23.87 \\
-    Beam-Search Optimization, $\Delta$  & \textbf{23.83} & \textbf{26.36} & \textbf{25.48} \\
+    Encoder-Decoder & 24.0 & 23.9 \\
+    Beam-Search Optimization, $\Delta$  &  \textbf{26.4} & \textbf{25.5} \\
     % \midrule
     % XENT & 17.74 & $\leq$ 20.5 & $\leq$ 20.5 \\
     % DAD & 20.12 & $\leq$ 22.5 & $\leq$ 23.0 \\
@@ -1031,7 +1031,8 @@ Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ \\%&   $6.7$ &  $1.3\%$ \\
 \midrule
 \pause
 $2 \times 500$ \\
-Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ \\%&  $8.2$ & $0.9\%$  \\
+  Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ \\%&  $8.2$ & $0.9\%$  \\
+  \pause
 \hspace{1mm} Word-KD  & $15.4$ & $+0.7$& $17.7$& $+0.1$\\%&  $8.0$ & $1.0\%$  \\
 \pause
 % \hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$\\%&  $22.7$ & $                     \pause                                                         16.9\%$ \\

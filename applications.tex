@@ -16,8 +16,6 @@
 % \end{frame}
 
 \begin{frame}{Machine Learning for Multiclass Classification}
-
-
   \begin{center}
     \begin{tikzpicture}
       \node(a) [rectangle,  xshift=-5cm, scale=0.6, draw,thick,fill=blue!0, rounded corners, inner sep =5pt] {
@@ -92,7 +90,7 @@ here describes the form and structure of the model g and its parameters theta.  
 
 \begin{frame}{Machine Learning for Text Generation}
 
-  \[ \alert<3>{y^*_{1:T}} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}_{\theta}(\alert<3>{y_{1:T}}, \tikzmark{input}\alert<2>{x}) \]
+  \[ y^*_{1:T} = \argmax_{y_{\tikzmark{opt}1:T}} \alert<4>{f}_{\theta}(\alert<3>{y_{1:T}}, \tikzmark{input}\alert<2>{x}) \]
 
 % \begin{tikzpicture}[
 %   remember picture,
@@ -130,7 +128,7 @@ here describes the form and structure of the model g and its parameters theta.  
   % Target:\  \
   % \texttt{[Yalitza Aparicio had] just [finished her] teaching [degree] .}
   % \air
-  
+
   % Predict:
   % \texttt{[Yalitza Aparicio had] recently [finished her] [degree]. }
   % \pause
@@ -138,7 +136,7 @@ here describes the form and structure of the model g and its parameters theta.  
 
     \pause
 
-    \air 
+    \air
 
   \textbf{Evaluation:}
 
@@ -146,9 +144,9 @@ here describes the form and structure of the model g and its parameters theta.  
   \item Truth: \texttt{[Yalitza Aparicio had] just
       [finished her] teaching [degree]}
 
-    \air  
+    \air
   \item Prediction: \texttt{[Yalitza Aparicio had] recently [finished
-      her] [degree]} 
+      her] [degree]}
   \end{itemize}
 \end{frame}
 
@@ -194,7 +192,7 @@ here describes the form and structure of the model g and its parameters theta.  
   \begin{center}
     \includegraphics[trim={1cm 0cm 0cm 0cm}, clip, width=7cm]{ap}
   \end{center}
-  
+
 \end{frame}
 
 
