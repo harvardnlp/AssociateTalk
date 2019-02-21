@@ -1,21 +1,21 @@
 
+
 \begin{frame}{ Outline}
   \begin{itemize}
-  \item Background: Core Model and Implementation
+  \item \textcolor{gray}{Background: Core Model and Implementation}
     \air
-  \item Work 1: Rethinking Model Training
+  \item \textcolor{gray}{Work 1: Rethinking Model Training}
     \air
 
   \item \textbf{Work 2: Rethinking  Generation  (\textit{Learning Neural Templates})}
     \air
 
-  \item Challenges: Text Generation and Deep Learning
+  \item \textcolor{gray}{Challenges: Text Generation and Deep Learning}
   \end{itemize}
 
   \begin{center}
-    Can we learn interpretable and controllable target text generation models?
+    \textbf{Can we learn interpretable and controllable target text generation models?}
   \end{center}
-
 
 \end{frame}
 
@@ -215,22 +215,28 @@ Guarantees about the quality, in particular,
 
 
 \begin{itemize}
-\item Interpretable in its factual content.
+\item \textbf{Interpretable} in its factual content.
   \air
 
 
   \air
 
-\item Controllable in terms of style.
+\item \textbf{Controllable} in terms of style.
   \air
-
 
 
 \end{itemize}
 
 \begin{center}
-  Can we achieve these criteria with a deep learning system?
+  Can we achieve these criteria within a deep learning system?
 \end{center}
+
+
+\begin{enumerate}
+\item Model
+\item Training
+\item Template Extraction
+\end{enumerate}
 \end{frame}
 
 
@@ -256,7 +262,7 @@ p(y, z\ |\ x \param \theta)
 
 \end{frame}
 
-\begin{frame}{Preliminary Model 1: Sentence Clusters }
+\begin{frame}{Example: Discrete Variables as Clusters}
 
 Generative process:
 \begin{enumerate}
@@ -371,41 +377,41 @@ Generative process:
 % \end{frame}
 
 
-\begin{frame}{Preliminary Model 2: Copy Model}
-%{(Gu et al, 2016) (Gulcehre et al, 2016)}
+% \begin{frame}{Preliminary Model 2: Copy Model}
+% %{(Gu et al, 2016) (Gulcehre et al, 2016)}
 
-Generative process:
-\begin{enumerate}
-\item Draw copy switch $z_t \in \{0, 1\}$ from a Bernoulli.
-\item Draw words $y_t$ wherre
-\begin{itemize}
-\item If $z = 0$, generate a new word from the decoder.
-  \air
-\item If $z = 1$, copy a word from the source data.
-\end{itemize}
+% Generative process:
+% \begin{enumerate}
+% \item Draw copy switch $z_t \in \{0, 1\}$ from a Bernoulli.
+% \item Draw words $y_t$ wherre
+% \begin{itemize}
+% \item If $z = 0$, generate a new word from the decoder.
+%   \air
+% \item If $z = 1$, copy a word from the source data.
+% \end{itemize}
 
-\end{enumerate}
+% \end{enumerate}
 
-\air
-\air
+% \air
+% \air
 
-Example:
-\begin{center}
-\underline{Frederick Parker-Rhodes} (born \underline{21 November
-1914}) was a English \underline{linguist} $\ldots$
-
-
-% \centerline{\small (See et al, 2017)}
-\end{center}
-\end{frame}
+% Example:
+% \begin{center}
+% \underline{Frederick Parker-Rhodes} (born \underline{21 November
+% 1914}) was a English \underline{linguist} $\ldots$
 
 
-\begin{frame}{Classical Model:  Hidden Semi-Markov Model}
+% % \centerline{\small (See et al, 2017)}
+% \end{center}
+% \end{frame}
+
+
+\begin{frame}{Hidden Semi-Markov Model}
 
   \air
   \begin{itemize}
 
-  \item Extension of Hidden Markov Model where discrete latent states produce multiple emissions (e.g. phrases).
+  \item Each discrete cluster produces multiple emissions (e.g. phrases).
     \air
 
   \item Parameterized with \textit{transition}
@@ -443,7 +449,7 @@ Example:
 \end{frame}
 
 
-\begin{frame}{A Deep Hidden Semi-Markov Model}
+\begin{frame}{Model: A Deep Hidden Semi-Markov Model}
 
   \begin{itemize}
   \item Employ HSMM as a conditional latent variable language model, $p(y_1, \ldots, y_T, z\ |\ x)$.
@@ -452,7 +458,7 @@ Example:
   \item Transition Distribution: neural network between clusters.
 
     \air
-  \item Emission Distribution: Encoder-Decoder+Copy, specialized per cluster $\{1, \ldots, Z\}$.
+  \item Emission Distribution: Encoder-Decoder, specialized per cluster $\{1, \ldots, Z\}$.
 
 
   \end{itemize}
@@ -487,25 +493,36 @@ Example:
   \end{figure}
 \end{frame}
 
-\begin{frame}{Technical Methodology:  Training Model}
+\begin{frame}{Training}
 
-
-  Fit model by minimizing  negative log-marginal likelihood on training data.
+  Training requires summing over clusters and segmentation of deep model.
     \[ {\cal L}(\theta) =  - \log \sum_{z_{1:T}} p(\hat{y}_{1:T}, z_{1:T} \ |\ x; \theta)\]
+    \pause
+    \centerline{\textbf{Example}}
+
+    \begin{center}
 
 
-    \begin{itemize}
-    \item Requires summing over all clusters and segmentation.
-    \item Approach: backprop through HSMM dynamic programming algorithm, exact gradient.
-    \item Gives a new definition for $f_\theta(y_{1:T}, x)$
-    \end{itemize}
-
-    However, this model alone does not give templates.
-    \air
+Frederick Parker-Rhodes  was an English linguist, plant pathologist
+    \begin{center}
+      $\Downarrow \sum_{z_{1:T}}$
+    \end{center}
+\colorbox{green}{Frederick Parker-Rhodes}  \colorbox{red}{was an English} \colorbox{skyblue}{linguist}, \colorbox{redpurple}{plant pathologist} $\ldots$\\ \pause
+\colorbox{red}{Frederick} \colorbox{redpurple}{Parker-Rhodes}  \colorbox{red}{was an\phantom{D}} \colorbox{skyblue}{English linguist}, \colorbox{green}{plant pathologist} $\ldots$\\ \pause
+\colorbox{redpurple}{Frederick}  \colorbox{orange}{Parker-Rhodes was an English linguist ,} \colorbox{skyblue}{linguist}, \colorbox{redpurple}{plant pathologist} $\ldots$
+    \end{center}
 \end{frame}
 
+% \begin{frame}{Technical Methodology}
+%     \begin{itemize}
+%     \item Requires summing over all clusters and segmentation.
+%     \item Approach: backprop through HSMM dynamic programming algorithm, exact gradient.
+%     \item Gives a new definition for $f_\theta(y_{1:T}, x)$
+%     \end{itemize}
+% \end{frame}
 
-\begin{frame}{From Neural HSMM to Templates}
+
+\begin{frame}{Template Extraction}
   Extract templates by finding most common, best latent sequences from training.
   \begin{figure}
     \centering
@@ -535,24 +552,75 @@ Example:
     % \caption{HSMM factor graph (under a fixed segmentation) to illustrate parameters. Here we assume $z_1$ is in the ``red'' state (out of $K$ possibilities), and transitions to the ``blue'' state after emitting three words. The transition model, shown as $T$, is a function of the two states and the neural encoded source $x$. The emission model is a function of a ``red'' RNN model (with copy attention over $x$) that generates words 1, 2 and 3. After transitioning, the next word $y_4$ is generated by the ``blue'' RNN, but independently of the previous words.}
   \end{figure}
     \[ z_{1:T}^* = \argmax_{z_{1:T}} p(y_{1:T}, z_{1:T} \ |\ x; \theta)\]
-
-    The Wrestlers is a coffee shop that serves English $\ldots$
+    \pause
+    \centerline{\textbf{Example}}
     \begin{center}
-      $\Downarrow z^*$
+
+
+Frederick Parker-Rhodes  was an English linguist, plant pathologist
+    \begin{center}
+      $\Downarrow \argmax_{z_{1:T}}$
     \end{center}
-    \colorbox{green}{\phantom{g}The Wrestlers\phantom{g}} \colorbox{red}{\phantom{g}is a\phantom{g}} \colorbox{skyblue}{\phantom{g}coffee shop\phantom{g}} \colorbox{redpurple}{\phantom{g}that serves\phantom{g}} \colorbox{bluegreen}{\phantom{g}English\phantom{g}} $\ldots$
+\colorbox{green}{Frederick Parker-Rhodes}  \colorbox{red}{was an English} \colorbox{skyblue}{linguist}, \colorbox{redpurple}{plant pathologist} $\ldots$\\ \pause
+    \end{center}
+\end{frame}
+
+\begin{frame}{Template Grouping}
+  Find templates $z_{1:T}$ that occur most often in the data.
+\air
+\begin{center}
+
+
+Frederick Parker-Rhodes  was an English linguist, plant pathologist
+    \begin{center}
+      $\Downarrow \argmax_{z_{1:T}}$
+    \end{center}
+\colorbox{green}{Frederick Parker-Rhodes}  \colorbox{red}{was an English} \colorbox{skyblue}{linguist}, \colorbox{redpurple}{plant pathologist} $\ldots$\\ \pause
+\air
+\air
+
+Bill Jones  was an American professor, and well-known author
+    \begin{center}
+      $\Downarrow \argmax_{z_{1:T}}$
+    \end{center}
+
+\colorbox{green}{Bill Jones}  \colorbox{red}{was an American} \colorbox{skyblue}{professor}, \colorbox{redpurple}{and well-known author} $\ldots$\\ \pause
+\end{center}
 
 \end{frame}
+
+
 
 
 \begin{frame}{Example Templates: Wikipedia}
 
-  Sentences grouped by the same $z_{1:T}^*$ and their splits.
+  Extracted templates $z_{1:T}^*$ and their generated words.
 
   \begin{center}
-    \includegraphics[width=0.9\textwidth]{extemp}
+    \includegraphics[trim={5cm 5cm 0.2cm 0cm}, clip, width=0.9\textwidth]{extemp}
   \end{center}
 \end{frame}
+
+
+
+\begin{frame}{Technical Methodology}
+
+  Training is end-to-end, i.e. clusters and segmentation are learned
+  simultaneously with encoder-decoder model on GPU.
+
+
+  \begin{itemize}
+  \item  Training Technique: Backpropagation through dynamic programming. Parameters are trained by exactly marginalizing over segmentations (HSMM backward algorithms)
+  \end{itemize}
+  \air
+
+  \begin{itemize}
+  \item Extraction Technique: Viterbi algorithm over encoder-decoder potentials.
+  \end{itemize}
+
+
+\end{frame}
+
 
 
 
@@ -671,7 +739,7 @@ $\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt
       }
 
       \visible<3->{
-        \node(c) [xshift=4.5cm, rectangle, scale=0.75, draw,thick,fill=blue!0,text width=20em, rounded corners, inner sep =5pt, minimum height=1em] {\baselineskip=50pt \small $\|$  \underline{Fitzbillies} $\|$   is a $\|$    \underline{coffee shop} $\|$   providing $\|$  \underline{Chinese} $\|$ food $\|$ in the $\|$  moderate $\|$ price range $\|$ . $\|$ It is  $\|$ located in the $\|$ \underline{city centre} $\|$ . $\|$ Its customer rating is $\|$ \underline{3} out of \underline{5} $\|$ . \par };
+        \node(c) [xshift=4.5cm, rectangle, scale=0.75, draw,thick,fill=blue!0,text width=20em, rounded corners, inner sep =5pt, minimum height=1em] {\baselineskip=50pt \small $\|$  Fitzbillies $\|$   is a $\|$    coffee shop $\|$   providing $\|$  Chinese $\|$ food $\|$ in the $\|$  moderate $\|$ price range $\|$ . $\|$ It is  $\|$ located in the $\|$ city centre $\|$ . $\|$ Its customer rating is $\|$ 3 out of 5 $\|$ . \par };
       \node [rounded corners, above = (0.1cm) of c] { $y_{1:T}$};
       \path[draw, ->] (gal.east) -- (c);
     }
@@ -849,7 +917,30 @@ $\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt
 % \begin{frame}
 % \end{frame}
 
-\begin{frame}[fragile]{Issue 1: Interpretability}
+
+\begin{frame}{Arguments for Templated Generation}
+Guarantees about the quality, in particular,
+\air
+
+
+\begin{itemize}
+\item \textbf{Interpretable} in its factual content.
+  \air
+
+
+  \air
+
+\item \textbf{Controllable} in terms of style.
+  \air
+
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Issue 1: Interpretable}
 
   \begin{center}
 
@@ -887,7 +978,7 @@ $\textcolor{gray}{|} $ $ \substack{\text{The \rule{15pt}{1pt}}\\\text{\rule{15pt
 \end{frame}
 
 
-\begin{frame}{Issue 2: Controllability}
+\begin{frame}{Controllable}
 
   \begin{table}[t]
 \small

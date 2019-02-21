@@ -57,7 +57,8 @@
 %   \end{itemize}
 % \end{frame}
 
-\begin{frame}{Encoder-Decoder}{\large $f_{\theta}(y_{1:T}, x_{1:S})$}
+\begin{frame}{Encoder-Decoder}
+\centerline{\large $f_{\theta}(y_{1:T}, x_{1:S})$}
 
   \vspace{-0.25cm}
 
@@ -67,7 +68,7 @@
 \end{frame}
 
 
-\begin{frame}{Encoder-Decoder}
+\begin{frame}{Encoder}
   \textcolor{blue}{Encoder}:
   \[{\mathbf{h}^{x}_s \gets \RNN(\mathbf{h}^{x}_{s-1}, x_s; \theta)} \]
 
@@ -78,19 +79,23 @@
     \includegraphics<1>[height=0.6\textheight, trim=0.5cm 0.5cm 0.5cm
     0.5cm, clip]{nmt-noattn-2}
   \end{center}
-  \pause
-  \vspace{-0.5cm}
+\end{frame}
 
-  \textcolor{red}{Decoder}:
+\begin{frame}{Decoder}
+    \textcolor{red}{Decoder}:
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t; \theta)} \]
 
   \textbf{Scoring function:}
   \[ p(y_{t}\  |\  y_{1:t-1}, x) = \softmax( \mathbf{W} [\mathbf{h}_{t-1}; \mathbf{c}]) \]
   \[  f_{\theta}(y_{1:T}, x) =   \sum_{t=1}^T \log p(y_{t}\  |\  y_{1:t-1}, x; \theta) \]
+  \begin{center}
+    \includegraphics<1>[height=0.45\textheight, trim=12.5cm 0.5cm 0.5cm
+    0.5cm, clip]{nmt-noattn-8}
+  \end{center}
 
 \end{frame}
 
-\begin{frame}{Scoring Model Example }
+\begin{frame}{Decoder Example }
   \textcolor{red}{Decoder}:
   \[{\mathbf{h}_t \gets \RNN(\mathbf{h}_{t-1}, y_t; \theta)} \]
 

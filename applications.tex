@@ -194,6 +194,15 @@ here describes the form and structure of the model g and its parameters theta.  
   \end{center}
 
 \end{frame}
+\begin{myverbbox}{\sTWO}
+ { \cal K } ^ { L } ( \sigma = 2 ) = \left( \begin{array}
+{ c c } { - \frac { d ^ { 2 } } { d x ^ { 2 } } + 4 - \frac
+ { 3 } { \operatorname { c o s h } ^ { 2 } x } } \& { \frac
+ { 3 } { d x ^ { 2 } } }  { \frac { 3 } { \operatorname
+ { c o s h } ^ { 2 } x } } \& { - \frac { d ^ { 2 } }
+{ d x ^ { 2 } } + 4 - \frac { 3 } { \operatorname { c o s h }
+^ { 2 } x } }  \end{array} \right) \qquad
+\end{myverbbox}
 
 
 
@@ -233,6 +242,31 @@ here describes the form and structure of the model g and its parameters theta.  
 %   \end{center}
 % \end{frame}
 
+\begin{frame}{Talk about the Diagrams}
+\research{\cite{Deng2016} w/ Bloomberg}
+  \begin{center}
+\begin{tikzpicture}
+
+
+\node(a){\includegraphics[width=1.5cm]{phone}};
+ \node [yshift=4cm, rectangle, thick,fill=blue!0,text width=5cm, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \includegraphics[width=10cm]{latexin}};
+
+\visible {
+\node (b)[xshift=6cm, rectangle, scale=0.6, draw,thick,fill=blue!0,text width=32em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
+\sTWO
+
+};
+  \path[draw, <-] (b) --  (b -| gal.east);
+}
+\end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{Mathpix}
+  \end{center}
+\end{frame}
 
 \begin{frame}{Talk about Data }
 
@@ -328,15 +362,6 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 
 
 
-\begin{myverbbox}{\sTWO}
- { \cal K } ^ { L } ( \sigma = 2 ) = \left( \begin{array}
-{ c c } { - \frac { d ^ { 2 } } { d x ^ { 2 } } + 4 - \frac
- { 3 } { \operatorname { c o s h } ^ { 2 } x } } \& { \frac
- { 3 } { d x ^ { 2 } } }  { \frac { 3 } { \operatorname
- { c o s h } ^ { 2 } x } } \& { - \frac { d ^ { 2 } }
-{ d x ^ { 2 } } + 4 - \frac { 3 } { \operatorname { c o s h }
-^ { 2 } x } }  \end{array} \right) \qquad
-\end{myverbbox}
 
 % \begin{frame}{E2E Challenge 2018}
 %   \begin{figure}
@@ -356,25 +381,6 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 
 
 
-\begin{frame}{Talk about the Diagrams}
-\research{\cite{Deng2016} w/ Bloomberg}
-  \begin{center}
-\begin{tikzpicture}
-
-
-\node(a){\includegraphics[width=1.5cm]{phone}};
- \node [yshift=4cm, rectangle, thick,fill=blue!0,text width=5cm, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \includegraphics[width=10cm]{latexin}};
-
-\visible {
-\node (b)[xshift=6cm, rectangle, scale=0.6, draw,thick,fill=blue!0,text width=32em, rounded corners, inner sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
-\sTWO
-
-};
-  \path[draw, <-] (b) --  (b -| gal.east);
-}
-\end{tikzpicture}
-  \end{center}
-\end{frame}
 
 % \begin{frame}{Im2Latex}
 % \research{\cite{Deng2016} w/ Bloomberg}
@@ -384,19 +390,19 @@ Rodney McGruder  &    5 &    5 &  11 &    3 &    8 &     Miami \\
 % \end{frame}
 
 
-\begin{frame}{Im2Latex}
-\research{\cite{Deng2016} w/ Bloomberg}
+% \begin{frame}{Im2Latex}
+% \research{\cite{Deng2016} w/ Bloomberg}
 
 
-  \vspace{-0.25cm}
-  \begin{center}
-    \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Latex-Video}{videos/latex.mp4}
-  \end{center}
+%   \vspace{-0.25cm}
+%   \begin{center}
+%     \movie[width=\textwidth, repeat, height=0.85\textheight, width=\textwidth, poster, showcontrols]{Latex-Video}{videos/latex.mp4}
+%   \end{center}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}
-  \begin{center}
-    \includegraphics[width=0.8\textwidth]{Mathpix}
-  \end{center}
-\end{frame}
+% \begin{frame}
+%   \begin{center}
+%     \includegraphics[width=0.8\textwidth]{Mathpix}
+%   \end{center}
+% \end{frame}

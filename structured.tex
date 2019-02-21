@@ -1,20 +1,20 @@
 \begin{frame}{Outline}
 
   \begin{itemize}
-  \item Model: Structure and Implementation
+  \item \textcolor{gray}{Model: Structure and Implementation}
     \air
   \item \textbf{Work 1: Rethinking Training (\textit{Beam Search Optimization})}
     \air
 
-  \item Work 2: Rethinking Generation
+  \item \textcolor{gray}{Work 2: Rethinking Generation}
     \air
 
-  \item Challenges: Text Generation and Deep Learning
+  \item \textcolor{gray}{Challenges: Text Generation and Deep Learning}
   \end{itemize}
 
   \begin{center}
-    Can we learn parameters $\theta$ to better target text generation
-    applications?
+    \textbf{Can we learn parameters $\theta$ to better target text generation
+    applications?}
   \end{center}
 
 
@@ -100,8 +100,9 @@
 \end{frame}
 
 \begin{frame}[fragile]{Standard Heuristic Method:  Beam Search}
-  {$ y^*_{1:T} \approx \argmax_{y_{1:T}} f_{\theta}(y_{1:T}, x)$ }
+  \centerline{$ y^*_{1:T} \approx \argmax_{y_{1:T}} f_{\theta}(y_{1:T}, x)$ }
 
+  \air
   \air
 
     \begin{center}
@@ -167,12 +168,12 @@
 \air
 
 \visible<7->{
+  Start with $K$ sequence in beam.
+
    \begin{enumerate}
-   \item For each $k$ in beam, example all possible next words $y_t$,
-     \[f_{\theta}(\langle y_t, y_{1:t-1}^{(k)}\rangle, x) \gets \log p(y_{t}\ |\ y^{(k)}_{1:t-1}, x) + \log p(y^{(k)}_{1:t-1} \ |\  x) \]
-     \pause
-   \item Prune ($K \times \text{vocab}$) expansions to top $K$,
-     \[y_{1:t}^{(1:K)} \gets K\argmax_{y_t, k} f_{\theta}(\langle y_t, y_{1:t}^{(k)} \rangle, x)\]
+   \item For each $k$ in beam, expand and score all possible next words $y_t$.
+
+   \item Prune all expansions ($K \times \text{vocab}$) down to top $K$.
    \end{enumerate}
 }
 
@@ -445,7 +446,7 @@
   \air
   \pause
 
-  \[ \mathcal{L}(\theta) = \sum_{t} \Delta(\textcolor{gold}{\hat{y}_{1:t}}, \textcolor{red}{y_{1:t}^{(K)}}) \left[1 - f_{\theta}( \textcolor{gold}{\hat{y}_{1:t}}, x) +  f_{\theta}(\textcolor{red}{y_{1:t}^{(K)}}, x) \right] \]
+  \[ \mathcal{L}(\theta) = \sum_{t} \Delta(\textcolor{gold}{\hat{y}_{1:t}}, \textcolor{red}{y_{1:t}^{(K)}}) \left[1 - f_{\theta}( \textcolor{gold}{\hat{y}_{1:t}}, x) +  f_{\theta}(\textcolor{red}{y_{1:t}^{(K)}}, x) \right]_{+} \]
 
   \begin{itemize}
   \item Positive if true sequence $\textcolor{gold}{\hat{y}_{1:t}}$ within margin of worst beam sequence $\textcolor{red}{y^{(K)}_{1:t}}$.
@@ -464,38 +465,74 @@
 ^ { 2 } x } }  \end{array} \right) \qquad
 \end{myverbbox}
 
-\begin{frame}{Extension: Training with Hard Constraints}
+% \begin{frame}{Extension: Training with Hard Constraints}
 
-  Beam Search Optimization supports hard constraints at training.
+%   Beam Search Optimization supports hard constraints at training.
 
-  \textbf{Example:} Code generation with a known grammar,
+%   \textbf{Example:} Code generation with a known grammar,
+%   \air
+%     \begin{center}
+%       \begin{tikzpicture}
+%         \node (b)[xshift=6cm, rectangle, scale=0.6,
+%         draw,thick,fill=blue!0,text width=32em, rounded corners, inner
+%         sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
+%           \sTW };
+
+%     \end{tikzpicture}
+%   \end{center}
+
+% \end{frame}
+
+
+\begin{frame}[fragile]{Standard Training Example}
+  \textcolor{gold}{True}: ground-truth training sequence $\hat{y}_{1:T}$.
+
+  \begin{center}
+  \begin{tikzpicture}[transform canvas = {scale=0.8}]
+  \tikzstyle{beam}=[draw, minimum height=0.6cm, anchor=base, text height=5, text depth=0, minimum width=1.5cm,thin, rounded corners, line width=0.03cm]
+  \tikzstyle{mat}=[draw=white]
+\tikzset{>=stealth',every on chain/.append style={join},
+         every join/.style={->}}
+       \begin{scope}[]
+
+      \matrix (G) [matrix of nodes,nodes={beam}, inner sep=1mm,row sep=0.06cm,column sep=0.8cm ] {
+        \node[fill=yellow](G-1-1){a}; & \node<2->[fill=yellow](G-1-2){red}; & \node<3->[fill=yellow](G-1-3){dog}; & \node<3->[fill=yellow](G-1-4){runs}; & \node<3->[fill=yellow](G-1-5){quickly}; & \node<3->[fill=yellow](G-1-6){today}; \\
+         % & \node[fill=lightgray](G-2-2){\textcolor{blue}{blue}}; & \node[fill=lightgray](G-2-3){\textcolor{blue}{dog}}; & \node[fill=lightgray](G-2-4){\textcolor{blue}{barks}}; & \node[fill=lightgray](G-2-5){\textcolor{red}{home}}; & \node[fill=lightgray](G-2-6){\textcolor{red}{today}}; \\
+      };
+    \draw<2->[->] (G-1-1.east) -> (G-1-2.west);
+    \draw<3->[->] (G-1-2.east) -> (G-1-3.west);
+    \draw<3->[->] (G-1-3.east) -> (G-1-4.west);
+    \draw<3->[->] (G-1-4.east) -> (G-1-5.west);
+    \draw<3->[->] (G-1-5.east) -> (G-1-6.west);
+
+    % \draw[->] (G-1-1.east) -> (G-2-2.west);
+    % \draw[->] (G-2-2.east) -> (G-2-3.west);
+    % \draw[->] (G-2-3.east) -> (G-2-4.west);
+    % \draw[->] (G-1-4.east) -> (G-2-5.west);
+    % \draw[->] (G-2-5.east) -> (G-2-6.west);
+    \end{scope}
+  \end{tikzpicture}
   \air
-    \begin{center}
-      \begin{tikzpicture}
-        \node (b)[xshift=6cm, rectangle, scale=0.6,
-        draw,thick,fill=blue!0,text width=32em, rounded corners, inner
-        sep =5pt, minimum height=1em]{\baselineskip=50pt \footnotesize
-          \sTW };
-
-    \end{tikzpicture}
+  \[ {\cal L}(\theta) = - \log p(\text{a}\ |\  x; \theta) \pause - \log p(\text{red}\ |\  \text{a}, x; \theta) \pause- \log p(\text{dog}\ |\  \text{a \ red}, x; \theta) \pause - \ldots\]
   \end{center}
 
 \end{frame}
 
-
-
-
-\begin{frame}[fragile]{Beam Search Optimization: Training Example}
+\begin{frame}[fragile]{Beam Search Training Example}
   \begin{center}
     \begin{center}
 
     \end{center}
-    \air
+
+ % \textcolor{gold}{True}: ground-truth training sequence $\hat{y}_{1:t}$
+
     \air
     \air
     \air
 
-\
+
+  % \item<4-> \textcolor{red}{Predicted}: lowest-scoring violating sequence  $y_{1:t}^{(K)}$
+  % \end{itemize}
 
   \begin{tikzpicture}[transform canvas = {scale=0.8}]
   \tikzstyle{beam}=[draw, minimum height=0.6cm, anchor=base, text height=5, text depth=0, minimum width=1.5cm,thin, rounded corners, line width=0.03cm]
@@ -587,15 +624,21 @@
 %  \mathcal{L}&(\theta) = \sum_{t} \Delta(\wvec_{1:t}, \wvec_{1:t}^{(K)}) \left[1 - f(\wvec_t, \wvec_{1:t-1}, \cvec) +  f(\wvec_t^{(K)}, \wvec_{1:t-1}^{(K)}, \cvec) \right]
 % \end{align*}
 
-  \begin{itemize}
-  \item \textcolor{gold}{True}: ground-truth sequence $\hat{y}_{1:t}$
-  \item<4-> \textcolor{red}{Predicted}: lowest-scoring violating sequence  $y_{1:t}^{(K)}$
-  \end{itemize}
+  \begin{eqnarray*}
+ {\cal L}(\theta) &=& 0 \pause + 0 \pause +  0 \pause +  \Delta \left[1 - f_{\theta}( \textcolor{gold}{\text{a red dog runs}}, x) +  f_{\theta}(\textcolor{red}{\text{a blue dog barks}}, x) \right] \pause + 0 \\
+            & &   \pause + \Delta \left[1 - f_{\theta}( \textcolor{gold}{\text{a red dog runs quickly today}}, x) +  f_{\theta}(\textcolor{red}{\text{a red dog runs home now}}, x) \right]
+  \end{eqnarray*}
+
   % Strategy: if true falls off beam, restart from ground truth (learning as search optimization \cite{daume05learning})
 \end{frame}
 
 \begin{frame}[fragile]{Parameter Updates: Structured Backpropagation}
   \begin{center}
+  \begin{eqnarray*}
+ {\cal L}(\theta) &=&   \Delta \left[1 - f_{\theta}( \textcolor{gold}{\text{a red dog runs}}, x) +  f_{\theta}(\textcolor{red}{\text{a blue dog barks}}, x) \right]   \\
+            & &    + \Delta \left[1 - f_{\theta}( \textcolor{gold}{\text{a red dog runs quickly today}}, x) +  f_{\theta}(\textcolor{red}{\text{a red dog runs home now}}, x) \right]
+  \end{eqnarray*}
+
 
   \air
   \air
@@ -611,59 +654,59 @@
 
        % \node[draw = white, yshift=1.8cm]{Time Step};
        %\node[draw = white, xshift=-7.5cm, yshift=0.5cm]{Beam:};
+   %     \begin{scope}
+
+
+   % \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
+   %   \node[fill=yellow](G-1-1){\textcolor{blue}{a}}; & \node[fill=yellow](G-1-2){red}; & \node[fill=lightgray](G-1-3){\textcolor{blue}{dog}}; & \node(G-1-4){smells}; & \node[fill=lightgray](G-1-5){\textcolor{red}{home}};  & \node[fill=lightgray](G-1-6){\textcolor{red}{today}}; \\
+   %   \node(G-2-1){the}; & \node(G-2-2){dog}; & \node[fill=yellow](G-2-3){dog}; & \node(G-2-4){barks}; & \node[fill=yellow](G-2-5){quickly}; & \node(G-2-6){Friday}; \\
+   %   \node(G-3-1){red}; & \node[fill=lightgray](G-3-2){\textcolor{blue}{blue}}; & \node(G-3-3){cat}; &  \node[fill=lightgray](G-3-4){\textcolor{blue}{barks}}; & \node(G-3-5){straight}; & \node[](G-3-6){now}; \\
+   %   & & & \node[fill=yellow](G-4-4){runs}; & & \node[fill=yellow](G-4-6){today}; \\
+   %  };
+
+
+   %  \draw[->] (G-1-1.east) -> (G-1-2.west);
+   %  \draw[->] (G-2-1.east) -> (G-2-2.west);
+   %  \draw[->] (G-1-1.east) -> (G-3-2.west);
+   %  \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-2.south east);
+
+
+   %  \draw[->] (G-1-2.east) -> (G-2-3.west);
+   %  \draw[->] (G-3-2.east) -> (G-3-3.west);
+   %  \draw[->] (G-3-2.east) -> (G-1-3.west);
+   %  \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-3.south east);
+
+   %  \draw[->] (G-2-3.east) -> (G-4-4.west);
+   %  \draw[->] (G-1-3.east) -> (G-3-4.west);
+   %  \draw[->] (G-2-3.east) -> (G-2-4.west);
+   %  \draw[->] (G-1-3.east) -> (G-1-4.west);
+   %  \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-4.south east);
+
+   %  \draw[->] (G-1-5.east) -> (G-1-6.west);
+   %  \draw[->] (G-1-5.east) -> (G-3-6.west);
+   %  \draw[->] (G-2-5.east) -> (G-2-6.west);
+   %  \draw[->] (G-2-5.east) -> (G-4-6.west);
+   %  \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-6.south east);
+
+
+   %  % \draw[->] (G-3-2.east) -> (G-3-3.west);
+   %  % \draw[->] (G-3-2.east) -> (G-1-3.west);
+
+
+   %  \draw[->, dashed] (G-4-4.east) -> (G-1-5.west);
+   %  \draw[->, dashed] (G-4-4.east) -> (G-2-5.west);
+   %  \draw[->, dashed] (G-4-4.east) -> (G-3-5.west);
+   %  \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-5.south east);
+
+
+   %     \end{scope}
+
+
        \begin{scope}
-
-
-   \matrix (G) [matrix of nodes, nodes={beam},inner sep=1mm,row sep=0.03cm, column sep=0.8cm ] {
-     \node[fill=yellow](G-1-1){\textcolor{blue}{a}}; & \node[fill=yellow](G-1-2){red}; & \node[fill=lightgray](G-1-3){\textcolor{blue}{dog}}; & \node(G-1-4){smells}; & \node[fill=lightgray](G-1-5){\textcolor{red}{home}};  & \node[fill=lightgray](G-1-6){\textcolor{red}{today}}; \\
-     \node(G-2-1){the}; & \node(G-2-2){dog}; & \node[fill=yellow](G-2-3){dog}; & \node(G-2-4){barks}; & \node[fill=yellow](G-2-5){quickly}; & \node(G-2-6){Friday}; \\
-     \node(G-3-1){red}; & \node[fill=lightgray](G-3-2){\textcolor{blue}{blue}}; & \node(G-3-3){cat}; &  \node[fill=lightgray](G-3-4){\textcolor{blue}{barks}}; & \node(G-3-5){straight}; & \node[](G-3-6){now}; \\
-     & & & \node[fill=yellow](G-4-4){runs}; & & \node[fill=yellow](G-4-6){today}; \\
-    };
-
-
-    \draw[->] (G-1-1.east) -> (G-1-2.west);
-    \draw[->] (G-2-1.east) -> (G-2-2.west);
-    \draw[->] (G-1-1.east) -> (G-3-2.west);
-    \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-2.south east);
-
-
-    \draw[->] (G-1-2.east) -> (G-2-3.west);
-    \draw[->] (G-3-2.east) -> (G-3-3.west);
-    \draw[->] (G-3-2.east) -> (G-1-3.west);
-    \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-3.south east);
-
-    \draw[->] (G-2-3.east) -> (G-4-4.west);
-    \draw[->] (G-1-3.east) -> (G-3-4.west);
-    \draw[->] (G-2-3.east) -> (G-2-4.west);
-    \draw[->] (G-1-3.east) -> (G-1-4.west);
-    \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-4.south east);
-
-    \draw[->] (G-1-5.east) -> (G-1-6.west);
-    \draw[->] (G-1-5.east) -> (G-3-6.west);
-    \draw[->] (G-2-5.east) -> (G-2-6.west);
-    \draw[->] (G-2-5.east) -> (G-4-6.west);
-    \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-6.south east);
-
-
-    % \draw[->] (G-3-2.east) -> (G-3-3.west);
-    % \draw[->] (G-3-2.east) -> (G-1-3.west);
-
-
-    \draw[->, dashed] (G-4-4.east) -> (G-1-5.west);
-    \draw[->, dashed] (G-4-4.east) -> (G-2-5.west);
-    \draw[->, dashed] (G-4-4.east) -> (G-3-5.west);
-    \draw[double, line width=0.03cm] (G-3-1.south west) -- (G-3-5.south east);
-
-
-       \end{scope}
-
-
-       \begin{scope}[yshift=-2.8cm]
 
       \matrix (G) [matrix of nodes,nodes={beam}, inner sep=1mm,row sep=0.06cm,column sep=0.8cm ] {
         \node[fill=yellow](G-1-1){a}; & \node[fill=yellow](G-1-2){red}; & \node[fill=yellow](G-1-3){dog}; & \node[fill=yellow](G-1-4){runs}; & \node[fill=yellow](G-1-5){quickly}; & \node[fill=yellow](G-1-6){today}; \\
-         & \node[fill=lightgray](G-2-2){\textcolor{blue}{blue}}; & \node[fill=lightgray](G-2-3){\textcolor{blue}{dog}}; & \node[fill=lightgray](G-2-4){\textcolor{blue}{barks}}; & \node[fill=lightgray](G-2-5){\textcolor{red}{home}}; & \node[fill=lightgray](G-2-6){\textcolor{red}{today}}; \\
+         & \node[fill=lightgray](G-2-2){\textcolor{blue}{blue}}; & \node[fill=lightgray](G-2-3){\textcolor{blue}{dog}}; & \node[fill=lightgray](G-2-4){\textcolor{blue}{barks}}; & \node[fill=lightgray](G-2-5){\textcolor{red}{home}}; & \node[fill=lightgray](G-2-6){\textcolor{red}{now}}; \\
       };
     \draw[->] (G-1-1.east) -> (G-1-2.west);
     \draw[->] (G-1-2.east) -> (G-1-3.west);
@@ -680,8 +723,16 @@
     \end{scope}
   \end{tikzpicture}
   \end{center}
-  \vspace{2cm}
-  \vspace{1cm}
+  \pause
+\air
+
+  Key Modifications:
+
+  \begin{itemize}
+  \item Modification 1: ${\cal L}(\theta)$, loss determined by beam search procedure.
+  \item Modification 2: $f(y_{1:t}, x; \theta)$, score determined by global model.
+  \item Modification 3:  $\Delta$, scales loss by n-gram metric.
+  \end{itemize}
 
   % \begin{itemize}
   % \item Margin gradients are sparse, only grey sequences get updates.
@@ -756,8 +807,8 @@
      & \multicolumn{2}{c}{Word Ordering (BLEU) } \\
     \midrule
     Encoder-Decoder & 29.8 & 31.0 \\
-    Beam Search Optimization     & 33.2 & 34.3 \\
-    Beam Search Optimization-Constraints &  \textbf{34.3} & \textbf{34.5} \\
+    % Beam Search Optimization     & 33.2 & 34.3 \\
+    Beam Search Optimization &  \textbf{34.3} & \textbf{34.5} \\
     \midrule
 
 %   \end{tabular}
@@ -844,29 +895,29 @@
 %   (Teacher-Student Diagram)
 % \end{frame}
 
-\begin{frame}{Application: Model Compression}
-  \research{\cite{Kim2016a}}
- Knowledge Distillation: Train a \textit{student} model to learn
-from a \textit{teacher} model. %\cite{Bucila2006,Ba2014,Hinton2015}.
+% \begin{frame}{Application: Model Compression}
+%   \research{\cite{Kim2016a}}
+%  Knowledge Distillation: Train a \textit{student} model to learn
+% from a \textit{teacher} model. %\cite{Bucila2006,Ba2014,Hinton2015}.
 
-\begin{center}
-  \includegraphics[width=10cm]{distill}
-\end{center}
+% \begin{center}
+%   \includegraphics[width=10cm]{distill}
+% \end{center}
 
 
 
-% \air
-% Other methods:
-% \begin{itemize}
-% \item low-rank matrix factorization of weight matrices \cite{Denton2014}
-% \item weight binarization \cite{Lin2016}
-% \item weight sharing \cite{Chen2015}
-% \end{itemize}
+% % \air
+% % Other methods:
+% % \begin{itemize}
+% % \item low-rank matrix factorization of weight matrices \cite{Denton2014}
+% % \item weight binarization \cite{Lin2016}
+% % \item weight sharing \cite{Chen2015}
+% % \end{itemize}
+% % \end{frame}
+
+
+
 % \end{frame}
-
-
-
-\end{frame}
 
 % \begin{frame}{Baseline}
 
@@ -907,32 +958,22 @@ from a \textit{teacher} model. %\cite{Bucila2006,Ba2014,Hinton2015}.
 % \end{frame}
 
 
-\begin{frame}{Baseline: Word-Level Knowledge Distillation (Multiclass)}
-
+\begin{frame}{Application: Sequence Compression }
+  \research{\cite{Kim2016a}}
   \begin{center}
     \includegraphics[trim={0.2cm 0.2cm 0.2cm 3cm}, clip,
     width=7cm]{word-kd-2}
   \end{center}
-% \begin{columns}
-% \begin{column}{7cm}
-% Teacher model: $q(y_{t} | y_{1:t-1}, x; \theta_T$)
-% \air
-
-% Cross-entropy between teacher and student
-
-% \begin{align*}
-% \mathcal{L}_{\text{WORD-KD}}(\theta) = -\sum_t \sum_v &q(y_t=v \given \hat{y}_{1: t-1}, x ; \theta_T)\times \\
-% & \log p(y_t =v \given \hat{y}_{1: t-1}, x ; \theta)
-% \end{align*}
-% \end{column}
-
-% \begin{column}{7cm}
-% \centering
-
-
-% \end{column}
-% \end{columns}
 \end{frame}
+
+\begin{frame}{Application: Sequence Compression }
+  \research{\cite{Kim2016a}}
+  \begin{center}
+    \includegraphics[trim={0.2cm 0.2cm 0.2cm 0.2cm}, clip,
+    width=7cm]{seq-kd-2}
+  \end{center}
+\end{frame}
+
 
 % \begin{frame}
 % \centerline{\structure{Word-Level Knowledge Distillation}}
@@ -995,59 +1036,59 @@ from a \textit{teacher} model. %\cite{Bucila2006,Ba2014,Hinton2015}.
 % \end{columns}
 % \end{frame}
 
-\begin{frame}{Sequence-Level Knowledge Distillation}
+% \begin{frame}{Sequence-Level Knowledge Distillation}
 
-% \begin{columns}
-% \begin{column}{7cm}
-% \begin{align*}
-% \mathcal{L}_\text{SEQ-KD}(\theta) &= -\log p(y^*_{1:T} \given x ; \theta)  \\
-% & \hspace*{-1cm} \displaystyle \approx   -\sum_{v_{1:T}} q(y_{1:T}=v_{1:t}|x; \theta_T) \log p(y_{1:T} | x ; \theta)
-% \end{align*}
+% % \begin{columns}
+% % \begin{column}{7cm}
+% % \begin{align*}
+% % \mathcal{L}_\text{SEQ-KD}(\theta) &= -\log p(y^*_{1:T} \given x ; \theta)  \\
+% % & \hspace*{-1cm} \displaystyle \approx   -\sum_{v_{1:T}} q(y_{1:T}=v_{1:t}|x; \theta_T) \log p(y_{1:T} | x ; \theta)
+% % \end{align*}
+% % \air
+
+% % Extension: $\mathcal{L}_\text{SEQ-INTER}(\theta)$ select sample based on ground truth $\hat{y}$
+% % as well.
+% % \end{column}
+% % \begin{column}{7cm}
+%   \begin{center}
+%     \includegraphics[trim={0.2cm 0.2cm 0.2cm 0.2cm}, clip,
+%     width=7cm]{seq-kd-2}
+%   \end{center}
+% % \end{column}
+% % \end{columns}
+% \end{frame}
+
+% \begin{frame}{Results: WMT English $\rightarrow$ German Translation}
 % \air
-
-% Extension: $\mathcal{L}_\text{SEQ-INTER}(\theta)$ select sample based on ground truth $\hat{y}$
-% as well.
-% \end{column}
-% \begin{column}{7cm}
-  \begin{center}
-    \includegraphics[trim={0.2cm 0.2cm 0.2cm 0.2cm}, clip,
-    width=7cm]{seq-kd-2}
-  \end{center}
-% \end{column}
-% \end{columns}
-\end{frame}
-
-\begin{frame}{Results: WMT English $\rightarrow$ German Translation}
-\air
-\air
-\begin{table}
-\centering
-\begin{tabular}{lccccrr}
-\toprule
-Model &    BLEU$_{K=1}$   & $\Delta_{K=1}$ & BLEU$_{K=5}$ & $\Delta_{K=5}$ \\%& PPL & $p(y^*)$ \\
-\midrule
-$4 \times 1000$ \\
-Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ \\%&   $6.7$ &  $1.3\%$ \\
-\midrule
-\pause
-$2 \times 500$ \\
-  Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ \\%&  $8.2$ & $0.9\%$  \\
-  \pause
-\hspace{1mm} Word-KD  & $15.4$ & $+0.7$& $17.7$& $+0.1$\\%&  $8.0$ & $1.0\%$  \\
-\pause
-% \hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$\\%&  $22.7$ & $                     \pause                                                         16.9\%$ \\
-\hspace{1mm} Seq-KD  & $18.9$ & $+\mathbf{4.2}$&$19.3$ & $+\mathbf{1.7}$ \\ %&  $15.8$ & $7.6\%$  \\
+% \air
+% \begin{table}
+% \centering
+% \begin{tabular}{lccccrr}
+% \toprule
+% Model &    BLEU$_{K=1}$   & $\Delta_{K=1}$ & BLEU$_{K=5}$ & $\Delta_{K=5}$ \\%& PPL & $p(y^*)$ \\
+% \midrule
+% $4 \times 1000$ \\
+% Teacher    & $17.7$ &  $-$ & $19.5$&   $-$ \\%&   $6.7$ &  $1.3\%$ \\
 % \midrule
 % \pause
-% $4 \times 1000$ \\
-% \hspace{1mm} Seq-Inter    & $19.6$ & $+1.9$&  $19.8$& $+0.3$\\ %&   $10.4$ & $8.2\%$   \\
-\bottomrule
-\end{tabular}
+% $2 \times 500$ \\
+%   Student  $\,$   & $14.7$ & $-$ & $17.6$&  $-$ \\%&  $8.2$ & $0.9\%$  \\
+%   \pause
+% \hspace{1mm} Word-KD  & $15.4$ & $+0.7$& $17.7$& $+0.1$\\%&  $8.0$ & $1.0\%$  \\
+% \pause
+% % \hspace{1mm} Seq-KD   & $18.9$ & $+\mathbf{4.2}$& $19.0$& $+1.4$\\%&  $22.7$ & $                     \pause                                                         16.9\%$ \\
+% \hspace{1mm} Seq-KD  & $18.9$ & $+\mathbf{4.2}$&$19.3$ & $+\mathbf{1.7}$ \\ %&  $15.8$ & $7.6\%$  \\
+% % \midrule
+% % \pause
+% % $4 \times 1000$ \\
+% % \hspace{1mm} Seq-Inter    & $19.6$ & $+1.9$&  $19.8$& $+0.3$\\ %&   $10.4$ & $8.2\%$   \\
+% \bottomrule
+% \end{tabular}
 
-\end{table}
-\air
-\air
-\end{frame}
+% \end{table}
+% \air
+% \air
+% \end{frame}
 
 % \begin{frame}{Combining Knowledge Distillation and Pruning}
 % \air
