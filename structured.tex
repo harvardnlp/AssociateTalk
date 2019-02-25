@@ -167,15 +167,15 @@
 
 \air
 
-\visible<7->{
-  Start with $K$ sequence in beam.
+
+  Start with $K$ sequences in beam.
 
    \begin{enumerate}
    \item For each $k$ in beam, expand and score all possible next words $y_t$.
 
    \item Prune all expansions ($K \times \text{vocab}$) down to top $K$.
    \end{enumerate}
-}
+
 
   % \begin{enumerate}
   % \item Start with $K$ partial starting hypotheses $\wvec^{(1:K)}$
@@ -730,7 +730,7 @@
 
   \begin{itemize}
   \item Modification 1: ${\cal L}(\theta)$, loss determined by beam search procedure.
-  \item Modification 2: $f(y_{1:t}, x; \theta)$, score determined by global model.
+  \item Modification 2: $f_{\theta}(y_{1:t}, x)$, score determined by global model.
   \item Modification 3:  $\Delta$, scales loss by n-gram metric.
   \end{itemize}
 
